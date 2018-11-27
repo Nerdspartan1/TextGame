@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 
 enum ReadMode { TEXT, CONDITION, OPERATION, VALUE, NEXT_ADRESS, NEXT_DESC }
@@ -17,11 +18,17 @@ public struct Operation
 public class GameEvent{
 
 	public string fileName;
+
+	static public GameObject textBox;
+	static public GameObject dialogueBox;
+
+	int currentBox = 0;
 	
 	public string text = "Texte non chargé";
 	public List<GameEvent> nextGameEvents = new List<GameEvent>();
 	public List<string> nextDescriptions = new List<string>();
 	public List<HashSet<Operation> > nextOperations = new List<HashSet<Operation> >();
+	public List<GameObject> boxes = new List<GameObject>();
 
 
 	public void Load()
@@ -39,6 +46,8 @@ public class GameEvent{
 		float value1 = 0;
 		float value2 = 0;
 
+		int nbOfReturn = 0;
+
 		int i = 0;
 
 		Condition condition = Condition.EQUALS;
@@ -55,7 +64,7 @@ public class GameEvent{
 		char c;
 		while (!reader.EndOfStream)
 		{
-			Debug.Log(mode);
+			//Debug.Log(mode);
 			do
 			{
 				c = (char)reader.Read();
@@ -79,6 +88,9 @@ public class GameEvent{
 				}
 			} while (currentConditionLayer > maxVerifiedConditionLayer);
 
+
+			Debug.Log(c);
+			Debug.Log((int)c);
 			switch (c)
 			{
 				case '£'://Lecture de condition
@@ -199,9 +211,26 @@ public class GameEvent{
 						mode = ReadMode.TEXT;
 						readingDesc = false;
 					}
-					else
+					else //Si on lit normalement
 					{
-						loadedText += c;
+						Debug.Log("Fin de ligne !");
+						if (loadedText != "")//Si le texte est vide, on ne fait rien
+						{
+							nbOfReturn++;
+							//Si c'est un simple saut de ligne, on ne fait rien
+							if( nbOfReturn >= 2)//Si on saut 2 lignes, on fait une nouvelle boîte
+							{
+								GameObject b = GameObject.Instantiate(textBox);
+								//On créé une boîte de texte
+								b.transform.Find("Panel/Line").GetComponent<Text>().text = loadedText;
+								boxes.Add(b);
+								Debug.Log("Boîte ajoutée ! ");
+								//Et on vide le buffer pour accueillir le texte de la prochaine boîte
+								loadedText = "";
+								nbOfReturn = 0;
+
+							}
+						}
 					}
 					break;
 				case '='://Si mode Condition, alors condition égal
@@ -248,6 +277,10 @@ public class GameEvent{
 				case '}': //idem
 					break;
 				default: //Pour tout autre caractère on met dans le buffer adapté
+					if (c != 13) //Pour certaine raison, il y a un caractère (13) avant chaque saut de ligne
+					{
+						nbOfReturn = 0;
+					}
 					switch (mode)
 					{
 						case ReadMode.CONDITION:
@@ -282,8 +315,6 @@ public class GameEvent{
 			nextDescriptions.Add(dstring);
 
 		}
-
-		text= loadedText;
 	}
 
 	static bool IsVerified(float value1, float value2, Condition c)
@@ -371,6 +402,14 @@ public class GameEvent{
 	public static void ApplyOperation(Operation o)
 	{
 		ApplyOperation(o.key, o.value, o.operationType);
+	}
+
+	public GameObject GetNextBox()
+	{
+		GameObject box = boxes[currentBox];
+		currentBox++;
+		return box;
+		
 	}
 
 }

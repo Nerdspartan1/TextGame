@@ -10,9 +10,12 @@ public class GameManager : MonoBehaviour {
 	static public Dictionary<string, string> names = new Dictionary<string, string>();
 	static public Dictionary<string, float> values = new Dictionary<string, float>();
 
-	public Text mainText;
+	public Transform mainPanel;
 	public Transform buttonPanel;
 	public GameObject buttonObject;
+
+	public GameObject textBox;
+	public GameObject dialogueBox;
 	public Fight currentFight;
 
 	void Start () {
@@ -24,6 +27,9 @@ public class GameManager : MonoBehaviour {
 		{
 			Destroy(this);
 		}
+
+		GameEvent.textBox = textBox;
+		GameEvent.dialogueBox = dialogueBox;
 
 		names.Add("name", "Maurice");
 		values.Add("isHappy", 1);
@@ -52,7 +58,7 @@ public class GameManager : MonoBehaviour {
 	{
 		ClearButtons();
 		ge.Load();
-		mainText.text = ge.text;
+		ge.GetNextBox().transform.SetParent(mainPanel);
 		for (int i=0; i< ge.nextGameEvents.Count; i++)
 		{
 			GameEvent nge = ge.nextGameEvents[i];

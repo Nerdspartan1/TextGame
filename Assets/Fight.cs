@@ -18,7 +18,7 @@ public class Fight{
 
 	public void Begin()
 	{
-		GameManager.Instance.mainText.text = "Le combat commence !";
+		//GameManager.Instance.mainText.text = "Le combat commence !";
 		DoPlayerTurn();
 	}
 
@@ -42,7 +42,7 @@ public class Fight{
 	public void DoEnemyTurn()
 	{
 		foe.Attack(player);
-		GameManager.Instance.mainText.text += "\n\n" + foe.name + " attaque " + player.name;
+		//GameManager.Instance.mainText.text += "\n\n" + foe.name + " attaque " + player.name;
 		DoPlayerTurn();
 	}
 
@@ -58,7 +58,7 @@ public class Fight{
 	void Attack()
 	{
 		player.Attack(foe);
-		GameManager.Instance.mainText.text += "\n\n" + player.name + " attaque " + foe.name + " avec sa " + player.weapon.name;
+		//GameManager.Instance.mainText.text += "\n\n" + player.name + " attaque " + foe.name + " avec sa " + player.weapon.name;
 
 		DoEnemyTurn();
 	}
