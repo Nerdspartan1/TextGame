@@ -1,0 +1,4 @@
+﻿Hé, je suis juste un texte préprogrammé. Pas la peine de s'énerver contre moi ! @enerve=1@
+
+#test2.txt# Reviens en arrière.
+#test.txt# Bon, okay, on recommence.

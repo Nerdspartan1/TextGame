@@ -1,0 +1,12 @@
+﻿"Congratulation loyal Hubris customer n°DR0885678431 ! You have the immense luck of having been selected to receive a very special prize to reward you for buying our products!"
+
+You unsuccessfully try to skip the message by tapping repeatedly on your old phone.
+
+"N- No seriously ! It's for real this time, I mean..." continues the voice on the phone.
+
+You continue tapping. You frown in confusion. Even though you've already experienced a lot of intrusive ads on your phone, this one is particularly tenacious. It looks like it completely locked your phone and there's not much you can do now.
+
+"Listen ! You've won something really big, for real ! Don't you want to know what it is ?"
+
+#start0# Not really. @enthusiastic=0@
+#start0# Fine, what is it ? @enthusiastic=1@
