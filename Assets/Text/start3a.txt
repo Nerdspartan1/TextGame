@@ -1,9 +1,15 @@
-﻿Your response provoked a sinister laugh from the sinister voice.
+﻿>Sinister voice : Pffft... Hahaha...
 
-"Wh- What ?" stutters the deep voice.
+>Deep voice : N- No ?
 
-"But- You didn't like our introduction ?" says the soft voice.
+>Soft voice : But- You didn't like our introduction ?
 
-"Alright, listen kid" says the husky voice, somewhat annoyed, "you didn't come this far just to cower and quit, did you ? Your chopper just took off and it would a pain to start all of this again. Plus, I'm terrible with introductions. So stop fooling with us, and say yes, got it ?"
+>Husky voice : Alright, listen kid...
+
+>Husky voice : You didn't come this far just to cower and quit, did you ? 
+
+>Husky voice : Your chopper just took off and it would a pain to start all of this again.
+
+>Husky voice : Plus, I'm terrible with introductions. So stop fooling around, and just say yes, got it ?
  
-#start4# Yes
+#start4# Yes.

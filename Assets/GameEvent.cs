@@ -36,12 +36,13 @@ public class GameEvent{
 
 		string loadedText = "";
 
-		string nstring = "";
-		string dstring = "";
-		string cstring = "";
-		string vstring = "";
-		string ostring = "";
-		string ostring2 = "";
+		string astring = ""; //adresse des prochains GameEvent
+		string dstring = ""; //description des buttons
+		string cstring = ""; //conditions
+		string vstring = ""; //valeurs
+		string ostring = ""; //opération
+		string ostring2 = ""; //opération (buffer)
+		string nstring = ""; //nom
 
 		float value1 = 0;
 		float value2 = 0;
@@ -60,6 +61,7 @@ public class GameEvent{
 		ReadMode prevMode = ReadMode.TEXT;
 
 		bool readingDesc = false;
+		bool readingName = false;
 
 		char c;
 		while (!reader.EndOfStream)
@@ -190,7 +192,7 @@ public class GameEvent{
 					if (mode == ReadMode.NEXT_ADRESS) //Fermeture
 					{
 						GameEvent ge = new GameEvent();
-						ge.fileName = "Assets/Text/" + nstring + ".txt";
+						ge.fileName = "Assets/Text/" + astring + ".txt";
 						nextGameEvents.Add(ge);
 
 						readingDesc = true;
@@ -199,12 +201,12 @@ public class GameEvent{
 					}
 					else // Ouverture
 					{
-						nstring = "";
+						astring = "";
 						mode = ReadMode.NEXT_ADRESS; 
 					}
 					break;
-				case '\n'://Signale la fin de la lecture de description, on ajoute ensuite la desc qu'on a lu
-					if (readingDesc)
+				case '\n'://Signale la fin d'une boîte de texte ou signale la fin de la lecture de description, on ajoute ensuite la desc qu'on a lu
+					if (readingDesc) //Si on lit une description
 					{
 						nextDescriptions.Add(dstring);
 						dstring= "";
@@ -220,7 +222,18 @@ public class GameEvent{
 							//Si c'est un simple saut de ligne, on ne fait rien
 							if( nbOfReturn >= 2)//Si on saut 2 lignes, on fait une nouvelle boîte
 							{
-								GameObject b = GameObject.Instantiate(textBox);
+								GameObject b;
+								if (nstring == "")
+								{
+									b=GameObject.Instantiate(textBox);
+								}
+								else
+								{
+									b = GameObject.Instantiate(dialogueBox);
+									b.transform.Find("Panel/Name").GetComponent<Text>().text = nstring;
+									b.transform.Find("Panel").GetComponent<Image>().color = GetColor(nstring);
+									nstring = "";
+								}
 								//On créé une boîte de texte
 								b.transform.Find("Panel/Line").GetComponent<Text>().text = loadedText;
 								boxes.Add(b);
@@ -231,6 +244,16 @@ public class GameEvent{
 
 							}
 						}
+					}
+					break;
+				case ':':
+					if (readingName)
+					{
+						readingName = false;
+					}
+					else
+					{
+						loadedText += c;
 					}
 					break;
 				case '='://Si mode Condition, alors condition égal
@@ -258,7 +281,11 @@ public class GameEvent{
 					}
 					break;
 				case '>'://Si mode condition, alors condition GREATER_THAN,
-					if (mode == ReadMode.CONDITION)
+					if (loadedText == "")//Si on est à un début de boîte
+					{
+						readingName = true;
+					}
+					else if (mode == ReadMode.CONDITION)
 					{
 						condition = Condition.GREATER_THAN;
 						if (!GameManager.values.TryGetValue(cstring, out value1))
@@ -277,7 +304,7 @@ public class GameEvent{
 				case '}': //idem
 					break;
 				default: //Pour tout autre caractère on met dans le buffer adapté
-					if (c != 13) //Pour certaine raison, il y a un caractère (13) avant chaque saut de ligne
+					if (c > 32) //Pour certaine raison, il peut y avoir un caractère spécial (de valeur <= 32) avant chaque saut de ligne. On ignore aussi les espace (32)
 					{
 						nbOfReturn = 0;
 					}
@@ -290,7 +317,7 @@ public class GameEvent{
 							vstring += c;
 							break;
 						case ReadMode.NEXT_ADRESS:
-							nstring += c;
+							astring += c;
 							break;
 						case ReadMode.OPERATION:
 							ostring += c;
@@ -299,6 +326,10 @@ public class GameEvent{
 							if (readingDesc)
 							{
 								dstring += c;
+							}
+							else if (readingName)
+							{
+								nstring += c;
 							}
 							else
 							{
@@ -406,10 +437,44 @@ public class GameEvent{
 
 	public GameObject GetNextBox()
 	{
-		GameObject box = boxes[currentBox];
-		currentBox++;
-		return box;
 		
+		//Renvoie la prochaine boîte (commençant par la 1ère)
+		if(currentBox < boxes.Count)
+		{
+			GameObject box = boxes[currentBox];
+			currentBox++;
+			return box;
+		}
+		//Si on a atteint la fin de la liste, on renvoie null
+		return null;
+		
+		
+	}
+
+	public bool EndOfGameEvent()
+	{
+		return (currentBox == boxes.Count);
+	}
+
+	public Color GetColor(string name)
+	{
+		float alpha = 0.5f;
+		switch (name.Trim())
+		{
+			case "Deep voice":
+			case "Boss":
+				return new Color(0.5f, 0.5f, 0.5f, alpha);
+			case "Sinister voice":
+			case "Strike":
+				return new Color(0.5f, 0.1f, 0.1f, alpha);
+			case "Soft voice":
+			case "Yau":
+				return new Color(0.1f, 0.4f, 0.6f, alpha);
+			case "Husky voice":
+			case "Tank":
+				return new Color(0.1f, 0.4f, 0.0f, alpha);
+		}
+		return new Color(0.3f, 0.3f, 0.3f, alpha);
 	}
 
 }

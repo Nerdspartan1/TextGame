@@ -1,6 +1,30 @@
-﻿"Excellent." says the deep voice. "Truly excellent."
+﻿>Deep voice : Excellent. Truly excellent.
 
+>Deep voice : Recruit, welcome to the team. My name is Boss.
 
+>Soft voice : (whisper) Perhaps we should turn on the lights now ?
+
+>Deep voice : Ah- Of course. Sorry.
+
+Light floods the hangar as the spotlights are turned off, giving you full sight of your environment.
+
+>Boss: As I said, my name is Boss, I am the leader of the Phalanx.
+
+Boss is a tall wolf-like creature. His scarred face look like it has seen quite a lot of battles. You don't know how wolf people age but he looks about in his late forties.
+
+>Boss : This is Yau, our medic and intelligence operator.
+
+>Yau : Hello ! It's a pleasure to meet you !
+
+She.. or he... looks like a normal slim, pale-skinned, conventionally attractive woman... or man. For now you can't really tell their gender.
+
+>Boss : This is Strike, our tech expert, gun specialist, and recon operator.
+
+>Strike : Hm...
+
+He is a seemingly young dark elf with dark skin, dark hair and dark pointy ears. His equally dark eyes convey all the animosity he feels toward you.
+
+>Boss : And lastly, this is Tank, our most efficient warrior, mechanic, and explosive specialist.
 
 
 "You... have been chosen by fate ! You are the chosen one !" explains the deep voice uncomfortably.

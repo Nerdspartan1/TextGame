@@ -1,37 +1,40 @@
 ﻿A few minutes later, you arrive at the spatioport, a very large structure designed to welcome spaceships coming and going to the city. The chopper places itself above a large old-fashioned space vessel, and lowers its altitude until it lands on top of it.
 
-"There you go sweetie !~" says the chopper.
+>Chopper : There you go sweetie !~
 
 You get out on the hull. There no one there to welcome you except for the gaping hangar door toward the rear of the ship so you decide to head there. 
 
 The inside is really dark, only dimly lit by the nocturnal light of the city. You progress slowly as your eyes adapt to the obscurity.
 
-Suddenly the hangar door shuts down, making a loud mechanical noise, leaving you in total darkness. You don't have to think too much before spotlights blinds you from across the wide room. You protect your eyes with your hands.
+Suddenly the hangar door shuts down, making a loud mechanical noise, leaving you in total darkness. You don't have to think too much before spotlights blind you from across the wide room. You protect your eyes with your hands.
 
-"So... the new recruit has arrived.", states a deep masculine voice.
+>Deep voice : The new recruit has arrived.
 
 It's impossible to make out who is talking to you; the lights are too bright.
 
-"Well it's about damn time !" states a husky voice. "Why's he look so tiny ?"
+>Husky voice : Well it's about damn time ! 
 
-"Hush, Rachel, we rehearsed this ! Please, don't mess it up!", says a soft feminine voice.
+>Husky voice : Why's he look so tiny ?
 
-You hear the one with a deep voice clear his throat. "Valiant heart, please come closer..."
+>Soft voice : Hush, Rachel, we rehearsed this ! Please, don't mess it up!
 
-"Yeah... "Valiant". Like this guy is totally not here because he bought a Hubris toaster or something.", states a sinister voice.
+You hear the one with a deep voice clear his throat. 
 
-"Silence soldiers !" orders firmly the deep voice.
+>Deep voice : Valiant heart, please come closer...
+
+>Sinister voice : Yeah... "Valiant". Like this guy is totally not here just because he bought a toaster or something.
+
+>Deep voice : Silence soldiers !
 
 You eventually manage to make out four figures standing before you in the dark.
 
-"You are about to become part of the Phalanx, the protectors of the system, that shield your home against the evil. We are the guardians of good and civilization, composed of nothing but the best warriors in the galaxy !-"
+>Deep voice : You are about to become part of the Phalanx, the protectors of the system, that shield your home against the evil.
 
-"Well, not anymore I guess...", whispers the sinister voice.
+>Deep voice : We are the guardians of good and civilization, composed of nothing but the best warriors in the galaxy !
 
-"You have been chosen, recruit. Will you accept your duty ?"
+>Sinister voice : (whisper) Well, not anymore I guess...
 
-#start3a# No
-#start4# Yes
+>Deep voice : You have been chosen, recruit. Will you accept your duty ?
 
-
-
+#start4# Yes.
+#start3a# Nah.
