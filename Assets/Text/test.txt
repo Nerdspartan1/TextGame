@@ -1,4 +1,5 @@
-﻿@enerve=0@Bonjour !
-Je suis £isHappy=1£{ $name$ et je suis super content d'être ici ! £isBored=1£{Mais je m'ennuie un peu...}}£isHappy=0£{où là ?}
+﻿> ??? : Par ma barbe ! Mais c'est $player.name$ ! 
 
-#test2.txt# Euh... Okay ?
+£player.hp=player.maxHp£{> ??? : Et en plus il pète la forme ! }
+
+#test2# Euh... Okay ?

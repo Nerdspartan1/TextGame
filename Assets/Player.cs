@@ -7,4 +7,9 @@ public class Player : Unit {
 	public List<Item> inventory;
 	public int xp;
 
+	public Player()
+	{
+		IdName = "player";
+	}
+
 }

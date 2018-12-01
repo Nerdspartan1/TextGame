@@ -22,26 +22,16 @@ public class Fight{
 		DoPlayerTurn();
 	}
 
-	public void DoTurn(bool playerTurn)
-	{
-		if (playerTurn)
-		{
-			DoPlayerTurn();
-		}
-		else
-		{
-			DoEnemyTurn();
-		}
-	}
-
 	public void DoPlayerTurn()
 	{
 		GenerateButtons();
+		GameManager.Instance.UpdatePlayerInfo();
 	}
 
 	public void DoEnemyTurn()
 	{
 		foe.Attack(player);
+		Debug.Log("L'ennemi vous attaque !");
 		//GameManager.Instance.mainText.text += "\n\n" + foe.name + " attaque " + player.name;
 		DoPlayerTurn();
 	}
@@ -57,6 +47,7 @@ public class Fight{
 
 	void Attack()
 	{
+		Debug.Log("Vous attaquez l'ennemi !");
 		player.Attack(foe);
 		//GameManager.Instance.mainText.text += "\n\n" + player.name + " attaque " + foe.name + " avec sa " + player.weapon.name;
 

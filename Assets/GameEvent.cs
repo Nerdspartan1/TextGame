@@ -92,7 +92,7 @@ public class GameEvent{
 
 
 			Debug.Log(c);
-			Debug.Log((int)c);
+			//Debug.Log((int)c);
 			switch (c)
 			{
 				case '£'://Lecture de condition
@@ -150,7 +150,7 @@ public class GameEvent{
 					{
 						if (operationType == OperationType.NONE) //Si aucune opération n'a été lue, on déclare juste la valeur
 						{
-							CreateValue(ostring);
+							GameManager.CreateValue(ostring);
 						}
 						else
 						{
@@ -220,7 +220,7 @@ public class GameEvent{
 						{
 							nbOfReturn++;
 							//Si c'est un simple saut de ligne, on ne fait rien
-							if( nbOfReturn >= 2)//Si on saut 2 lignes, on fait une nouvelle boîte
+							if( nbOfReturn >= 2)//Si on saute 2 lignes, on fait une nouvelle boîte
 							{
 								GameObject b;
 								if (nstring == "")
@@ -308,34 +308,38 @@ public class GameEvent{
 					{
 						nbOfReturn = 0;
 					}
-					switch (mode)
+
+					if (loadedText != "" || c > 32) //D'autre part, si le texte est vide, on ajoute pas les caractères invisibles
 					{
-						case ReadMode.CONDITION:
-							cstring += c;
-							break;
-						case ReadMode.VALUE:
-							vstring += c;
-							break;
-						case ReadMode.NEXT_ADRESS:
-							astring += c;
-							break;
-						case ReadMode.OPERATION:
-							ostring += c;
-							break;
-						default:
-							if (readingDesc)
-							{
-								dstring += c;
-							}
-							else if (readingName)
-							{
-								nstring += c;
-							}
-							else
-							{
-								loadedText += c;
-							}
-							break;
+						switch (mode)
+						{
+							case ReadMode.CONDITION:
+								cstring += c;
+								break;
+							case ReadMode.VALUE:
+								vstring += c;
+								break;
+							case ReadMode.NEXT_ADRESS:
+								astring += c;
+								break;
+							case ReadMode.OPERATION:
+								ostring += c;
+								break;
+							default:
+								if (readingDesc)
+								{
+									dstring += c;
+								}
+								else if (readingName)
+								{
+									nstring += c;
+								}
+								else
+								{
+									loadedText += c;
+								}
+								break;
+						}
 					}
 					break;
 			}
@@ -388,14 +392,6 @@ public class GameEvent{
 			{
 				Debug.Log("Erreur : clé inconnue " + key);
 			}
-		}
-	}
-
-	static void CreateValue(string key)
-	{
-		if (!GameManager.values.ContainsKey(key))
-		{
-			GameManager.values.Add(key, 0);
 		}
 	}
 
@@ -474,7 +470,7 @@ public class GameEvent{
 			case "Tank":
 				return new Color(0.1f, 0.4f, 0.0f, alpha);
 		}
-		return new Color(0.3f, 0.3f, 0.3f, alpha);
+		return new Color(0.6f, 0.6f, 0.6f, alpha);
 	}
 
 }

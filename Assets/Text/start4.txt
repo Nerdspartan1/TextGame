@@ -14,23 +14,28 @@ Boss is a tall wolf-like creature. His scarred face look like it has seen quite 
 
 >Boss : This is Yau, our medic and intelligence operator.
 
->Yau : Hello ! It's a pleasure to meet you !
-
 She.. or he... looks like a slim, pale-skinned, conventionally attractive woman... or man. For now you can't really tell their gender. Despite this oddity, they seem relatively normal, making you wonder what makes them special.
+
+>Yau : Hello ! It's a pleasure to meet you !
 
 >Boss : This is Strike, our tech expert, gun specialist, and recon operator.
 
->Strike : Hm...
+Strike is a seemingly young dark elf with dark skin, dark hair and dark pointy ears. His equally dark eyes convey all the animosity he feels toward you.
 
-He is a seemingly young dark elf with dark skin, dark hair and dark pointy ears. His equally dark eyes convey all the animosity he feels toward you.
+>Strike : Hm...
 
 >Boss : And lastly, this is Tank, our most efficient warrior, mechanic, and explosive specialist.
 
+Before you stands a very tall and intimidating lizard-women, complete with claws and brown scales. Her face is almost entirely hidden behind a protective medical mask. Her right arm appears to be completely robotic.
+
 >Tank : Sup', chump.
 
-Before you stands a very tall and intimidating lizard-women, complete with claws and brown scales. Her face is almost entirely hidden behind a protective medical mask.
+>Boss : Together, we keep the galaxy safe.
 
-Boss : Together, we form the ultimate defense of the people.
+>Boss : Alright, now that the presentations are done, let's get you started. Unless you have any question ?
+
+#start4a# Yeah. Why am I here ?
+
 
 
 
