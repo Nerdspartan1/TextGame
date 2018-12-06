@@ -7,18 +7,19 @@ Rich characters -> need to be with the character -> crew ?
 		-> or be recurrent (villain, merchant or adventurer on a similar quest)
 #the knights must be found and convinced to reassemble
 
-Year 20019:
+Lore:
 Humanity has greatly expanded beyond the solar system, now inhabiting thousands of planets and discovering alien species.
-Governments are being outpowered by multisystems companies that keep on growing.
+Governments are being outpowered by multisystems companies that kept on growing.
+
+(Hidden :
+Due to the ever growing hunger for ressources, the corporations led to diplomatic difficulties with other species, eventually degenerating into the Galactic War in 19019. The red knights were super warriors assembled by the alien alliance to defend against the humans. After a few years, the war devolved into civil war for the humans and it annihilated itself with planet vitrification. Humanity got almost fully extinct.
+After that, the alien alliances thrived in peace, but capitalism took on and big corporations are becoming extremely powerful.)
+
+Year 20019:
+Climate change on an icy planet provoked a terrain slide which shook an abandoned human laboratory and awoke the player, a defunct genetically enhanced human soldier supposed to fight the Galactic War.
 
 ###Take 2:
-The player wakes up from a cryospleep on a seemingly abandoned icy planet with only one directive : reassemble the red knights (and stop the corporate's hunger for growth)
-
-Player:
-Specie : human
-Background : woke up from cryosleep (implied that humans are gone practically extinct because of environmental unsustainability that provoked nuclear war)
-
-
+The player wakes up from a cryospleep on a seemingly abandoned icy planet with only one directive : eliminate the red knights and restore the balance
 
 
 

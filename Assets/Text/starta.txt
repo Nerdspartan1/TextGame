@@ -1,0 +1,10 @@
+﻿You decide to stay down. It's quite comfortable in here actually.
+
+...
+
+...
+
+Okay, that was great. Maybe it's time to get up now.
+
+#start0# [Yeah, let's go.]
+#startb# [Just a little longer...] @lazy=1@

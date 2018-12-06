@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
 	public Transform infoPanel;
 	private Text playerName;
 	private Text playerHp;
+	public Transform mapPanel;
 
 
 	//L'événement actuel
@@ -27,10 +28,14 @@ public class GameManager : MonoBehaviour {
 	public GameEvent currentGameEvent;
 	public Fight currentFight;
 
+	public string startMap;
+	public Map currentMap;
+
 	//Les prefabs
 	public GameObject textBox;
 	public GameObject dialogueBox;
 	public GameObject buttonObject;
+	public GameObject mapCellObject;
 	
 	//Etat de l'UI
 	bool buttonsDisplayed = false;
@@ -79,9 +84,12 @@ public class GameManager : MonoBehaviour {
 		//currentFight.Begin();
 
 		//Premier GameEvent
-		GameEvent ge = new GameEvent();
-		ge.fileName = "Assets/Text/" + startGameEvent + ".txt";
+		GameEvent ge = new GameEvent(startGameEvent);
 		GoToGameEvent(ge);
+
+		//Première Map
+		Map map = new Map(startMap);
+		GoToMap(map);
 
 	}
 
@@ -124,6 +132,33 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	public void GoToMap(Map map)
+	{
+		currentMap = map;
+		ClearMapPanel();
+		map.Load();
+		float w = mapCellObject.GetComponent<RectTransform>().rect.width;
+		float h = mapCellObject.GetComponent<RectTransform>().rect.height;
+		Debug.Log(map.Width);
+		Debug.Log(map.Height);
+		mapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(w*map.Width, h*map.Height);
+
+		for (int i = 0; i<map.Height; i++)
+		{
+			for(int j = 0; j<map.Width; j++)
+			{
+				if (map[i, j] != null)
+				{
+					GameObject go = Instantiate(mapCellObject, mapPanel);
+					go.transform.localPosition = new Vector3(w * j, -i * h, 0);
+				}
+			}
+		}
+	}
+
+
+
+
 	public bool DisplayNextBox()
 	{
 		if (currentGameEvent != null) {
@@ -160,19 +195,26 @@ public class GameManager : MonoBehaviour {
 
 	public void ClearBoxes()
 	{
-		for (int i = 0; i < textPanel.childCount; i++)
-		{
-			Destroy(textPanel.GetChild(i).gameObject);
-		}
+		ClearChilds(textPanel);
 	}
 
 	public void ClearButtons()
 	{
-		for (int i = 0; i < buttonPanel.childCount; i++)
-		{
-			Destroy(buttonPanel.GetChild(i).gameObject);
-		}
+		ClearChilds(buttonPanel);
 		buttonsDisplayed = false;
+	}
+
+	public void ClearMapPanel()
+	{
+		ClearChilds(mapPanel);
+	}
+
+	static void ClearChilds(Transform t)
+	{
+		for (int i = 0; i < t.childCount; i++)
+		{
+			Destroy(t.GetChild(i).gameObject);
+		}
 	}
 
 	public void UpdatePlayerInfo()
@@ -184,6 +226,7 @@ public class GameManager : MonoBehaviour {
 
 		}
 	}
+
 
 	public static void ChangeValue(string key, float value)
 	{

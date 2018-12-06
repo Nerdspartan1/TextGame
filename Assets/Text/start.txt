@@ -1,12 +1,10 @@
-﻿"Congratulation loyal Hubris customer n°DR0885678431 ! You have the immense luck of having been selected to receive a very special prize to reward you for buying our products!"
+﻿> ??? : Warning. Power malfunction detected.
 
-You unsuccessfully try to skip the message by tapping repeatedly on your old phone.
+You start to make out what seems like an infinitely distant beeping sound.
 
-"N- No seriously ! It's for real this time, I mean..." continues the voice on the phone.
+> ??? : Now applying emergency protocol : artificial sleep disengaged.
 
-You continue tapping. You frown in confusion. Even though you've already experienced a lot of intrusive ads on your phone, this one is particularly tenacious. It looks like it completely locked your phone and there's not much you can do now.
+You feel your senses coming back from utter numbness. Opening your eyes to the flashing light, you find yourself back in your body again. You appear to be lying inside what seems to be a plastic sarcophagus. Before you try to do anything, the lid of your prison emits a loud hissing noise, followed by an equally loud clicking sound, before swinging open.
 
-"Listen ! You've won something really big, for real ! Don't you want to know what it is ?"
-
-#start0# Not really. @enthusiastic=0@
-#start0# Fine, what is it ? @enthusiastic=1@
+#start0# [Get up]
+#starta# [Stay]

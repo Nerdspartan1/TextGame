@@ -1,0 +1,14 @@
+﻿You decide to stay a little longer. 
+
+After all, who knows how long you've slept here ? £lazy=1£{One}£lazy=2£{Two}£lazy=3£{Three}£lazy=4£{Four}£lazy=5£{Five}£lazy=6£{Six} more minute£lazy>1£{s} shouldn't hurt.
+
+...
+
+...
+
+...
+
+Okay, surely now, you are ready to get up.
+
+#start0# [Sure, let's go.]
+#startb# [Nah. I'm fine here.] @lazy+1@

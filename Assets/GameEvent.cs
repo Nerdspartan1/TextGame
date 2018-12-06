@@ -6,7 +6,7 @@ using System.IO;
 
 enum ReadMode { TEXT, CONDITION, OPERATION, VALUE, NEXT_ADRESS, NEXT_DESC }
 enum Condition { EQUALS, GREATER_THAN }
-public enum OperationType { NONE, ASSIGN, INCREMENT}
+public enum OperationType { NONE, ASSIGN, ADD}
 
 public struct Operation
 {
@@ -23,13 +23,18 @@ public class GameEvent{
 	static public GameObject dialogueBox;
 
 	int currentBox = 0;
+
+	public bool isMapLocation;
 	
-	public string text = "Texte non chargé";
 	public List<GameEvent> nextGameEvents = new List<GameEvent>();
 	public List<string> nextDescriptions = new List<string>();
 	public List<HashSet<Operation> > nextOperations = new List<HashSet<Operation> >();
 	public List<GameObject> boxes = new List<GameObject>();
 
+	public GameEvent(string eventName)
+	{
+		fileName = "Assets/Text/"+eventName+".txt";
+	}
 
 	public void Load()
 	{
@@ -91,7 +96,7 @@ public class GameEvent{
 			} while (currentConditionLayer > maxVerifiedConditionLayer);
 
 
-			Debug.Log(c);
+			//Debug.Log(c);
 			//Debug.Log((int)c);
 			switch (c)
 			{
@@ -191,8 +196,7 @@ public class GameEvent{
 				case '#'://Signale le début et la fin de la lecture de l'adresse d'un nextGameEvent
 					if (mode == ReadMode.NEXT_ADRESS) //Fermeture
 					{
-						GameEvent ge = new GameEvent();
-						ge.fileName = "Assets/Text/" + astring + ".txt";
+						GameEvent ge = new GameEvent(astring);
 						nextGameEvents.Add(ge);
 
 						readingDesc = true;
@@ -215,7 +219,7 @@ public class GameEvent{
 					}
 					else //Si on lit normalement
 					{
-						Debug.Log("Fin de ligne !");
+						//Debug.Log("Fin de ligne !");
 						if (loadedText != "")//Si le texte est vide, on ne fait rien
 						{
 							nbOfReturn++;
@@ -237,7 +241,7 @@ public class GameEvent{
 								//On créé une boîte de texte
 								b.transform.Find("Panel/Line").GetComponent<Text>().text = loadedText;
 								boxes.Add(b);
-								Debug.Log("Boîte ajoutée ! ");
+								//Debug.Log("Boîte ajoutée ! ");
 								//Et on vide le buffer pour accueillir le texte de la prochaine boîte
 								loadedText = "";
 								nbOfReturn = 0;
@@ -299,6 +303,22 @@ public class GameEvent{
 						loadedText += c;
 					}
 					break;
+				case '+':
+					if(mode == ReadMode.OPERATION)
+					{
+						operationType = OperationType.ADD;
+						if (!GameManager.values.ContainsKey(ostring)) //On vérifie ce qu'il y a à gauche du '+'
+						{
+							Debug.Log("Clé inconnue " + ostring + " au caractère " + i);
+						}
+						ostring2 = ostring; //On stocke ce qu'il a à gauche du '+' pour plus tard
+						ostring = "";
+					}
+					else
+					{
+						loadedText += c;
+					}
+					break;
 				case '{': //Déjà géré avant le switch
 					break;
 				case '}': //idem
@@ -308,38 +328,37 @@ public class GameEvent{
 					{
 						nbOfReturn = 0;
 					}
-
-					if (loadedText != "" || c > 32) //D'autre part, si le texte est vide, on ajoute pas les caractères invisibles
+					switch (mode)
 					{
-						switch (mode)
-						{
-							case ReadMode.CONDITION:
-								cstring += c;
-								break;
-							case ReadMode.VALUE:
-								vstring += c;
-								break;
-							case ReadMode.NEXT_ADRESS:
-								astring += c;
-								break;
-							case ReadMode.OPERATION:
-								ostring += c;
-								break;
-							default:
-								if (readingDesc)
-								{
-									dstring += c;
-								}
-								else if (readingName)
-								{
-									nstring += c;
-								}
-								else
+						case ReadMode.CONDITION:
+							cstring += c;
+							break;
+						case ReadMode.VALUE:
+							vstring += c;
+							break;
+						case ReadMode.NEXT_ADRESS:
+							astring += c;
+							break;
+						case ReadMode.OPERATION:
+							ostring += c;
+							break;
+						default:
+							if (readingDesc)
+							{
+								dstring += c;
+							}
+							else if (readingName)
+							{
+								nstring += c;
+							}
+							else
+							{
+								if (loadedText != "" || c > 32) //D'autre part, si le texte est vide, on ajoute pas les caractères invisibles
 								{
 									loadedText += c;
 								}
-								break;
-						}
+							}
+							break;
 					}
 					break;
 			}
@@ -373,7 +392,7 @@ public class GameEvent{
 				case OperationType.ASSIGN:
 					GameManager.values[key] = value;
 					break;
-				case OperationType.INCREMENT:
+				case OperationType.ADD:
 					GameManager.values[key] += value;
 					break;
 				default:
@@ -404,7 +423,7 @@ public class GameEvent{
 				case OperationType.ASSIGN:
 					GameManager.names[key] = value;
 					break;
-				case OperationType.INCREMENT:
+				case OperationType.ADD:
 					GameManager.names[key] += value;
 					break;
 				default:
@@ -471,6 +490,45 @@ public class GameEvent{
 				return new Color(0.1f, 0.4f, 0.0f, alpha);
 		}
 		return new Color(0.6f, 0.6f, 0.6f, alpha);
+	}
+
+	public string IntToFullLetters(int n)
+	{
+		if (n == 0) return "zero";
+		else if (n == 1) return "one";
+		else if (n == 2) return "two";
+		else if (n == 3) return "three";
+		else if (n == 4) return "four";
+		else if (n == 5) return "five";
+		else if (n == 6) return "six";
+		else if (n == 7) return "seven";
+		else if (n == 8) return "eight";
+		else if (n == 9) return "nine";
+		else if (n == 10) return "ten";
+		else if (n == 11) return "eleven";
+		else if (n == 12) return "twelve";
+		else if (n == 13) return "thirteen";
+		else if (n == 14) return "fourteen";
+		else if (n == 15) return "fifteen";
+		else if (n == 16) return "sixteen";
+		else if (n == 17) return "seventeen";
+		else if (n == 18) return "eighteen";
+		else if (n == 19) return "nineteen";
+		else
+		{
+			int doz = n / 10;
+			string s ="";
+			if (doz == 2) s = "twenty";
+			else if (doz == 3) s = "thirty";
+			else if (doz == 4) s = "fourty";
+			else if (doz == 5) s = "fifty";
+			else if (doz == 6) s = "sixty";
+			else if (doz == 7) s = "seventy";
+			else if (doz == 8) s = "eighty";
+			else if (doz == 9) s = "ninety";
+			return s + (n - doz > 0 ? "-" + IntToFullLetters(n - doz) : "");
+		}
+
 	}
 
 }
