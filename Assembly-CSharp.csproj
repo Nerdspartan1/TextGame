@@ -75,10 +75,10 @@
     <None Include="Assets\Text\starta.txt" />
     <None Include="Assets\Text\Take 1\start0.txt" />
     <None Include="Assets\Text\characters.txt" />
-    <None Include="Assets\Text\Maps\kaltan.txt" />
     <None Include="Assets\Text\Take 1\start0a.txt" />
     <None Include="Assets\Text\Take 1\start.txt" />
     <None Include="Assets\Text\test2.txt" />
+    <None Include="Assets\Text\Maps\kaltan_lab\labr1.txt" />
     <None Include="Assets\Items\banana.txt" />
     <None Include="Assets\Text\Take 1\start3.txt" />
     <None Include="Assets\Text\test3.txt" />
@@ -86,6 +86,7 @@
     <None Include="Assets\Text\start0.txt" />
     <None Include="Assets\Text\test.txt" />
     <None Include="Assets\Text\Take 1\start3a.txt" />
+    <None Include="Assets\Text\Maps\kaltan_lab\labr0.txt" />
     <None Include="Assets\Text\Take 1\start4.txt" />
     <None Include="Assets\Text\Take 1\start1.txt" />
     <None Include="Assets\Text\Maps\kaltan_lab.txt" />

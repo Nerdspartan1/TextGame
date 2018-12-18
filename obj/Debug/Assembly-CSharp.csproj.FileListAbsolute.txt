@@ -501,3 +501,4 @@ D:\UnityProjects\TextGame\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cac
 D:\UnityProjects\TextGame\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 D:\UnityProjects\TextGame\obj\Debug\Assembly-CSharp.dll
 D:\UnityProjects\TextGame\obj\Debug\Assembly-CSharp.pdb
+D:\UnityProjects\TextGame\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache

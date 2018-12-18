@@ -17,23 +17,42 @@ public struct Operation
 
 public class GameEvent{
 
-	public string fileName;
+	public string path;
+	//public string eventName;
 
 	static public GameObject textBox;
 	static public GameObject dialogueBox;
 
 	int currentBox = 0;
 
-	public bool isMapLocation;
-	
+	private bool isMapLocation;
+
 	public List<GameEvent> nextGameEvents = new List<GameEvent>();
 	public List<string> nextDescriptions = new List<string>();
 	public List<HashSet<Operation> > nextOperations = new List<HashSet<Operation> >();
 	public List<GameObject> boxes = new List<GameObject>();
 
-	public GameEvent(string eventName)
+	public bool IsMapLocation
 	{
-		fileName = "Assets/Text/"+eventName+".txt";
+		get
+		{
+			return isMapLocation;
+		}
+
+		set
+		{
+			isMapLocation = value;
+		}
+	}
+
+	///<summary>
+	///Va lire le fichier "Assets/Text/"+ path +".txt"
+	///</summary>
+	public GameEvent(string name)
+	{
+		//eventName = name;
+		path = "Assets/Text/"+name+".txt";
+
 	}
 
 	public void Load()
@@ -60,7 +79,7 @@ public class GameEvent{
 		OperationType operationType = OperationType.NONE;
 		int currentConditionLayer = 0;
 		int maxVerifiedConditionLayer = 0;
-		StreamReader reader = new StreamReader(fileName);
+		StreamReader reader = new StreamReader(path);
 
 		ReadMode mode = ReadMode.TEXT;
 		ReadMode prevMode = ReadMode.TEXT;
@@ -68,13 +87,23 @@ public class GameEvent{
 		bool readingDesc = false;
 		bool readingName = false;
 
+		bool endOfStream = false;
 		char c;
-		while (!reader.EndOfStream)
+		while (!endOfStream || loadedText != "" || dstring != "")
 		{
 			//Debug.Log(mode);
 			do
 			{
-				c = (char)reader.Read();
+				if (!endOfStream)
+				{
+					c = (char)reader.Read();
+					endOfStream = reader.EndOfStream;
+				}
+				else //Si on est en fin de stream (et que le nom n'est pas vide): on fait comme si il y avait un retour à la ligne
+				{
+					c = '\n';
+					nbOfReturn = 2;
+				}
 				i++;
 				if (c == '{')
 				{
@@ -196,7 +225,15 @@ public class GameEvent{
 				case '#'://Signale le début et la fin de la lecture de l'adresse d'un nextGameEvent
 					if (mode == ReadMode.NEXT_ADRESS) //Fermeture
 					{
-						GameEvent ge = new GameEvent(astring);
+						GameEvent ge;
+						if (astring == "done")
+						{
+							ge = GameManager.Instance.currentLocation;
+						}
+						else
+						{
+							ge = new GameEvent(astring);
+						}
 						nextGameEvents.Add(ge);
 
 						readingDesc = true;
@@ -364,11 +401,8 @@ public class GameEvent{
 			}
 		}
 
-		if(readingDesc && dstring != "") //Si on finit la lecture avec une description non comptée (ie oublié de sauter une ligne)
-		{
-			nextDescriptions.Add(dstring);
 
-		}
+
 	}
 
 	static bool IsVerified(float value1, float value2, Condition c)
@@ -384,6 +418,7 @@ public class GameEvent{
 				return false;
 		}
 	}
+
 	static void ApplyOperation(string key, float value, OperationType o)
 	{
 		if (GameManager.values.ContainsKey(key)) {

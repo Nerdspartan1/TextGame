@@ -27,13 +27,13 @@ public class Item{
 		{
 			Item i = new Item();
 			i.Load(file);
-			items.Add(ExtractFileName(file), i);
+			items.Add(GameManager.ExtractFileName(file), i);
 		}
 		foreach (string file in Directory.GetFiles(path + "/Weapons", "*.txt"))
 		{
 			Weapon w = new Weapon();
 			w.Load(file);
-			items.Add(ExtractFileName(file), w);
+			items.Add(GameManager.ExtractFileName(file), w);
 		}
 	}
 
@@ -42,22 +42,5 @@ public class Item{
 		return  name + ":\n" + desc;
 	}
 
-	static string ExtractFileName(string filePath)
-	{
-		string result = filePath;
-		for(int i= filePath.Length-1; i >= 0; i--)
-		{
-			if(filePath[i] == '.')
-			{
-				result = result.Remove(i);
-			}
-			if(filePath[i] == '/' || filePath[i] == '\\' )
-			{
-				result = result.Remove(0, i+1);
-				break;
-			}
-			
-		}
-		return result;
-	}
+	
 }

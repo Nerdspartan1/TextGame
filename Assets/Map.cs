@@ -7,17 +7,61 @@ public class Map
 {
 	private List<List<GameEvent>> gameLocations = new List<List<GameEvent>>();
 
-	string fileName;
+	string mapName;
+	string path;
 
-
+	/// <summary>
+	/// Va lire le fichier "Assets/Text/Maps/" + mapName + ".txt"
+	/// </summary>
 	public Map(string mapName)
 	{
-		fileName = "Assets/Text/Maps/" + mapName + ".txt";
+		this.mapName = mapName;
+		path = "Assets/Text/Maps/" + mapName + ".txt";
 	}
 
 	public GameEvent this[int i,int j]
 	{
 		get { return gameLocations[i][j];  }
+	}
+
+	/// <summary>
+	/// Cherche le fichier dans Maps/mapName/
+	/// </summary>
+	/// <param name="locationName"></param>
+	/// <returns></returns>
+	public GameEvent Find(string locationName)
+	{
+		foreach(List<GameEvent> row in gameLocations)
+		{
+			foreach(GameEvent ge in row)
+			{
+				if(ge!= null && ge.path == "Assets/Text/Maps/"+mapName+"/"+locationName+".txt")
+				{
+					return ge;
+				}
+			}
+		}
+		return null;
+	}
+
+	public Vector2 GetPosition(string locationName)
+	{
+		int i = 0;
+		int j = 0;
+		foreach (List<GameEvent> row in gameLocations)
+		{
+			j = 0;
+			foreach (GameEvent ge in row)
+			{
+				if (ge != null && ge.path == "Assets/Text/Maps/" + mapName + "/" + locationName + ".txt")
+				{
+					return new Vector2(i, j);
+				}
+				j++;
+			}
+			i++;
+		}
+		return new Vector2(-1, -1) ;
 	}
 
 	public int Width
@@ -29,10 +73,10 @@ public class Map
 	{
 		get { return gameLocations.Count; }
 	}
+
 	public void Load()
 	{
-		Debug.Log("Load Map");
-		StreamReader reader = new StreamReader(fileName);
+		StreamReader reader = new StreamReader(path);
 		List<GameEvent> row = new List<GameEvent>();
 
 		string name = "";
@@ -59,7 +103,8 @@ public class Map
 				GameEvent ge;
 				if (name != "0")
 				{
-					ge = new GameEvent("Assets/Text/Maps/" + name + ".txt");
+					ge = new GameEvent("Maps/"+ this.mapName + "/" + name);
+					ge.IsMapLocation = true;
 					Debug.Log("Ajout de " + name);
 				}
 				else

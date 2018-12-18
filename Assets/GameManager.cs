@@ -14,28 +14,36 @@ public class GameManager : MonoBehaviour {
 	//Le joueur
 	public Player player;
 
-	//Les transform de l'UI
+	//UI
 	public Transform textPanel;
 	public Transform buttonPanel;
 	public Transform infoPanel;
+	public Transform mapHidingPanel;
 	private Text playerName;
 	private Text playerHp;
 	public Transform mapPanel;
+	Dictionary<Vector2,Button> mapCells = new Dictionary<Vector2,Button>();
+	private float cellWidth, cellHeight;
 
 
 	//L'événement actuel
 	public string startGameEvent;
 	public GameEvent currentGameEvent;
+
 	public Fight currentFight;
 
 	public string startMap;
 	public Map currentMap;
+	public string startLocation;
+	public GameEvent currentLocation;
+	Vector2 currentCellPos;
 
 	//Les prefabs
 	public GameObject textBox;
 	public GameObject dialogueBox;
 	public GameObject buttonObject;
 	public GameObject mapCellObject;
+	public GameObject playerCursor;
 	
 	//Etat de l'UI
 	bool buttonsDisplayed = false;
@@ -84,12 +92,16 @@ public class GameManager : MonoBehaviour {
 		//currentFight.Begin();
 
 		//Premier GameEvent
-		GameEvent ge = new GameEvent(startGameEvent);
-		GoToGameEvent(ge);
+		//GameEvent ge = new GameEvent(startGameEvent);
+		//GoToGameEvent(ge);
 
 		//Première Map
 		Map map = new Map(startMap);
 		GoToMap(map);
+
+		GoToCell("labr1");
+
+		GoToGameEvent(new GameEvent("start"));
 
 	}
 
@@ -128,6 +140,7 @@ public class GameManager : MonoBehaviour {
 		ClearBoxes();
 		ClearButtons();
 		ge.Load();
+		mapHidingPanel.gameObject.SetActive(!ge.IsMapLocation);
 		DisplayNextBox();
 
 	}
@@ -137,11 +150,11 @@ public class GameManager : MonoBehaviour {
 		currentMap = map;
 		ClearMapPanel();
 		map.Load();
-		float w = mapCellObject.GetComponent<RectTransform>().rect.width;
-		float h = mapCellObject.GetComponent<RectTransform>().rect.height;
-		Debug.Log(map.Width);
-		Debug.Log(map.Height);
-		mapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(w*map.Width, h*map.Height);
+		cellWidth = mapCellObject.GetComponent<RectTransform>().rect.width;
+		cellHeight = mapCellObject.GetComponent<RectTransform>().rect.height;
+
+		mapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(cellWidth*map.Width, cellHeight*map.Height);
+		mapCells.Clear();
 
 		for (int i = 0; i<map.Height; i++)
 		{
@@ -150,13 +163,58 @@ public class GameManager : MonoBehaviour {
 				if (map[i, j] != null)
 				{
 					GameObject go = Instantiate(mapCellObject, mapPanel);
-					go.transform.localPosition = new Vector3(w * j, -i * h, 0);
+					go.transform.localPosition = new Vector3(cellWidth * j, -i * cellHeight, 0);
+					int _i = i;
+					int _j = j;
+					go.GetComponent<Button>().onClick.AddListener(delegate { GoToCell(ExtractFileName(map[_i, _j].path)); });
+					mapCells.Add(new Vector2(_i, _j), go.GetComponent<Button>());
 				}
 			}
 		}
 	}
 
+	public void GoToCell(string cellName)
+	{
+		if(currentMap != null)
+		{
+			GameEvent cell = currentMap.Find(cellName);
+			if(cell != null)
+			{
+				Vector2 position = currentMap.GetPosition(cellName);
+				playerCursor.transform.localPosition = new Vector3(position.y * cellWidth, -position.x * cellHeight);
 
+				GoToGameEvent(cell);
+				currentLocation = cell;
+				while (!currentGameEvent.EndOfGameEvent())
+				{
+					DisplayNextBox();
+				}
+				foreach(KeyValuePair<Vector2,Button> pair in mapCells)
+				{
+					if((pair.Key.x == position.x+1 && pair.Key.y == position.y)
+						|| (pair.Key.x == position.x-1 && pair.Key.y == position.y)
+						|| (pair.Key.y == position.y+1 && pair.Key.x == position.x)
+						|| (pair.Key.y == position.y-1 && pair.Key.x == position.x))
+					{
+						pair.Value.interactable = true;
+					}
+					else
+					{
+						pair.Value.interactable = false;
+					}
+				}
+
+			}
+			else
+			{
+				Debug.Log("Cellule introuvable : "+cellName);
+			}
+		}
+		else
+		{
+			Debug.Log("Impossible de chercher une cellule : map non référencée.");
+		}
+	}
 
 
 	public bool DisplayNextBox()
@@ -206,7 +264,9 @@ public class GameManager : MonoBehaviour {
 
 	public void ClearMapPanel()
 	{
+		playerCursor.transform.parent = null;
 		ClearChilds(mapPanel);
+		playerCursor.transform.parent = mapPanel;
 	}
 
 	static void ClearChilds(Transform t)
@@ -268,6 +328,25 @@ public class GameManager : MonoBehaviour {
 		{
 			names.Add(key, "");
 		}
+	}
+
+	public static string ExtractFileName(string filePath)
+	{
+		string result = filePath;
+		for (int i = filePath.Length - 1; i >= 0; i--)
+		{
+			if (filePath[i] == '.')
+			{
+				result = result.Remove(i);
+			}
+			if (filePath[i] == '/' || filePath[i] == '\\')
+			{
+				result = result.Remove(0, i + 1);
+				break;
+			}
+
+		}
+		return result;
 	}
 
 }
