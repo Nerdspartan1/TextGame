@@ -1,3 +1,4 @@
 ﻿You decide to get up.
 
 #done# [Next]
+#maps/gerka/room0# [Try to go to Gerka]

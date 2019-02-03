@@ -6,7 +6,7 @@ using System.IO;
 
 enum ReadMode { TEXT, CONDITION, OPERATION, VALUE, NEXT_ADRESS, NEXT_DESC }
 enum Condition { EQUALS, GREATER_THAN }
-public enum OperationType { NONE, ASSIGN, ADD}
+public enum OperationType { NONE, ASSIGN, ADD, CHANGE_MAP,CHANGE_CELL}
 
 public struct Operation
 {
@@ -225,6 +225,7 @@ public class GameEvent{
 				case '#'://Signale le début et la fin de la lecture de l'adresse d'un nextGameEvent
 					if (mode == ReadMode.NEXT_ADRESS) //Fermeture
 					{
+						nextOperations.Add(new HashSet<Operation>()); //On ajoute un set d'opérations à appliquer si on clique sur le bouton (restera vide si aucune opération n'est associé à ce nextGameEvent)
 						GameEvent ge;
 						if (astring == "done")
 						{
@@ -232,12 +233,37 @@ public class GameEvent{
 						}
 						else
 						{
-							ge = new GameEvent(astring);
+							string[] gameEventPath = astring.Split('/');
+							if(gameEventPath[0] == "maps") //Si on lit un gameLocation
+							{
+								try
+								{
+									Operation goToMap = new Operation();
+									goToMap.operationType = OperationType.CHANGE_MAP;
+									goToMap.key = gameEventPath[1];
+									nextOperations[nextOperations.Count - 1].Add(goToMap);
+
+									Operation goToCell = new Operation();
+									goToCell.operationType = OperationType.CHANGE_CELL;
+									goToCell.key = gameEventPath[2];
+									nextOperations[nextOperations.Count - 1].Add(goToCell);
+
+									ge = null; 
+								}
+								catch(System.Exception e)
+								{
+									throw e;
+								}
+							}
+							else //Sinon, c'est qu'on lit un gameEvent normal
+							{
+								ge = new GameEvent(astring);
+							}
 						}
 						nextGameEvents.Add(ge);
 
 						readingDesc = true;
-						nextOperations.Add(new HashSet<Operation>()); //On ajoute un set d'opérations (restera vide si aucune opération n'est associé à ce nextGameEvent)
+						
 						mode = ReadMode.TEXT; //Ensuite on va lire la description
 					}
 					else // Ouverture
@@ -482,7 +508,19 @@ public class GameEvent{
 
 	public static void ApplyOperation(Operation o)
 	{
-		ApplyOperation(o.key, o.value, o.operationType);
+		switch (o.operationType)
+		{
+			case OperationType.CHANGE_MAP:
+				GameManager.Instance.GoToMap(new Map(o.key));
+				break;
+			case OperationType.CHANGE_CELL:
+				GameManager.Instance.GoToCell(o.key);
+				break;
+			default:
+				ApplyOperation(o.key, o.value, o.operationType);
+				break;
+		}
+		
 	}
 
 	public GameObject GetNextBox()

@@ -11,12 +11,12 @@ public class Map
 	string path;
 
 	/// <summary>
-	/// Va lire le fichier "Assets/Text/Maps/" + mapName + ".txt"
+	/// Va lire le fichier "Assets/Text/maps/" + mapName + ".txt"
 	/// </summary>
 	public Map(string mapName)
 	{
 		this.mapName = mapName;
-		path = "Assets/Text/Maps/" + mapName + ".txt";
+		path = "Assets/Text/maps/" + mapName + ".txt";
 	}
 
 	public GameEvent this[int i,int j]
@@ -35,7 +35,7 @@ public class Map
 		{
 			foreach(GameEvent ge in row)
 			{
-				if(ge!= null && ge.path == "Assets/Text/Maps/"+mapName+"/"+locationName+".txt")
+				if(ge!= null && ge.path == "Assets/Text/maps/"+mapName+"/"+locationName+".txt")
 				{
 					return ge;
 				}
@@ -53,7 +53,7 @@ public class Map
 			j = 0;
 			foreach (GameEvent ge in row)
 			{
-				if (ge != null && ge.path == "Assets/Text/Maps/" + mapName + "/" + locationName + ".txt")
+				if (ge != null && ge.path == "Assets/Text/maps/" + mapName + "/" + locationName + ".txt")
 				{
 					return new Vector2(i, j);
 				}
@@ -103,7 +103,7 @@ public class Map
 				GameEvent ge;
 				if (name != "0")
 				{
-					ge = new GameEvent("Maps/"+ this.mapName + "/" + name);
+					ge = new GameEvent("maps/"+ this.mapName + "/" + name);
 					ge.IsMapLocation = true;
 					Debug.Log("Ajout de " + name);
 				}

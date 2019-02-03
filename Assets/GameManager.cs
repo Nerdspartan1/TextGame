@@ -136,13 +136,16 @@ public class GameManager : MonoBehaviour {
 
 	public void GoToGameEvent(GameEvent ge)
 	{
+		if (ge == null) //Si le gameEvent est null, alors on retourne en mode exploration
+		{
+			ge = currentLocation;
+		}
 		currentGameEvent = ge;
 		ClearBoxes();
 		ClearButtons();
 		ge.Load();
 		mapHidingPanel.gameObject.SetActive(!ge.IsMapLocation);
 		DisplayNextBox();
-
 	}
 
 	public void GoToMap(Map map)
@@ -173,6 +176,10 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Goes the cell named cellName within the current map
+	/// </summary>
+	/// <param name="cellName"></param>
 	public void GoToCell(string cellName)
 	{
 		if(currentMap != null)
