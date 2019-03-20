@@ -3,14 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class Item{
 
+[CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/Item/Item", order = 1)]
+public class Item : ScriptableObject{
+	
 	public static Dictionary<string,Item> items = new Dictionary<string,Item>();
-
-	public string name;
+	
+	[Header("Identity")]
+	new public string name;
+	[TextArea(3,10)]
 	public string desc;
 	public int value;
 
+	public virtual string Describe()
+	{
+		return name + ":\n" + desc;
+	}
+
+	//Deprecated
+	/*
 	public virtual void Load(string fileName)
 	{
 		StreamReader reader = new StreamReader(fileName);
@@ -36,11 +47,5 @@ public class Item{
 			items.Add(GameManager.ExtractFileName(file), w);
 		}
 	}
-
-	public virtual string Describe()
-	{
-		return  name + ":\n" + desc;
-	}
-
-	
+	*/
 }

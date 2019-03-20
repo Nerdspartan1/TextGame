@@ -2,18 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit{
-
+public class Unit : ScriptableObject
+{
+	[SerializeField]
 	private string idName;
-	private int level;
-	private int hp;
-	private int maxHp;
-	private string name;
+
+	[Header("Identity")]
+	[SerializeField]
+	new private string name;
+	[SerializeField]
+	[TextArea(3,10)]
 	private string desc;
-	private Weapon weapon;
+	
+	[Header("Weapon")]
+	public Weapon weapon;
 
-	public int STR, PER, END, CHR, INT, AGI, LCK;
+	[Header("Stats")]
+	public int STR; //+damage
+	public int END; //+hp
+	public int DEX; //+speed,dodges
 
+	private int level = 1;
+	private int hp, maxHp;
+
+	public virtual void Init()
+	{
+		//Calcul des HP
+		MaxHp = 10 + 1 * STR + 3 * END;
+		Hp = MaxHp;
+		Debug.Log(name + " initialized.\n Hp = " + Hp.ToString());
+		
+	}
 
 
 	public int MaxHp
@@ -52,7 +71,10 @@ public class Unit{
 		}
 	}
 
-	public bool IsDead { get; private set; }
+	public bool IsDead
+	{
+		get { return Hp <= 0; }
+	}
 
 	public string Name
 	{
@@ -149,6 +171,7 @@ public class Unit{
 
 	public void Die()
 	{
-		IsDead = true;
+		Debug.Log(name + " dies !");
+
 	}
 }

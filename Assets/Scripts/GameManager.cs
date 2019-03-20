@@ -10,90 +10,68 @@ public class GameManager : MonoBehaviour {
 	//Valeurs pour la lecture des gameEvent
 	static public Dictionary<string, string> names = new Dictionary<string, string>();
 	static public Dictionary<string, float> values = new Dictionary<string, float>();
-
-	//Le joueur
+	
+	[Header("Player")]
 	public Player player;
 
+	[HideInInspector]
+	public FightManager fightManager;
+
 	//UI
+	[Header("UI References")]
 	public Transform textPanel;
 	public Transform buttonPanel;
 	public Transform infoPanel;
 	public Transform mapHidingPanel;
-	private Text playerName;
-	private Text playerHp;
+	public Text playerNameInfoText;
+	public Text playerHpInfoText;
+	public Text playerLevelInfoText;
+	public Text playerXpInfoText;
 	public Transform mapPanel;
 	Dictionary<Vector2,Button> mapCells = new Dictionary<Vector2,Button>();
 	private float cellWidth, cellHeight;
-
-
-	//L'événement actuel
-	public string startGameEvent;
-	public GameEvent currentGameEvent;
-
-	public Fight currentFight;
-
-	public string startMap;
-	public Map currentMap;
-	public string startLocation;
-	public GameEvent currentLocation;
-	Vector2 currentCellPos;
+	private bool buttonsDisplayed = false;
 
 	//Les prefabs
+	[Header("Prefabs")]
 	public GameObject textBox;
 	public GameObject dialogueBox;
 	public GameObject buttonObject;
 	public GameObject mapCellObject;
 	public GameObject playerCursor;
+
+
+	//L'événement actuel
+	[Header("Initial values")]
+	public string startGameEvent;
+	private GameEvent currentGameEvent;
+	public string startMap;
+	private Map currentMap;
+	public string startLocation;
+	[HideInInspector]
+	public GameEvent currentLocation;
+	private Vector2 currentCellPos;
+
+	//Debug
+	[Header("##DEBUG##")]
+	public Enemy foe;
 	
-	//Etat de l'UI
-	bool buttonsDisplayed = false;
 
 	void Start () {
 		//Singleton
 		if(instance == null)
-		{
 			instance = this;
-		}
 		else
-		{
 			Destroy(this);
-		}
+
+		//Référencement des autres managers
+		fightManager = GetComponent<FightManager>();
 
 		//Association des prefabs
 		GameEvent.textBox = textBox;
 		GameEvent.dialogueBox = dialogueBox;
 
-		//Localisation des objets textes
-		playerName = infoPanel.Find("Player Name").GetComponent<Text>();
-		playerHp = infoPanel.Find("Player HP").GetComponent<Text>();
-
-
-
-		//Valeurs initiales
-
-	
-		//Chargement des items
-		Item.LoadItems("Assets/Prefabs/Items");
-
-		//Création du joueur
-		player = new Player();
-		player.Name = "Mauri";
-		player.Hp = 100;
-		player.Weapon = (Weapon)Item.items["weapon"];
-
-		UpdatePlayerInfo();
-
-		Unit foe = new Unit();
-		foe.Hp = 100;
-
-		foe.Weapon = (Weapon)Item.items["weapon"];
-
-		currentFight = new Fight(player, foe);
-		//currentFight.Begin();
-
-		//Premier GameEvent
-		//GameEvent ge = new GameEvent(startGameEvent);
-		//GoToGameEvent(ge);
+		player.Init();
 
 		//Première Map
 		Map map = new Map(startMap);
@@ -101,23 +79,24 @@ public class GameManager : MonoBehaviour {
 
 		GoToCell("labr1");
 
-		GoToGameEvent(new GameEvent("start"));
+		//GoToGameEvent(new GameEvent("start"));
+		fightManager.BeginFight(foe);
+
+		//Actualise les infos du joueur sur les textes à l'écran
+		UpdatePlayerInfo();
 
 	}
 
 	public static GameManager Instance
 	{
 		get{
-			if (instance == null)
-			{
-				instance = new GameManager();
-			}
 			return instance;
 		}
 	}
 
 	private void Update()
 	{
+		UpdatePlayerInfo();
 		if (currentGameEvent != null && Input.GetButtonDown("Fire1"))
 		{
 			if (!currentGameEvent.EndOfGameEvent())
@@ -288,8 +267,10 @@ public class GameManager : MonoBehaviour {
 	{
 		if(player != null)
 		{
-			playerName.text = player.Name;
-			playerHp.text = player.Hp.ToString() + " / " + player.MaxHp.ToString();
+			playerNameInfoText.text = player.Name;
+			playerHpInfoText.text = player.Hp.ToString() + " / " + player.MaxHp.ToString();
+			playerLevelInfoText.text = "Lvl. " + player.Level.ToString();
+			playerXpInfoText.text = "XP : " + player.Xp.ToString();
 
 		}
 	}

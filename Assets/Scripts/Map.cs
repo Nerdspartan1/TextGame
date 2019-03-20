@@ -105,12 +105,12 @@ public class Map
 				{
 					ge = new GameEvent("maps/"+ this.mapName + "/" + name);
 					ge.IsMapLocation = true;
-					Debug.Log("Ajout de " + name);
+					//Debug.Log("Ajout de " + name);
 				}
 				else
 				{
 					ge = null;
-					Debug.Log("Ajout de null");
+					//Debug.Log("Ajout de null");
 				}
 
 				row.Add(ge);
@@ -118,7 +118,7 @@ public class Map
 				name = "";
 				if(c == '\n')
 				{
-					Debug.Log("Ajout de row de taille " + row.Count);
+					//Debug.Log("Ajout de row de taille " + row.Count);
 					gameLocations.Add(row);
 					row = new List<GameEvent>();
 				}
