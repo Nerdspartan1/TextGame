@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 
 	//L'événement actuel
 	[Header("Initial values")]
-	public string startGameEvent;
+	public GameEvent startGameEvent;
 	private GameEvent currentGameEvent;
 	public string startMap;
 	private Map currentMap;
@@ -67,20 +67,17 @@ public class GameManager : MonoBehaviour {
 		//Référencement des autres managers
 		fightManager = GetComponent<FightManager>();
 
-		//Association des prefabs
-		GameEvent.textBox = textBox;
-		GameEvent.dialogueBox = dialogueBox;
-
 		player.Init();
+		GoToGameEvent(startGameEvent);
 
 		//Première Map
-		Map map = new Map(startMap);
-		GoToMap(map);
+		//Map map = new Map(startMap);
+		//GoToMap(map);
 
-		GoToCell("labr1");
+		//GoToCell("labr1");
 
 		//GoToGameEvent(new GameEvent("start"));
-		fightManager.BeginFight(foe);
+		//fightManager.BeginFight(foe);
 
 		//Actualise les infos du joueur sur les textes à l'écran
 		UpdatePlayerInfo();
@@ -99,16 +96,9 @@ public class GameManager : MonoBehaviour {
 		UpdatePlayerInfo();
 		if (currentGameEvent != null && Input.GetButtonDown("Fire1"))
 		{
-			if (!currentGameEvent.EndOfGameEvent())
+			if (!buttonsDisplayed)
 			{
 				DisplayNextBox();
-			}
-			else
-			{
-				if (!buttonsDisplayed)
-				{
-					DisplayButtons();
-				}
 			}
 		}
 	}
@@ -117,21 +107,57 @@ public class GameManager : MonoBehaviour {
 	{
 		if (ge == null) //Si le gameEvent est null, alors on retourne en mode exploration
 		{
-			ge = currentLocation;
+			return;
+			
 		}
 		currentGameEvent = ge;
+		currentGameEvent.Init();
+
 		ClearBoxes();
 		ClearButtons();
-		ge.Load();
-		mapHidingPanel.gameObject.SetActive(!ge.IsMapLocation);
+
 		DisplayNextBox();
+	}
+
+	public bool DisplayNextBox()
+	{
+		
+		if (currentGameEvent != null)
+		{
+			Paragraph p = currentGameEvent.GetNextParagraph();
+			if (p != null)
+			{
+				GameObject textBox;
+				List<GameObject> choiceBoxes;
+				p.ToGameObjects(out textBox, out choiceBoxes);
+				textBox.transform.SetParent(textPanel);
+
+				foreach (GameObject choiceBox in choiceBoxes)
+				{
+					choiceBox.transform.SetParent(buttonPanel);
+					choiceBox.GetComponent<Button>().onClick.AddListener(delegate
+					{
+						ClearButtons();
+						DisplayNextBox();
+					});
+					buttonsDisplayed = true;
+				}
+				return true;
+			}
+		}
+		else
+		{
+			throw new System.Exception("No current GameEvent. Cannot display next paragraph");
+
+		}
+		return false;
 	}
 
 	public void GoToMap(Map map)
 	{
 		currentMap = map;
 		ClearMapPanel();
-		map.Load();
+		//map.Load();
 		cellWidth = mapCellObject.GetComponent<RectTransform>().rect.width;
 		cellHeight = mapCellObject.GetComponent<RectTransform>().rect.height;
 
@@ -148,7 +174,7 @@ public class GameManager : MonoBehaviour {
 					go.transform.localPosition = new Vector3(cellWidth * j, -i * cellHeight, 0);
 					int _i = i;
 					int _j = j;
-					go.GetComponent<Button>().onClick.AddListener(delegate { GoToCell(ExtractFileName(map[_i, _j].path)); });
+					//go.GetComponent<Button>().onClick.AddListener(delegate { GoToCell(ExtractFileName(map[_i, _j].path)); });
 					mapCells.Add(new Vector2(_i, _j), go.GetComponent<Button>());
 				}
 			}
@@ -161,6 +187,7 @@ public class GameManager : MonoBehaviour {
 	/// <param name="cellName"></param>
 	public void GoToCell(string cellName)
 	{
+		/*
 		if(currentMap != null)
 		{
 			GameEvent cell = currentMap.Find(cellName);
@@ -168,13 +195,14 @@ public class GameManager : MonoBehaviour {
 			{
 				Vector2 position = currentMap.GetPosition(cellName);
 				playerCursor.transform.localPosition = new Vector3(position.y * cellWidth, -position.x * cellHeight);
-
+				
 				GoToGameEvent(cell);
 				currentLocation = cell;
 				while (!currentGameEvent.EndOfGameEvent())
 				{
 					DisplayNextBox();
 				}
+				
 				foreach(KeyValuePair<Vector2,Button> pair in mapCells)
 				{
 					if((pair.Key.x == position.x+1 && pair.Key.y == position.y)
@@ -200,42 +228,9 @@ public class GameManager : MonoBehaviour {
 		{
 			Debug.Log("Impossible de chercher une cellule : map non référencée.");
 		}
+		*/
 	}
 
-
-	public bool DisplayNextBox()
-	{
-		if (currentGameEvent != null) {
-			GameObject b = currentGameEvent.GetNextBox();
-			if (b != null)
-			{ 
-				b.transform.SetParent(textPanel);
-				return true;
-			}
-		}
-		else
-		{
-			Debug.Log("Error: cannot display next box : currentGameEvent is null");
-			
-		}
-		return false;
-	}
-
-	public void DisplayButtons()
-	{
-		for (int i = 0; i < currentGameEvent.nextGameEvents.Count; i++)
-		{
-			GameEvent nge = currentGameEvent.nextGameEvents[i];
-			GameObject bo = Instantiate(buttonObject, buttonPanel);
-			foreach (Operation op in currentGameEvent.nextOperations[i])
-			{
-				bo.GetComponent<Button>().onClick.AddListener(call: delegate { GameEvent.ApplyOperation(op); });
-			}
-			bo.GetComponent<Button>().onClick.AddListener(delegate { GoToGameEvent(nge); });
-			bo.GetComponentInChildren<Text>().text = currentGameEvent.nextDescriptions[i];
-		}
-		buttonsDisplayed = true;
-	}
 
 	public void ClearBoxes()
 	{
@@ -275,7 +270,6 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-
 	public static void ChangeValue(string key, float value)
 	{
 		if (values.ContainsKey(key))
@@ -291,10 +285,7 @@ public class GameManager : MonoBehaviour {
 
 	public static void CreateValue(string key)
 	{
-		if (!values.ContainsKey(key))
-		{
-			values.Add(key, 0);
-		}
+		ChangeValue(key, 0);
 	}
 
 	public static void ChangeName(string key, string value)
@@ -312,10 +303,7 @@ public class GameManager : MonoBehaviour {
 
 	public static void CreateName(string key)
 	{
-		if (!names.ContainsKey(key))
-		{
-			names.Add(key, "");
-		}
+		ChangeName(key, "");
 	}
 
 	public static string ExtractFileName(string filePath)

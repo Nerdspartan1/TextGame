@@ -14,7 +14,7 @@ public class Enemy : Unit
 	}
 
 	[Header("Fight Style")]
-	public FightPattern fightPattern;
+	
 
 	[Header("Drop")]
 	public int xpDrop;
