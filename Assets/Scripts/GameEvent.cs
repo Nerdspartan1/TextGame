@@ -4,13 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-//FORMER
-
-enum ReadMode { TEXT, CONDITION, OPERATION, VALUE, NEXT_ADRESS, NEXT_DESC }
 public enum ConditionType { EQUALS, GREATER_THAN }
 public enum OperationType { NONE, ASSIGN, ADD, CHANGE_MAP,CHANGE_CELL}
 
-//NEW
 [System.Serializable]
 public class Condition{
 	public string key;
