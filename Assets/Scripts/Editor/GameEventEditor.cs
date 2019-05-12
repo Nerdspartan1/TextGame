@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class CONST
+public class K
 {
 	public const int defaultPropHeight = 16;
 	public const int defaultInterlining = 2;
@@ -41,23 +41,30 @@ public class EditorUtils
 	{
 		if (!property.isArray) throw new System.Exception("[PropertyList] Property argument must be an array");
 
+		float totalHeight = 0;
+
 		EditorGUI.indentLevel++;
 		if (property.arraySize == 0)
 		{
-			Rect addButtonRect = new Rect(position.x + EditorGUI.indentLevel * CONST.indentWidth, position.y + CONST.defaultPropHeight, 100, CONST.defaultPropHeight);
+			Rect addButtonRect = new Rect(position.x + EditorGUI.indentLevel * K.indentWidth, position.y, 100, K.defaultPropHeight);
 			if (GUI.Button(addButtonRect, new GUIContent("Add property")))
 			{
 				property.InsertArrayElementAtIndex(0);
 			}
+			totalHeight = K.defaultPropHeight;
 		}
 		else
 		{
 			for (int i = 0; i < property.arraySize; i++)
 			{
-				Rect propRect = new Rect(position.x, position.y + (i + 1) * (CONST.defaultPropHeight + CONST.defaultInterlining), position.width-40, CONST.defaultPropHeight);
-				EditorGUI.PropertyField(propRect, property.GetArrayElementAtIndex(i));
+				SerializedProperty prop = property.GetArrayElementAtIndex(i);
+				float propHeight = EditorGUI.GetPropertyHeight(prop);
+				Rect propRect = new Rect(position.x, position.y + totalHeight, position.width-40, propHeight);
+				EditorGUI.PropertyField(propRect, prop);
 
-				Rect addButtonRect = new Rect(propRect.x + propRect.width , propRect.y, 20, CONST.defaultPropHeight);
+				totalHeight += propHeight+K.defaultInterlining;
+				
+				Rect addButtonRect = new Rect(propRect.x + propRect.width , propRect.y, 20, K.defaultPropHeight);
 				if (GUI.Button(addButtonRect, new GUIContent("+")))
 				{
 					property.InsertArrayElementAtIndex(i);
@@ -67,7 +74,7 @@ public class EditorUtils
 					}
 					property.GetArrayElementAtIndex(i + 1).isExpanded = false;
 				}
-				Rect removeButtonRect = new Rect(propRect.x + propRect.width +20, propRect.y, 20, CONST.defaultPropHeight);
+				Rect removeButtonRect = new Rect(propRect.x + propRect.width +20, propRect.y, 20, K.defaultPropHeight);
 				if (GUI.Button(removeButtonRect, new GUIContent("-")))
 				{
 					bool isLastExpanded = property.GetArrayElementAtIndex(property.arraySize - 1).isExpanded;
@@ -83,13 +90,8 @@ public class EditorUtils
 		}
 		EditorGUI.indentLevel--;
 
-		return new Rect(
-			position.x, 
-			position.y, 
-			position.width, 
-			property.arraySize > 0 ? 
-				property.arraySize * (CONST.defaultPropHeight + CONST.defaultInterlining) :
-				CONST.defaultPropHeight + CONST.defaultInterlining);
+		Debug.Log(totalHeight);
+		return new Rect(position.x,position.y,position.width,totalHeight);
 	}
 	/*
 	public static void PropertyListLayout(SerializedProperty property, bool foldout = false, bool shortProp = false)
@@ -203,14 +205,14 @@ public class OperationDrawer : PropertyDrawer
 		EditorGUI.indentLevel = 0;
 		bool inHorizontalScope = EditorUtils.InHorizontalScope;
 
-		Rect keyRect = new Rect(position.x, position.y, 100, CONST.defaultPropHeight);
-		Rect operationRect = new Rect(position.x + 110, position.y, 100, CONST.defaultPropHeight);
-		Rect valueRect = new Rect(position.x + 220, position.y, 100, CONST.defaultPropHeight);
+		Rect keyRect = new Rect(position.x, position.y, 100, K.defaultPropHeight);
+		Rect operationRect = new Rect(position.x + 110, position.y, 100, K.defaultPropHeight);
+		Rect valueRect = new Rect(position.x + 220, position.y, 100, K.defaultPropHeight);
 
 		if (!inHorizontalScope)
 		{
 			EditorUtils.BeginHorizontal();
-			GUILayout.Space(indent * CONST.indentWidth);
+			GUILayout.Space(indent * K.indentWidth);
 		}
 
 		EditorGUI.PropertyField(keyRect, property.FindPropertyRelative("key"),GUIContent.none);
@@ -243,14 +245,14 @@ public class ConditionDrawer : PropertyDrawer
 		EditorGUI.indentLevel = 0;
 		bool inHorizontalScope = EditorUtils.InHorizontalScope;
 
-		Rect keyRect = new Rect(position.x, position.y, 100, CONST.defaultPropHeight);
-		Rect conditionRect = new Rect(position.x + 110, position.y, 100, CONST.defaultPropHeight);
-		Rect valueRect = new Rect(position.x + 220, position.y, 100, CONST.defaultPropHeight);
+		Rect keyRect = new Rect(position.x, position.y, 100, K.defaultPropHeight);
+		Rect conditionRect = new Rect(position.x + 110, position.y, 100, K.defaultPropHeight);
+		Rect valueRect = new Rect(position.x + 220, position.y, 100, K.defaultPropHeight);
 
 		if (!inHorizontalScope)
 		{
 			EditorUtils.BeginHorizontal();
-			GUILayout.Space(indent * CONST.indentWidth);
+			GUILayout.Space(indent * K.indentWidth);
 		}
 
 		EditorGUI.PropertyField(keyRect, property.FindPropertyRelative("key"), GUIContent.none);
@@ -272,7 +274,8 @@ public class ChoiceDrawer : PropertyDrawer
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
 		int size = property.FindPropertyRelative("operations").arraySize;
-		return base.GetPropertyHeight(property, label) + ((size > 0) ? size * CONST.defaultPropHeight : 1 * CONST.defaultPropHeight);
+		Debug.Log("choice prop");
+		return ((size > 0) ? (1+size) * (K.defaultPropHeight+K.defaultInterlining) : 2 * K.defaultPropHeight);
 	}
 
 	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -284,8 +287,9 @@ public class ChoiceDrawer : PropertyDrawer
 		int indentLevel = EditorGUI.indentLevel;
 		EditorGUI.indentLevel = 0;
 
-		EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, CONST.defaultPropHeight), property.FindPropertyRelative("text"), GUIContent.none);
+		EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, K.defaultPropHeight), property.FindPropertyRelative("text"), GUIContent.none);
 		//EditorGUILayout.PropertyField(property.FindPropertyRelative("text"), GUIContent.none);
+		position.y += 20;
 
 		EditorUtils.PropertyList(position, property.FindPropertyRelative("operations"));
 
@@ -310,10 +314,11 @@ public class ParagraphDrawer : PropertyDrawer
 		SerializedProperty conditions = property.FindPropertyRelative("conditions");
 		//conditions.isExpanded = EditorGUILayout.Foldout(conditions.isExpanded, new GUIContent("Conditions"));
 		conditions.isExpanded = EditorGUI.Foldout(position, conditions.isExpanded, new GUIContent("Conditions"));
+		position.y += 20;
 		if (conditions.isExpanded)
 		{
 			position.y += EditorUtils.PropertyList(position, conditions).height;
-			position.y += 20;
+			
 		}
 
 		
@@ -323,17 +328,17 @@ public class ParagraphDrawer : PropertyDrawer
 
 		SerializedProperty operations = property.FindPropertyRelative("operations");
 		operations.isExpanded = EditorGUI.Foldout(position, operations.isExpanded, new GUIContent("Operations"));
+		position.y += 20;
 		if (operations.isExpanded)
 		{
 			position.y += EditorUtils.PropertyList(position, operations).height;
-			position.y += 20;
 		}
 		SerializedProperty choices = property.FindPropertyRelative("choices");
 		choices.isExpanded = EditorGUI.Foldout(position, choices.isExpanded, new GUIContent("Choices"));
+		position.y += 20;
 		if (choices.isExpanded)
 		{
 			position.y += EditorUtils.PropertyList(position, choices).height;
-			position.y += 20;
 		}
 
 		//EditorGUI.indentLevel = indentLevel;
