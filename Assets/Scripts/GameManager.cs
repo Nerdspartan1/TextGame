@@ -3,13 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public class Values
+{
+	static Dictionary<string, string> values = new Dictionary<string, string>();
+
+	static public bool ContainsKey(string key)
+	{
+		return values.ContainsKey(key);
+	}
+
+	static public bool GetValueAsFloat(string key, out float value)
+	{
+		string s;
+		value = 0;
+		if (!values.TryGetValue(key, out s)) return false;
+		if (!float.TryParse(s, out value)) return false;
+		return true;
+	}
+
+	static public void SetValueAsFloat(string key, float value)
+	{
+		if(values.ContainsKey(key))
+		{
+			values[key] = value.ToString();
+		}
+		else
+		{
+			values.Add(key, value.ToString());
+		}
+	}
+
+	static public bool GetValueAsString(string key, out string value)
+	{
+		return values.TryGetValue(key, out value);
+	}
+
+	static public void SetValueAsString(string key, string value)
+	{
+		if (values.ContainsKey(key))
+		{
+			values[key] = value;
+		}
+		else
+		{
+			values.Add(key, value);
+		}
+	}
+
+}
+
 public class GameManager : MonoBehaviour {
 	//Singleton instance
 	private static GameManager instance = null;
-
-	//Valeurs pour la lecture des gameEvent
-	static public Dictionary<string, string> names = new Dictionary<string, string>();
-	static public Dictionary<string, float> values = new Dictionary<string, float>();
 	
 	[Header("Player")]
 	public Player player;
@@ -142,6 +188,8 @@ public class GameManager : MonoBehaviour {
 					});
 					buttonsDisplayed = true;
 				}
+				p.ApplyOperations();
+
 				return true;
 			}
 		}
@@ -270,41 +318,6 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public static void ChangeValue(string key, float value)
-	{
-		if (values.ContainsKey(key))
-		{
-			values[key] = value;
-		}
-		else
-		{
-			values.Add(key, value);
-		}
-
-	}
-
-	public static void CreateValue(string key)
-	{
-		ChangeValue(key, 0);
-	}
-
-	public static void ChangeName(string key, string value)
-	{
-		if (names.ContainsKey(key))
-		{
-			names[key] = value;
-		}
-		else
-		{
-			names.Add(key, value);
-		}
-
-	}
-
-	public static void CreateName(string key)
-	{
-		ChangeName(key, "");
-	}
 
 	public static string ExtractFileName(string filePath)
 	{

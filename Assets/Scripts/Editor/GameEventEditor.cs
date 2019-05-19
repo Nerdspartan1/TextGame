@@ -283,12 +283,14 @@ public class GameEventEditor : Editor
 
 		position.y += EditorUtils.PropertyList(position, paragraphs).height;
 
-		Rect saveButtonRect = new Rect(position.x, position.y, position.width, 20);
+		GUI.EndScrollView();
+
+		Rect saveButtonRect = new Rect(position.x, 650, position.width, 20);
 		if (GUI.Button(saveButtonRect,"Save changes"))
 		{
 			serializedObject.ApplyModifiedProperties();
 		}
-		GUI.EndScrollView();
+		
 
 	}
 	

@@ -49,7 +49,7 @@ public class Unit : ScriptableObject
 			{
 				Hp = maxHp;
 			}
-			GameManager.ChangeValue(IdName + ".maxHp", maxHp);
+			Values.SetValueAsFloat(IdName + ".maxHp", maxHp);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class Unit : ScriptableObject
 			{
 				MaxHp = hp;
 			}
-			GameManager.ChangeValue(IdName + ".hp", hp);
+			Values.SetValueAsFloat(IdName + ".hp", hp);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class Unit : ScriptableObject
 		set
 		{
 			name = value;
-			GameManager.ChangeName(IdName + ".name" , name);
+			Values.SetValueAsString(IdName + ".name" , name);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class Unit : ScriptableObject
 		set
 		{
 			desc = value;
-			GameManager.ChangeName(IdName + ".desc", desc);
+			Values.SetValueAsString(IdName + ".desc", desc);
 		}
 	}
 
@@ -127,7 +127,7 @@ public class Unit : ScriptableObject
 		set
 		{
 			level = value;
-			GameManager.ChangeValue(IdName + ".level", level);
+			Values.SetValueAsFloat(IdName + ".level", level);
 		}
 	}
 

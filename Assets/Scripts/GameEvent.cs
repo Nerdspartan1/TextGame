@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 
 public enum ConditionType { EQUALS, GREATER_THAN }
-public enum OperationType { NONE, ASSIGN, ADD, CHANGE_MAP,CHANGE_CELL}
+public enum OperationType { NONE, SET, ADD, CHANGE_MAP,CHANGE_CELL}
 
 [System.Serializable]
 public class Condition{
@@ -17,21 +17,21 @@ public class Condition{
 	{
 		//key must be contained in values
 		float value1;
-		if (GameManager.values.ContainsKey(key))
+		if (Values.ContainsKey(key))
 		{
-			value1 = GameManager.values[key];
+			Values.GetValueAsFloat(key, out value1);
 		}
 		else
 		{
 			throw new System.Exception("[GameEvent]" + key + " key is unknown");
 		}
-		//value must have a numeric value or a key to values
+		//value must have a numeric value or be a key to a value
 		float value2;
-		if (!float.TryParse(value, out value2))
+		if (!float.TryParse(value, out value2)) // is it a float ?
 		{
-			if (GameManager.values.ContainsKey(value))
+			if (Values.ContainsKey(value)) //is it a key to a value ?
 			{
-				value2 = GameManager.values[value];
+				Values.GetValueAsFloat(value, out value2);
 			}
 			else
 			{
@@ -47,8 +47,7 @@ public class Condition{
 			case ConditionType.GREATER_THAN:
 				return (value1 > value2);
 			default:
-				Debug.Log("Erreur : Condition inconnue");
-				return false;
+				throw new System.Exception("[Operation] Condition type not supported");
 		}
 	}
 
@@ -68,7 +67,7 @@ public struct Operation
 {
 	public string key;
 	public OperationType operationType;
-	public float value;
+	public string value;
 
 	public void Apply()
 	{
@@ -82,21 +81,20 @@ public struct Operation
 				return;
 		}
 
-		if (!GameManager.values.ContainsKey(key))
-		{
-			GameManager.CreateValue(key);
-		}
 
 		switch (operationType)
 		{
-			case OperationType.ASSIGN:
-				GameManager.values[key] = value;
+			case OperationType.SET:
+				Values.SetValueAsString(key, value.ToString());
 				break;
 			case OperationType.ADD:
-				GameManager.values[key] += value;
+				float v1, v2;
+				if (!Values.GetValueAsFloat(key, out v1)) throw new System.Exception("[Operation] Cannot add : key " + key + " is not a float");
+				if (!float.TryParse(value, out v2)) throw new System.Exception("[Operation] Cannot add : value " + value + " is not a float");
+				Values.SetValueAsFloat(key, v1 + v2);
 				break;
 			default:
-				throw new System.Exception("[Operation] Operation type unsupported");
+				throw new System.Exception("[Operation] Operation type not supported");
 		}
 
 
@@ -116,16 +114,60 @@ public class Paragraph
 {
 	public List<Condition> conditions;
 	[TextArea(5,15)]
-	public string text;
+	[SerializeField]
+	private string text;
 	public List<Operation> operations;
 	public List<Choice> choices;
+
+	public string RawText{get{return text;} set{text = value;}}
+
+	public string Text {
+		get
+		{
+			string result = "";
+			int textSize = text.Length;
+			bool readingKey = false;
+			string key = "";
+			for(int i =0; i<textSize; i++)
+			{
+				if (!readingKey)
+				{
+					if(text[i] == '{')
+					{
+						readingKey = true;
+					}
+					else
+					{
+						result += text[i];
+					}
+				}
+				else //readingKey
+				{
+					if (text[i] == '}')
+					{
+						string s;
+						if (!Values.GetValueAsString(key, out s)) Debug.LogWarning("[GameEvent] Key " + key + " undefined.");
+						result += s;
+						readingKey = false;
+						key = "";
+					}
+					else
+					{
+						key += text[i];
+					}
+				}
+				
+			}
+			return result;
+		}
+	}
 
 	public void ToGameObjects(out GameObject textBox, out List<GameObject> choiceBoxes)
 	{
 		textBox = GameObject.Instantiate(GameManager.Instance.textBox);
 		Text text = textBox.transform.Find("Panel/Line").GetComponent<Text>();
 		if (text == null) throw new System.Exception("[GameEvent] Cannot find Text component of TextBox prefab ");
-		text.text = this.text;
+		text.text = Text;
 
 		choiceBoxes = new List<GameObject>();
 		foreach(Choice choice in choices)
@@ -157,6 +199,7 @@ public class Paragraph
 			op.Apply();
 		}
 	}
+
 }
 
 
