@@ -55,7 +55,7 @@ public class FightManager : MonoBehaviour
 		//vvv Mettre ça dans le beginFight pour ne créer les unitTarget qu'une fois au début et les enlever à la fin
 		GameObject unitTarget = Instantiate(unitTargetObject,fightPanel.transform);
 		unitTarget.transform.localPosition = Vector3.zero;
-		unitTarget.GetComponent<UnitTarget>().unit = GameManager.Instance.player;
+		//unitTarget.GetComponent<UnitTarget>().unit = GameManager.Instance.player;
 
 
 		yield return new WaitForSeconds(5);

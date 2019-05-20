@@ -102,9 +102,16 @@ public class OperationDrawer : PropertyDrawer
 		Rect operationRect = new Rect(position.x + 110, position.y, 100, K.defaultPropHeight);
 		Rect valueRect = new Rect(position.x + 220, position.y, 100, K.defaultPropHeight);
 
+		SerializedProperty operationType = property.FindPropertyRelative("operationType");
 
-		EditorGUI.PropertyField(keyRect, property.FindPropertyRelative("key"),GUIContent.none);
-		EditorGUI.PropertyField(operationRect, property.FindPropertyRelative("operationType"), GUIContent.none);
+		switch ((OperationType)operationType.intValue)
+		{
+			case OperationType.SET:
+			case OperationType.ADD:
+				EditorGUI.PropertyField(keyRect, property.FindPropertyRelative("key"), GUIContent.none);
+				break;
+		}
+		EditorGUI.PropertyField(operationRect, operationType, GUIContent.none);
 		EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("value"), GUIContent.none);
 
 		EditorGUI.indentLevel = indent;

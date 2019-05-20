@@ -74,10 +74,10 @@ public struct Operation
 		switch (operationType)
 		{
 			case OperationType.CHANGE_MAP:
-				GameManager.Instance.GoToMap(new Map(key));
+				//GameManager.Instance.GoToMap(new Map(value));
 				return;
 			case OperationType.CHANGE_CELL:
-				GameManager.Instance.GoToCell(key);
+				GameManager.Instance.GoToCell(value);
 				return;
 		}
 

@@ -151,15 +151,13 @@ public class GameManager : MonoBehaviour {
 
 	public void GoToGameEvent(GameEvent ge)
 	{
-		if (ge == null) //Si le gameEvent est null, alors on retourne en mode exploration
-		{
-			return;
-			
-		}
+		//Si le gameEvent est null, alors on retourne en mode exploration
+		if (ge == null) return;
+
 		currentGameEvent = ge;
 		currentGameEvent.Init();
 
-		ClearBoxes();
+		ClearText();
 		ClearButtons();
 
 		DisplayNextBox();
@@ -168,37 +166,32 @@ public class GameManager : MonoBehaviour {
 	public bool DisplayNextBox()
 	{
 		
-		if (currentGameEvent != null)
+		if (currentGameEvent == null) throw new System.Exception("No current GameEvent. Cannot display next paragraph");
+
+		Paragraph p = currentGameEvent.GetNextParagraph();
+		if (p == null) return false;
+
+		GameObject textBox;
+		List<GameObject> choiceBoxes;
+		p.ToGameObjects(out textBox, out choiceBoxes);
+
+		textBox.transform.SetParent(textPanel);
+
+		foreach (GameObject choiceBox in choiceBoxes)
 		{
-			Paragraph p = currentGameEvent.GetNextParagraph();
-			if (p != null)
+			choiceBox.transform.SetParent(buttonPanel);
+			choiceBox.GetComponent<Button>().onClick.AddListener(delegate
 			{
-				GameObject textBox;
-				List<GameObject> choiceBoxes;
-				p.ToGameObjects(out textBox, out choiceBoxes);
-				textBox.transform.SetParent(textPanel);
-
-				foreach (GameObject choiceBox in choiceBoxes)
-				{
-					choiceBox.transform.SetParent(buttonPanel);
-					choiceBox.GetComponent<Button>().onClick.AddListener(delegate
-					{
-						ClearButtons();
-						DisplayNextBox();
-					});
-					buttonsDisplayed = true;
-				}
-				p.ApplyOperations();
-
-				return true;
-			}
+				ClearButtons();
+				DisplayNextBox();
+			});
+			buttonsDisplayed = true;
 		}
-		else
-		{
-			throw new System.Exception("No current GameEvent. Cannot display next paragraph");
 
-		}
-		return false;
+		p.ApplyOperations();
+
+		return true;
+		
 	}
 
 	public void GoToMap(Map map)
@@ -209,9 +202,9 @@ public class GameManager : MonoBehaviour {
 		cellWidth = mapCellObject.GetComponent<RectTransform>().rect.width;
 		cellHeight = mapCellObject.GetComponent<RectTransform>().rect.height;
 
-		mapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(cellWidth*map.Width, cellHeight*map.Height);
+		//mapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(cellWidth*map.Width, cellHeight*map.Height);
 		mapCells.Clear();
-
+		/*
 		for (int i = 0; i<map.Height; i++)
 		{
 			for(int j = 0; j<map.Width; j++)
@@ -226,11 +219,11 @@ public class GameManager : MonoBehaviour {
 					mapCells.Add(new Vector2(_i, _j), go.GetComponent<Button>());
 				}
 			}
-		}
+		}*/
 	}
 
 	/// <summary>
-	/// Goes the cell named cellName within the current map
+	/// Go to the cell named cellName within the current map
 	/// </summary>
 	/// <param name="cellName"></param>
 	public void GoToCell(string cellName)
@@ -280,7 +273,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-	public void ClearBoxes()
+	public void ClearText()
 	{
 		ClearChilds(textPanel);
 	}
@@ -308,34 +301,13 @@ public class GameManager : MonoBehaviour {
 
 	public void UpdatePlayerInfo()
 	{
-		if(player != null)
-		{
-			playerNameInfoText.text = player.Name;
-			playerHpInfoText.text = player.Hp.ToString() + " / " + player.MaxHp.ToString();
-			playerLevelInfoText.text = "Lvl. " + player.Level.ToString();
-			playerXpInfoText.text = "XP : " + player.Xp.ToString();
+		if (player == null) return;
 
-		}
-	}
+		playerNameInfoText.text = player.Name;
+		playerHpInfoText.text = player.Hp.ToString() + " / " + player.MaxHp.ToString();
+		playerLevelInfoText.text = "Lvl. " + player.Level.ToString();
+		playerXpInfoText.text = "XP : " + player.Xp.ToString();
 
-
-	public static string ExtractFileName(string filePath)
-	{
-		string result = filePath;
-		for (int i = filePath.Length - 1; i >= 0; i--)
-		{
-			if (filePath[i] == '.')
-			{
-				result = result.Remove(i);
-			}
-			if (filePath[i] == '/' || filePath[i] == '\\')
-			{
-				result = result.Remove(0, i + 1);
-				break;
-			}
-
-		}
-		return result;
 	}
 
 }
