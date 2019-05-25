@@ -64,7 +64,6 @@ public class GameManager : MonoBehaviour {
 	[HideInInspector]
 	public FightManager fightManager;
 
-	//UI
 	[Header("UI References")]
 	public Transform textPanel;
 	public Transform buttonPanel;
@@ -79,7 +78,6 @@ public class GameManager : MonoBehaviour {
 	private float cellWidth, cellHeight;
 	private bool buttonsDisplayed = false;
 
-	//Les prefabs
 	[Header("Prefabs")]
 	public GameObject TextBoxPrefab;
 	public GameObject DialogueBoxPrefab;
@@ -88,16 +86,14 @@ public class GameManager : MonoBehaviour {
 	public GameObject MapCursorPrefab;
 
 
-	//L'événement actuel
 	[Header("Initial values")]
 	public GameEvent StartingGameEvent;
-	private GameEvent currentGameEvent;
+	private GameEvent CurrentGameEvent;
 	public Map StartingMap;
-	private Map currentMap;
+	private Map CurrentMap;
 	public Vector2Int StartingLocation;
-	private Vector2Int currentLocation;
+	private Vector2Int CurrentLocation;
 
-	//Debug
 	[Header("Debug")]
 	public Enemy foe;
 	
@@ -116,19 +112,17 @@ public class GameManager : MonoBehaviour {
 		//Référencement des autres managers
 		fightManager = GetComponent<FightManager>();
 
+		//starting map
+		GoToMap(StartingMap);
+
+		GoToLocation(StartingLocation.x, StartingLocation.y);
+
 		player.Init();
 		if(StartingGameEvent != null)
 			PlayGameEvent(StartingGameEvent);
 
-		//starting map
-		GoToMap(StartingMap);
-
-		GoToLocation(StartingLocation.x,StartingLocation.y);
-
-		//GoToGameEvent(new GameEvent("start"));
 		//fightManager.BeginFight(foe);
 
-		//Actualise les infos du joueur sur les textes à l'écran
 		UpdatePlayerInfo();
 
 	}
@@ -143,7 +137,7 @@ public class GameManager : MonoBehaviour {
 	private void Update()
 	{
 		UpdatePlayerInfo();
-		if (currentGameEvent != null && Input.GetButtonDown("Fire1"))
+		if (CurrentGameEvent != null && Input.GetButtonDown("Fire1"))
 		{
 			if (!buttonsDisplayed)
 			{
@@ -154,11 +148,10 @@ public class GameManager : MonoBehaviour {
 
 	public void PlayGameEvent(GameEvent ge)
 	{
-		//Si le gameEvent est null, alors on retourne en mode exploration
 		if (ge == null) return;
 
-		currentGameEvent = ge;
-		currentGameEvent.Init();
+		CurrentGameEvent = ge;
+		CurrentGameEvent.Init();
 
 		ClearText();
 		ClearButtons();
@@ -207,22 +200,26 @@ public class GameManager : MonoBehaviour {
 		paragraph.ApplyOperations();
 	}
 
-	public bool DisplayNextParagraphInGameEvent()
+	public void DisplayNextParagraphInGameEvent()
 	{
-		if (currentGameEvent == null) throw new System.Exception("No current GameEvent. Cannot display next paragraph");
+		if (CurrentGameEvent == null) throw new System.Exception("[GameManager] No current GameEvent. Cannot display next paragraph");
 
-		Paragraph p = currentGameEvent.GetNextParagraph();
-		if (p == null) return false;
+		Paragraph p = CurrentGameEvent.GetNextParagraph();
+		if (p == null) //end of game event, back to map
+		{
+			CurrentGameEvent = null;
+			DisplayParagraph(CurrentMap[CurrentLocation.x, CurrentLocation.y].description);
+			return;
+		}
 
 		DisplayParagraph(p, delegate { DisplayNextParagraphInGameEvent(); });
 
-		return true;
 		
 	}
 
 	public void GoToMap(Map map)
 	{
-		currentMap = map;
+		CurrentMap = map;
 		ClearMapPanel();
 
 		cellWidth = LocationPrefab.GetComponent<RectTransform>().rect.width;
@@ -250,13 +247,13 @@ public class GameManager : MonoBehaviour {
 
 	public void GoToLocation(int u, int v)
 	{
-		if(currentMap == null)
+		if(CurrentMap == null)
 		{
 			Debug.LogError($"[GameManager] Cannot move: no map provided");
 			return;
 		}
 		
-		Location location = currentMap[u, v];
+		Location location = CurrentMap[u, v];
 		if(location == null)
 		{
 			Debug.LogError($"[GameManager] No location found at ({u},{v})");
@@ -265,20 +262,27 @@ public class GameManager : MonoBehaviour {
 
 		MapCursorPrefab.transform.localPosition = new Vector2(u * cellWidth, -v* cellHeight);
 
-		//Display location paragraph here
-		DisplayParagraph(location.description);
+		ClearText();
+		GameEvent randomEvent = location.GetRandomEvent();
+		if (randomEvent != null) PlayGameEvent(randomEvent);
+		else
+		{
+			//Display location paragraph here
+			DisplayParagraph(location.description);
+		}
+
 
 		//set the possible destinations
 		foreach(KeyValuePair<Vector2Int,Button> pair in MapCells)
 		{
 			pair.Value.interactable = false;
 		}
-		currentLocation = new Vector2Int(u, v);
+		CurrentLocation = new Vector2Int(u, v);
 		Button b;
-		if (MapCells.TryGetValue(currentLocation + Vector2Int.up, out b)) b.interactable = true;
-		if (MapCells.TryGetValue(currentLocation + Vector2Int.right, out b)) b.interactable = true;
-		if (MapCells.TryGetValue(currentLocation + Vector2Int.down, out b)) b.interactable = true;
-		if (MapCells.TryGetValue(currentLocation + Vector2Int.left, out b)) b.interactable = true;
+		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.up, out b)) b.interactable = true;
+		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.right, out b)) b.interactable = true;
+		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.down, out b)) b.interactable = true;
+		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.left, out b)) b.interactable = true;
 
 	}
 
