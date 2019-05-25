@@ -11,7 +11,7 @@ public class MapEditor : Editor
 	SerializedProperty width;
 	SerializedProperty height;
 
-	Vector2 buttonSize = new Vector2(40, 16);
+	Vector2 buttonSize = new Vector2(80, 16);
 
 	private void OnEnable()
 	{
@@ -20,9 +20,12 @@ public class MapEditor : Editor
 		height = serializedObject.FindProperty("height");
 	}
 
+	
 	public override void OnInspectorGUI()
 	{
-		Rect position = new Rect(0, 50, EditorGUIUtility.currentViewWidth, 0);
+		Rect position = new Rect(0, 0, EditorGUIUtility.currentViewWidth, 0);
+
+		for(int i = 0; i < K.layoutSpaces; ++i) EditorGUILayout.Space();
 
 		EditorGUI.BeginChangeCheck();
 
@@ -31,8 +34,8 @@ public class MapEditor : Editor
 		EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 16), height, new GUIContent("Height"));
 		position.y += 18;
 
-		Rect scrollView = new Rect(0, 50, (buttonSize.x+5)*width.intValue, (buttonSize.y + 5) * height.intValue);
-		Rect scrollRect = new Rect(0, 50, EditorGUIUtility.currentViewWidth, 600);
+		Rect scrollView = new Rect(0, 0, (buttonSize.x+5)*width.intValue, (buttonSize.y + 5) * height.intValue);
+		Rect scrollRect = new Rect(0, 0, EditorGUIUtility.currentViewWidth, 600);
 
 		scrollPosition = GUI.BeginScrollView(scrollRect, scrollPosition, scrollView);
 

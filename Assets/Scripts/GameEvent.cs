@@ -8,7 +8,7 @@ public enum ConditionType { EQUALS, GREATER_THAN }
 public enum OperationType { NONE, SET, ADD, CHANGE_MAP,CHANGE_CELL}
 
 [System.Serializable]
-public class Condition{
+public struct Condition{
 	public string key;
 	public ConditionType conditionType;
 	public string value;
@@ -102,8 +102,9 @@ public struct Operation
 }
 
 [System.Serializable]
-public class Choice
+public struct Choice
 {
+	public List<Condition> conditions;
 	public string text;
 	public List<Operation> operations;
 
@@ -172,6 +173,7 @@ public class Paragraph
 		choiceBoxes = new List<GameObject>();
 		foreach(Choice choice in choices)
 		{
+			if (!Condition.AreVerified(choice.conditions)) continue;
 			GameObject choiceBox = GameObject.Instantiate(GameManager.Instance.buttonObject);
 			Button button = choiceBox.GetComponent<Button>();
 			if(button == null) throw new System.Exception("[GameEvent] Cannot find Button component of Button prefab ");

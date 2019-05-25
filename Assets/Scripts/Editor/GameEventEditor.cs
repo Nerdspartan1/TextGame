@@ -8,6 +8,7 @@ public class K
 	public const int defaultPropHeight = 16;
 	public const int defaultInterlining = 2;
 	public const int indentWidth = 16;
+	public const int layoutSpaces = 106;
 }
 
 public class EditorUtils
@@ -154,6 +155,8 @@ public class ChoiceDrawer : PropertyDrawer
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
 		return
+			EditorUtils.GetPropertyListHeight(property.FindPropertyRelative("conditions")) +
+			K.defaultInterlining +
 			K.defaultPropHeight +
 			K.defaultInterlining +
 			EditorUtils.GetPropertyListHeight(property.FindPropertyRelative("operations"));
@@ -165,16 +168,24 @@ public class ChoiceDrawer : PropertyDrawer
 
 		position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), GUIContent.none);
 
+		float top = position.y;
+
 		int indentLevel = EditorGUI.indentLevel;
 		EditorGUI.indentLevel = 0;
 
+		position.y += EditorUtils.PropertyList(position, property.FindPropertyRelative("conditions")).height;
+
 		EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, K.defaultPropHeight), property.FindPropertyRelative("text"), GUIContent.none);
+		position.y += 18;
 
-		position.y += 20;
-
-		EditorUtils.PropertyList(position, property.FindPropertyRelative("operations"));
+		position.y += EditorUtils.PropertyList(position, property.FindPropertyRelative("operations")).height;
 
 		EditorGUI.indentLevel = indentLevel;
+
+		Color defaultColor = GUI.color;
+		GUI.color = new Color(1.0f, 0.2f, 0.9f, 0.3f);
+		GUI.Box(new Rect(position.x, top, position.width, position.y - top), GUIContent.none);
+		GUI.color = defaultColor;
 
 		EditorGUI.EndProperty();
 	}
@@ -281,10 +292,13 @@ public class GameEventEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
+		for (int i = 0; i < K.layoutSpaces; ++i) EditorGUILayout.Space();
+
 		float totalHeight = EditorUtils.GetPropertyListHeight(paragraphs)+20;
-		Rect position   = new Rect(0, 50, EditorGUIUtility.currentViewWidth, totalHeight);
-		Rect scrollRect = new Rect(0, 50, EditorGUIUtility.currentViewWidth, 600);
-		Rect scrollView = new Rect(0, 50, EditorGUIUtility.currentViewWidth, totalHeight);
+		
+		Rect position   = new Rect(0, 0, EditorGUIUtility.currentViewWidth, totalHeight);
+		Rect scrollRect = new Rect(0, 0, EditorGUIUtility.currentViewWidth, 600);
+		Rect scrollView = new Rect(0, 0, EditorGUIUtility.currentViewWidth, totalHeight);
 
 		scrollPosition = GUI.BeginScrollView(scrollRect, scrollPosition, scrollView);
 
@@ -292,7 +306,7 @@ public class GameEventEditor : Editor
 
 		GUI.EndScrollView();
 
-		Rect saveButtonRect = new Rect(position.x, 650, position.width, 20);
+		Rect saveButtonRect = new Rect(position.x, 600, position.width, 20);
 		if (GUI.Button(saveButtonRect,"Save changes"))
 		{
 			serializedObject.ApplyModifiedProperties();
@@ -300,5 +314,4 @@ public class GameEventEditor : Editor
 		
 
 	}
-	
 }
