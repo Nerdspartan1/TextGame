@@ -52,7 +52,7 @@ public class FightManager : MonoBehaviour
 		fightPanel.SetActive(true);
 		fightMaskPanel.SetActive(true);
 
-		//vvv Mettre ça dans le beginFight pour ne créer les unitTarget qu'une fois au début et les enlever à la fin
+		//Mettre ça dans le beginFight pour ne créer les unitTarget qu'une fois au début et les enlever à la fin
 		GameObject unitTarget = Instantiate(unitTargetObject,fightPanel.transform);
 		unitTarget.transform.localPosition = Vector3.zero;
 		//unitTarget.GetComponent<UnitTarget>().unit = GameManager.Instance.player;
@@ -78,7 +78,7 @@ public class FightManager : MonoBehaviour
 	void GenerateButtons()
 	{
 		GameManager.Instance.ClearButtons();
-		GameObject go = GameObject.Instantiate(GameManager.Instance.buttonObject, GameManager.Instance.buttonPanel);
+		GameObject go = GameObject.Instantiate(GameManager.Instance.ButtonPrefab, GameManager.Instance.buttonPanel);
 		go.GetComponentInChildren<Text>().text = "Attack";
 		go.GetComponent<Button>().onClick.AddListener(PlayerAttack);
 		go.GetComponent<Button>().onClick.AddListener(GameManager.Instance.ClearButtons);

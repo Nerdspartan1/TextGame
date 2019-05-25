@@ -39,7 +39,7 @@ public class Fight{
 	void GenerateButtons()
 	{
 		GameManager.Instance.ClearButtons();
-		GameObject go = GameObject.Instantiate(GameManager.Instance.buttonObject, GameManager.Instance.buttonPanel);
+		GameObject go = GameObject.Instantiate(GameManager.Instance.ButtonPrefab, GameManager.Instance.buttonPanel);
 		go.GetComponentInChildren<Text>().text = "Attaquer";
 		go.GetComponent<Button>().onClick.AddListener(Attack);
 

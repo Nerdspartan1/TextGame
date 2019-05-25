@@ -91,7 +91,7 @@ public struct Operation
 				//GameManager.Instance.GoToMap(new Map(value));
 				return;
 			case OperationType.ChangeCell:
-				GameManager.Instance.GoToCell(value);
+				//GameManager.Instance.GoToCell(value);
 				return;
 		}
 
@@ -103,8 +103,8 @@ public struct Operation
 				break;
 			case OperationType.Add:
 				float v1, v2;
-				if (!Values.GetValueAsFloat(key, out v1)) throw new System.Exception("[Operation] Cannot add : key " + key + " is not a float");
-				if (!float.TryParse(value, out v2)) throw new System.Exception("[Operation] Cannot add : value " + value + " is not a float");
+				if (!Values.GetValueAsFloat(key, out v1)) throw new System.Exception($"[Operation] Cannot add : key {key} is not a float");
+				if (!float.TryParse(value, out v2)) throw new System.Exception($"[Operation] Cannot add : value {value} is not a float");
 				Values.SetValueAsFloat(key, v1 + v2);
 				break;
 			default:
@@ -161,7 +161,7 @@ public class Paragraph
 					if (text[i] == '}')
 					{
 						string s;
-						if (!Values.GetValueAsString(key, out s)) Debug.LogWarning("[GameEvent] Key " + key + " undefined.");
+						if (!Values.GetValueAsString(key, out s)) Debug.LogWarning($"[GameEvent] {key} key undefined.");
 						result += s;
 						readingKey = false;
 						key = "";
@@ -176,37 +176,6 @@ public class Paragraph
 			return result;
 		}
 	}
-
-	public void ToGameObjects(out GameObject textBox, out List<GameObject> choiceBoxes)
-	{
-		textBox = GameObject.Instantiate(GameManager.Instance.textBox);
-		Text text = textBox.transform.Find("Panel/Line").GetComponent<Text>();
-		if (text == null) throw new System.Exception("[GameEvent] Cannot find Text component of TextBox prefab ");
-		text.text = Text;
-
-		choiceBoxes = new List<GameObject>();
-		foreach(Choice choice in choices)
-		{
-			if (!Condition.AreVerified(choice.conditions)) continue;
-			GameObject choiceBox = GameObject.Instantiate(GameManager.Instance.buttonObject);
-			Button button = choiceBox.GetComponent<Button>();
-			if(button == null) throw new System.Exception("[GameEvent] Cannot find Button component of Button prefab ");
-			button.onClick.AddListener(delegate
-			{
-				foreach (Operation op in choice.operations)
-				{
-					op.Apply();
-				}
-				
-			});
-			Text buttonText = button.GetComponentInChildren<Text>();
-			if (buttonText == null) throw new System.Exception("[GameEvent] Cannot find Text component of Button prefab ");
-			buttonText.text = choice.text;
-
-			choiceBoxes.Add(choiceBox);
-		}
-
-	} 
 
 	public void ApplyOperations()
 	{

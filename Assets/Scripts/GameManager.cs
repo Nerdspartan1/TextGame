@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 
 public class Values
@@ -74,32 +75,30 @@ public class GameManager : MonoBehaviour {
 	public Text playerLevelInfoText;
 	public Text playerXpInfoText;
 	public Transform mapPanel;
-	Dictionary<Vector2,Button> mapCells = new Dictionary<Vector2,Button>();
+	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
 	private float cellWidth, cellHeight;
 	private bool buttonsDisplayed = false;
 
 	//Les prefabs
 	[Header("Prefabs")]
-	public GameObject textBox;
-	public GameObject dialogueBox;
-	public GameObject buttonObject;
-	public GameObject mapCellObject;
-	public GameObject playerCursor;
+	public GameObject TextBoxPrefab;
+	public GameObject DialogueBoxPrefab;
+	public GameObject ButtonPrefab;
+	public GameObject LocationPrefab;
+	public GameObject MapCursorPrefab;
 
 
 	//L'événement actuel
 	[Header("Initial values")]
-	public GameEvent startGameEvent;
+	public GameEvent StartingGameEvent;
 	private GameEvent currentGameEvent;
-	public string startMap;
+	public Map StartingMap;
 	private Map currentMap;
-	public string startLocation;
-	[HideInInspector]
-	public GameEvent currentLocation;
-	private Vector2 currentCellPos;
+	public Vector2Int StartingLocation;
+	private Vector2Int currentLocation;
 
 	//Debug
-	[Header("##DEBUG##")]
+	[Header("Debug")]
 	public Enemy foe;
 	
 
@@ -110,17 +109,21 @@ public class GameManager : MonoBehaviour {
 		else
 			Destroy(this);
 
+		ClearText();
+		ClearButtons();
+		ClearMapPanel();
+
 		//Référencement des autres managers
 		fightManager = GetComponent<FightManager>();
 
 		player.Init();
-		GoToGameEvent(startGameEvent);
+		if(StartingGameEvent != null)
+			PlayGameEvent(StartingGameEvent);
 
-		//Première Map
-		//Map map = new Map(startMap);
-		//GoToMap(map);
+		//starting map
+		GoToMap(StartingMap);
 
-		//GoToCell("labr1");
+		GoToLocation(StartingLocation.x,StartingLocation.y);
 
 		//GoToGameEvent(new GameEvent("start"));
 		//fightManager.BeginFight(foe);
@@ -144,12 +147,12 @@ public class GameManager : MonoBehaviour {
 		{
 			if (!buttonsDisplayed)
 			{
-				DisplayNextBox();
+				DisplayNextParagraphInGameEvent();
 			}
 		}
 	}
 
-	public void GoToGameEvent(GameEvent ge)
+	public void PlayGameEvent(GameEvent ge)
 	{
 		//Si le gameEvent est null, alors on retourne en mode exploration
 		if (ge == null) return;
@@ -160,35 +163,58 @@ public class GameManager : MonoBehaviour {
 		ClearText();
 		ClearButtons();
 
-		DisplayNextBox();
+		DisplayNextParagraphInGameEvent();
 	}
 
-	public bool DisplayNextBox()
+	public void DisplayParagraph(Paragraph paragraph, UnityAction onNext = null)
 	{
-		
+		if (paragraph == null) return;
+
+		//instantiate text
+		GameObject textBox;
+		textBox = Instantiate(TextBoxPrefab, textPanel);
+		Text text = textBox.transform.Find("Panel/Line").GetComponent<Text>();
+		if (text == null) throw new System.Exception("[GameManager] Cannot find Text component of TextBox prefab ");
+		text.text = paragraph.Text;
+
+		//instantiate choices
+		foreach (Choice choice in paragraph.choices)
+		{
+			if (!Condition.AreVerified(choice.conditions)) continue;
+
+			GameObject choiceBox = Instantiate(ButtonPrefab,buttonPanel);
+			Button button = choiceBox.GetComponent<Button>();
+			if (button == null) throw new System.Exception("[GameManager] Cannot find Button component of Button prefab ");
+			Text buttonText = button.GetComponentInChildren<Text>();
+			if (buttonText == null) throw new System.Exception("[GameManager] Cannot find Text component of Button prefab ");
+
+			buttonText.text = choice.text;
+	
+			button.onClick.AddListener(delegate
+			{
+				foreach (Operation op in choice.operations)
+				{
+					op.Apply();
+				}
+				ClearButtons();
+			});
+			if (onNext != null) button.onClick.AddListener(onNext);
+			
+			buttonsDisplayed = true;
+		}
+
+		//apply operations
+		paragraph.ApplyOperations();
+	}
+
+	public bool DisplayNextParagraphInGameEvent()
+	{
 		if (currentGameEvent == null) throw new System.Exception("No current GameEvent. Cannot display next paragraph");
 
 		Paragraph p = currentGameEvent.GetNextParagraph();
 		if (p == null) return false;
 
-		GameObject textBox;
-		List<GameObject> choiceBoxes;
-		p.ToGameObjects(out textBox, out choiceBoxes);
-
-		textBox.transform.SetParent(textPanel);
-
-		foreach (GameObject choiceBox in choiceBoxes)
-		{
-			choiceBox.transform.SetParent(buttonPanel);
-			choiceBox.GetComponent<Button>().onClick.AddListener(delegate
-			{
-				ClearButtons();
-				DisplayNextBox();
-			});
-			buttonsDisplayed = true;
-		}
-
-		p.ApplyOperations();
+		DisplayParagraph(p, delegate { DisplayNextParagraphInGameEvent(); });
 
 		return true;
 		
@@ -198,80 +224,63 @@ public class GameManager : MonoBehaviour {
 	{
 		currentMap = map;
 		ClearMapPanel();
-		//map.Load();
-		cellWidth = mapCellObject.GetComponent<RectTransform>().rect.width;
-		cellHeight = mapCellObject.GetComponent<RectTransform>().rect.height;
 
-		//mapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(cellWidth*map.Width, cellHeight*map.Height);
-		mapCells.Clear();
-		/*
-		for (int i = 0; i<map.Height; i++)
+		cellWidth = LocationPrefab.GetComponent<RectTransform>().rect.width;
+		cellHeight = LocationPrefab.GetComponent<RectTransform>().rect.height;
+
+		mapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(cellWidth*map.Width, cellHeight*map.Height);
+		MapCells.Clear();
+		
+		for (int v = 0; v<map.Height; v++)
 		{
-			for(int j = 0; j<map.Width; j++)
+			for(int u = 0; u<map.Width; u++)
 			{
-				if (map[i, j] != null)
+				if (map[u, v] != null)
 				{
-					GameObject go = Instantiate(mapCellObject, mapPanel);
-					go.transform.localPosition = new Vector3(cellWidth * j, -i * cellHeight, 0);
-					int _i = i;
-					int _j = j;
-					//go.GetComponent<Button>().onClick.AddListener(delegate { GoToCell(ExtractFileName(map[_i, _j].path)); });
-					mapCells.Add(new Vector2(_i, _j), go.GetComponent<Button>());
+					GameObject go = Instantiate(LocationPrefab, mapPanel);
+					go.transform.localPosition = new Vector3(cellWidth * u, -v * cellHeight, 0);
+					int _u = u;
+					int _v = v;
+					go.GetComponent<Button>().onClick.AddListener(delegate { GoToLocation(_u,_v); });
+					MapCells.Add(new Vector2Int(_u, _v), go.GetComponent<Button>());
 				}
 			}
-		}*/
+		}
 	}
 
-	/// <summary>
-	/// Go to the cell named cellName within the current map
-	/// </summary>
-	/// <param name="cellName"></param>
-	public void GoToCell(string cellName)
+	public void GoToLocation(int u, int v)
 	{
-		/*
-		if(currentMap != null)
+		if(currentMap == null)
 		{
-			GameEvent cell = currentMap.Find(cellName);
-			if(cell != null)
-			{
-				Vector2 position = currentMap.GetPosition(cellName);
-				playerCursor.transform.localPosition = new Vector3(position.y * cellWidth, -position.x * cellHeight);
-				
-				GoToGameEvent(cell);
-				currentLocation = cell;
-				while (!currentGameEvent.EndOfGameEvent())
-				{
-					DisplayNextBox();
-				}
-				
-				foreach(KeyValuePair<Vector2,Button> pair in mapCells)
-				{
-					if((pair.Key.x == position.x+1 && pair.Key.y == position.y)
-						|| (pair.Key.x == position.x-1 && pair.Key.y == position.y)
-						|| (pair.Key.y == position.y+1 && pair.Key.x == position.x)
-						|| (pair.Key.y == position.y-1 && pair.Key.x == position.x))
-					{
-						pair.Value.interactable = true;
-					}
-					else
-					{
-						pair.Value.interactable = false;
-					}
-				}
+			Debug.LogError($"[GameManager] Cannot move: no map provided");
+			return;
+		}
+		
+		Location location = currentMap[u, v];
+		if(location == null)
+		{
+			Debug.LogError($"[GameManager] No location found at ({u},{v})");
+			return;
+		}
 
-			}
-			else
-			{
-				Debug.Log("Cellule introuvable : "+cellName);
-			}
-		}
-		else
+		MapCursorPrefab.transform.localPosition = new Vector2(u * cellWidth, -v* cellHeight);
+
+		//Display location paragraph here
+		DisplayParagraph(location.description);
+
+		//set the possible destinations
+		foreach(KeyValuePair<Vector2Int,Button> pair in MapCells)
 		{
-			Debug.Log("Impossible de chercher une cellule : map non référencée.");
+			pair.Value.interactable = false;
 		}
-		*/
+		currentLocation = new Vector2Int(u, v);
+		Button b;
+		if (MapCells.TryGetValue(currentLocation + Vector2Int.up, out b)) b.interactable = true;
+		if (MapCells.TryGetValue(currentLocation + Vector2Int.right, out b)) b.interactable = true;
+		if (MapCells.TryGetValue(currentLocation + Vector2Int.down, out b)) b.interactable = true;
+		if (MapCells.TryGetValue(currentLocation + Vector2Int.left, out b)) b.interactable = true;
+
 	}
-
 
 	public void ClearText()
 	{
@@ -286,9 +295,9 @@ public class GameManager : MonoBehaviour {
 
 	public void ClearMapPanel()
 	{
-		playerCursor.transform.SetParent(null);
+		MapCursorPrefab.transform.SetParent(null);
 		ClearChilds(mapPanel);
-		playerCursor.transform.SetParent(mapPanel);
+		MapCursorPrefab.transform.SetParent(mapPanel);
 	}
 
 	static void ClearChilds(Transform t)

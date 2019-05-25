@@ -43,7 +43,7 @@ public class MapEditor : Editor
 		{
 			int u = i % width.intValue;
 			int v = i / width.intValue;
-			//GUI.Button(new Rect(position.x + u * (buttonSize.x+5), position.y + v * (buttonSize.y+5), buttonSize.x, buttonSize.y), "Button");
+			
 			EditorGUI.PropertyField(new Rect(position.x + u * (buttonSize.x + 5), position.y + v * (buttonSize.y + 5), buttonSize.x, buttonSize.y), locations.GetArrayElementAtIndex(i),GUIContent.none);
 		}
 
