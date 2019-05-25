@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public enum ConditionType { EQUALS, GREATER_THAN }
-public enum OperationType { NONE, SET, ADD, CHANGE_MAP,CHANGE_CELL}
+public enum ConditionType { Exists, DoesNotExist, IsEqualTo, IsNotEqualTo, IsGreaterThan }
+public enum OperationType { None, Set, Add, ChangeMap, ChangeCell}
 
 [System.Serializable]
 public struct Condition{
@@ -15,39 +15,53 @@ public struct Condition{
 
 	public bool IsVerified()
 	{
-		//key must be contained in values
+		//trim the strings
+		key = key.Trim();
+		value = value.Trim();
+
+		bool keyExists = Values.ContainsKey(key);
+
+		if		(conditionType == ConditionType.Exists)		  return keyExists;
+		else if (conditionType == ConditionType.DoesNotExist) return !keyExists;
+
+		//key must be contained in Values
+		if (!keyExists)
+		{
+			Debug.LogError("[GameEvent]" + key + " key is unknown");
+			return false;
+		}
+
 		float value1;
-		if (Values.ContainsKey(key))
+		if(!Values.GetValueAsFloat(key, out value1))
 		{
-			Values.GetValueAsFloat(key, out value1);
+			Debug.LogError("[GameEvent]" + key + " key is not float");
+			return false;
 		}
-		else
-		{
-			throw new System.Exception("[GameEvent]" + key + " key is unknown");
-		}
+
 		//value must have a numeric value or be a key to a value
 		float value2;
-		if (!float.TryParse(value, out value2)) // is it a float ?
+		if (!Values.GetValueAsFloat(value, out value2)) // is it a float ?
 		{
-			if (Values.ContainsKey(value)) //is it a key to a value ?
+			if (!Values.ContainsKey(value)) //is it a key to a value ?
 			{
-				Values.GetValueAsFloat(value, out value2);
-			}
-			else
-			{
-				throw new System.Exception("[GameEvent]" + value + " key is unknown");
+				//if both checks failed, error
+				Debug.LogError("[GameEvent]" + value + " key is unknown");
+				return false;
 			}
 		}
 
 
 		switch (conditionType)
 		{
-			case ConditionType.EQUALS:
+			case ConditionType.IsEqualTo:
 				return (value1 == value2);
-			case ConditionType.GREATER_THAN:
+			case ConditionType.IsNotEqualTo:
+				return (value1 != value2);
+			case ConditionType.IsGreaterThan:
 				return (value1 > value2);
 			default:
-				throw new System.Exception("[Operation] Condition type not supported");
+				Debug.LogError("[Operation] Condition type not supported");
+				return false;
 		}
 	}
 
@@ -73,10 +87,10 @@ public struct Operation
 	{
 		switch (operationType)
 		{
-			case OperationType.CHANGE_MAP:
+			case OperationType.ChangeMap:
 				//GameManager.Instance.GoToMap(new Map(value));
 				return;
-			case OperationType.CHANGE_CELL:
+			case OperationType.ChangeCell:
 				GameManager.Instance.GoToCell(value);
 				return;
 		}
@@ -84,10 +98,10 @@ public struct Operation
 
 		switch (operationType)
 		{
-			case OperationType.SET:
+			case OperationType.Set:
 				Values.SetValueAsString(key, value.ToString());
 				break;
-			case OperationType.ADD:
+			case OperationType.Add:
 				float v1, v2;
 				if (!Values.GetValueAsFloat(key, out v1)) throw new System.Exception("[Operation] Cannot add : key " + key + " is not a float");
 				if (!float.TryParse(value, out v2)) throw new System.Exception("[Operation] Cannot add : value " + value + " is not a float");
@@ -203,7 +217,6 @@ public class Paragraph
 	}
 
 }
-
 
 [CreateAssetMenu(fileName = "GameEvent",menuName = "ScriptableObjects/GameEvent")]
 public class GameEvent : ScriptableObject

@@ -11,7 +11,7 @@ public class MapEditor : Editor
 	SerializedProperty width;
 	SerializedProperty height;
 
-	Vector2 buttonSize = new Vector2(80, 16);
+	Vector2 buttonSize = new Vector2(40, 16);
 
 	private void OnEnable()
 	{
