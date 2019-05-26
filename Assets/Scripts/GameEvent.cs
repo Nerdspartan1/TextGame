@@ -82,16 +82,18 @@ public struct Operation
 	public string key;
 	public OperationType operationType;
 	public string value;
+	public Object reference;
+	public Vector2Int position;
 
 	public void Apply()
 	{
 		switch (operationType)
 		{
 			case OperationType.ChangeMap:
-				//GameManager.Instance.GoToMap(new Map(value));
+				GameManager.Instance.GoToMap((Map)reference);
 				return;
 			case OperationType.ChangeCell:
-				//GameManager.Instance.GoToCell(value);
+				GameManager.Instance.GoToLocation(position.x,position.y);
 				return;
 		}
 

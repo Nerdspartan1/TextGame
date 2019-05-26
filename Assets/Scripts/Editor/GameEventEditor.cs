@@ -113,8 +113,20 @@ public class OperationDrawer : PropertyDrawer
 				break;
 		}
 		EditorGUI.PropertyField(operationRect, operationType, GUIContent.none);
-		EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("value"), GUIContent.none);
-
+		switch ((OperationType)operationType.intValue)
+		{
+			case OperationType.Set:
+			case OperationType.Add:
+				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("value"), GUIContent.none);
+				break;
+			case OperationType.ChangeMap:
+				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("reference"), GUIContent.none);
+				break;
+			case OperationType.ChangeCell:
+				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("position"), GUIContent.none);
+				break;
+		}
+		
 		EditorGUI.indentLevel = indent;
 
 		EditorGUI.EndProperty();

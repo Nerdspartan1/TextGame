@@ -208,6 +208,7 @@ public class GameManager : MonoBehaviour {
 		if (p == null) //end of game event, back to map
 		{
 			CurrentGameEvent = null;
+			ClearText();
 			DisplayParagraph(CurrentMap[CurrentLocation.x, CurrentLocation.y].description);
 			return;
 		}
@@ -267,7 +268,6 @@ public class GameManager : MonoBehaviour {
 		if (randomEvent != null) PlayGameEvent(randomEvent);
 		else
 		{
-			//Display location paragraph here
 			DisplayParagraph(location.description);
 		}
 

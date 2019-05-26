@@ -9,7 +9,7 @@ public class Weapon : Item {
 	[Header("Damage")]
 	public int minDmg;
 	public int maxDmg;
-
+	/*
 	[Header("Fire Rate")]
 	public float rof;
 	public bool auto;
@@ -17,19 +17,10 @@ public class Weapon : Item {
 	[Header("Accuracy")]
 	public float dispersion;
 	public float recoil;
-
+	*/
 	public int GetDamage()
 	{
-		return (int)Random.Range(minDmg, maxDmg + 1);
+		return Random.Range(minDmg, maxDmg + 1);
 	}
-	/*
-	override public void Load(string fileName)
-	{
-		StreamReader reader = new StreamReader(fileName);
-		name = reader.ReadLine();
-		desc = reader.ReadLine();
-		minDmg = int.Parse(reader.ReadLine());
-		maxDmg = int.Parse(reader.ReadLine());
-	}
-	*/
+
 }
