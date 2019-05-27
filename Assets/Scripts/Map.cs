@@ -10,11 +10,11 @@ public class Map : ScriptableObject
 	private List<Location> locations = new List<Location>();
 
 	[SerializeField]
-	private int width;
+	private int width = 1;
 	public int Width { get { return width; } }
 
 	[SerializeField]
-	private int height;
+	private int height = 1;
 	public int Height { get { return height; } }
 
 	public Location this[int u, int v]{

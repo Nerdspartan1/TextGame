@@ -2193,7 +2193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae20571dc075e545b773b9a84151f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 11400000, guid: ada84c4424cb22043b9385a8d5793452, type: 2}
+  Player: {fileID: 0}
   fightManager: {fileID: 0}
   textPanel: {fileID: 439243144}
   buttonPanel: {fileID: 1655402122}
@@ -2215,7 +2215,7 @@ MonoBehaviour:
   MapCursorPrefab: {fileID: 151370142}
   StartingGameEvent: {fileID: 11400000, guid: a4c8953992d41504faee327597441dd5, type: 2}
   StartingMap: {fileID: 11400000, guid: 83b92eddad84d2845a3628734ce38ef3, type: 2}
-  StartingLocation: {x: 0, y: 0}
+  StartingLocation: {x: 1, y: 1}
   foe: {fileID: 11400000, guid: 7cffafcaec7339f4784abc7aecbfc9c7, type: 2}
 --- !u!4 &1700758564
 Transform:

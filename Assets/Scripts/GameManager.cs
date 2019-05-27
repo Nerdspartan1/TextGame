@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour {
 	private static GameManager instance = null;
 	
 	[Header("Player")]
-	public Player player;
+	public Player Player;
 
 	[HideInInspector]
 	public FightManager fightManager;
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour {
 
 		GoToLocation(StartingLocation.x, StartingLocation.y);
 
-		player.Init();
+		Player.Init();
 		if(StartingGameEvent != null)
 			PlayGameEvent(StartingGameEvent);
 
@@ -314,12 +314,12 @@ public class GameManager : MonoBehaviour {
 
 	public void UpdatePlayerInfo()
 	{
-		if (player == null) return;
+		if (Player == null) return;
 
-		playerNameInfoText.text = player.Name;
-		playerHpInfoText.text = player.Hp.ToString() + " / " + player.MaxHp.ToString();
-		playerLevelInfoText.text = "Lvl. " + player.Level.ToString();
-		playerXpInfoText.text = "XP : " + player.Xp.ToString();
+		playerNameInfoText.text = Player.Name;
+		playerHpInfoText.text = Player.Hp.ToString() + " / " + Player.MaxHp.ToString();
+		playerLevelInfoText.text = "Lvl. " + Player.Level.ToString();
+		playerXpInfoText.text = "XP : " + Player.Xp.ToString();
 
 	}
 

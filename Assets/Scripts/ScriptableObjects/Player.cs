@@ -5,30 +5,35 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/Unit/Player", order = 1)]
 public class Player : Unit {
 
-	public static Player instance;
-
 	public List<Item> inventory;
-	private int xp = 0;
+	public int Xp;
 
-	public int Xp
-	{
-		get
-		{
-			return xp;
-		}
+	[Header("Stats")]
+	public uint Vitality;
+	public uint Endurance;
+	public uint Strength; 
+	public uint Skill;
+	public uint Luck;
 
-		set
-		{
-			xp = value;
-		}
-	}
 
 	public override void Init()
 	{
 		base.Init();
 		Xp = 0;
 		Level = 1;
+		CalculateStatsFromCharacteristics();
+	}
 
+	public void CalculateStatsFromCharacteristics()
+	{
+		uint V = Vitality;
+		uint E = Endurance;
+		uint St = Strength;
+		uint Sk = Skill;
+		uint L = Luck;
 		
+		MaxHp = (int)(20 + 5 * V + 2 * E);
+		Hp = MaxHp;
+
 	}
 }

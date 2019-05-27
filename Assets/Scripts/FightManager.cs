@@ -65,7 +65,7 @@ public class FightManager : MonoBehaviour
 		fightPanel.SetActive(false);
 		fightMaskPanel.SetActive(false);
 
-		if (!GameManager.Instance.player.IsDead)
+		if (!GameManager.Instance.Player.IsDead)
 		{
 			DoPlayerTurn();
 		}
@@ -89,7 +89,7 @@ public class FightManager : MonoBehaviour
 	{
 		fightStatus = FightStatus.PlayerAttack;
 		Debug.Log("Vous attaquez l'ennemi !");
-		GameManager.Instance.player.Attack(foe);
+		GameManager.Instance.Player.Attack(foe);
 
 		if (!foe.IsDead)
 		{
@@ -105,7 +105,7 @@ public class FightManager : MonoBehaviour
 	{
 		if (victory)
 		{
-			GameManager.Instance.player.Xp += foe.xpDrop;
+			GameManager.Instance.Player.Xp += foe.xpDrop;
 			Debug.Log("You Win !");
 		}
 		else
