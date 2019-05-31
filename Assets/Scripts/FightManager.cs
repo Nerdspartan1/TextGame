@@ -30,6 +30,7 @@ public class FightManager : MonoBehaviour
 		Enemy = foe;
 		Enemy.Init();
 		GameManager.Instance.ClearText();
+		GameManager.Instance.HideMap = true;
 
 		//placeholder for fight comment
 		GameManager.Instance.CreateText($"The fight between you and {Enemy.Name} has begun !");
@@ -126,6 +127,7 @@ public class FightManager : MonoBehaviour
 		}
 
 		Enemy = null;
+		GameManager.Instance.HideMap = false;
 		Debug.Log("Fight end.");
 	}
 

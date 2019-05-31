@@ -14,7 +14,7 @@ public class Enemy : Unit
 	}
 
 	[Header("Fight Style")]
-	Vector2Int damage;
+	public Vector2Int damage;
 
 	[Header("Drop")]
 	public int xpDrop;

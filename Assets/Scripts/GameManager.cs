@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour {
 
 		ClearText();
 		ClearButtons();
-		ClearMapPanel();
+		ClearMap();
 
 		//Référencement des autres managers
 		FightManager = GetComponent<FightManager>();
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour {
 	public void GoToMap(Map map)
 	{
 		CurrentMap = map;
-		ClearMapPanel();
+		ClearMap();
 
 		cellWidth = LocationPrefab.GetComponent<RectTransform>().rect.width;
 		cellHeight = LocationPrefab.GetComponent<RectTransform>().rect.height;
@@ -298,11 +298,23 @@ public class GameManager : MonoBehaviour {
 		buttonsDisplayed = false;
 	}
 
-	public void ClearMapPanel()
+	public void ClearMap()
 	{
 		MapCursorPrefab.transform.SetParent(null);
 		ClearChilds(mapPanel);
 		MapCursorPrefab.transform.SetParent(mapPanel);
+	}
+
+	public bool HideMap
+	{
+		get
+		{
+			return mapHidingPanel.gameObject.activeInHierarchy;
+		}
+		set
+		{
+			mapHidingPanel.gameObject.SetActive(value);
+		}
 	}
 
 	static void ClearChilds(Transform t)
