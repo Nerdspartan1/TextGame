@@ -57,12 +57,13 @@ public class Values
 public class GameManager : MonoBehaviour {
 	//Singleton instance
 	private static GameManager instance = null;
-	
+	public static GameManager Instance{ get { return instance; } }
+
 	[Header("Player")]
 	public Player Player;
 
 	[HideInInspector]
-	public FightManager fightManager;
+	public FightManager FightManager;
 
 	[Header("UI References")]
 	public Transform textPanel;
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour {
 	public Transform mapPanel;
 	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
 	private float cellWidth, cellHeight;
+
 	private bool buttonsDisplayed = false;
 
 	[Header("Prefabs")]
@@ -110,7 +112,7 @@ public class GameManager : MonoBehaviour {
 		ClearMapPanel();
 
 		//Référencement des autres managers
-		fightManager = GetComponent<FightManager>();
+		FightManager = GetComponent<FightManager>();
 
 		//starting map
 		GoToMap(StartingMap);
@@ -118,20 +120,13 @@ public class GameManager : MonoBehaviour {
 		GoToLocation(StartingLocation.x, StartingLocation.y);
 
 		Player.Init();
-		if(StartingGameEvent != null)
-			PlayGameEvent(StartingGameEvent);
 
-		//fightManager.BeginFight(foe);
+		//PlayGameEvent(StartingGameEvent);
+
+		FightManager.BeginFight(foe);
 
 		UpdatePlayerInfo();
 
-	}
-
-	public static GameManager Instance
-	{
-		get{
-			return instance;
-		}
 	}
 
 	private void Update()
@@ -146,6 +141,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	#region GameEvent handling
 	public void PlayGameEvent(GameEvent ge)
 	{
 		if (ge == null) return;
@@ -164,36 +160,14 @@ public class GameManager : MonoBehaviour {
 		if (paragraph == null) return;
 
 		//instantiate text
-		GameObject textBox;
-		textBox = Instantiate(TextBoxPrefab, textPanel);
-		Text text = textBox.transform.Find("Panel/Line").GetComponent<Text>();
-		if (text == null) throw new System.Exception("[GameManager] Cannot find Text component of TextBox prefab ");
-		text.text = paragraph.Text;
+		CreateText(paragraph.Text);
 
 		//instantiate choices
 		foreach (Choice choice in paragraph.choices)
 		{
 			if (!Condition.AreVerified(choice.conditions)) continue;
 
-			GameObject choiceBox = Instantiate(ButtonPrefab,buttonPanel);
-			Button button = choiceBox.GetComponent<Button>();
-			if (button == null) throw new System.Exception("[GameManager] Cannot find Button component of Button prefab ");
-			Text buttonText = button.GetComponentInChildren<Text>();
-			if (buttonText == null) throw new System.Exception("[GameManager] Cannot find Text component of Button prefab ");
-
-			buttonText.text = choice.text;
-	
-			button.onClick.AddListener(delegate
-			{
-				foreach (Operation op in choice.operations)
-				{
-					op.Apply();
-				}
-				ClearButtons();
-			});
-			if (onNext != null) button.onClick.AddListener(onNext);
-			
-			buttonsDisplayed = true;
+			CreateButton(choice.text, delegate{Operation.ApplyAll(choice.operations);}, onNext);
 		}
 
 		//apply operations
@@ -214,10 +188,10 @@ public class GameManager : MonoBehaviour {
 		}
 
 		DisplayParagraph(p, delegate { DisplayNextParagraphInGameEvent(); });
-
-		
 	}
+	#endregion
 
+	#region Map handling
 	public void GoToMap(Map map)
 	{
 		CurrentMap = map;
@@ -285,6 +259,33 @@ public class GameManager : MonoBehaviour {
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.left, out b)) b.interactable = true;
 
 	}
+	#endregion
+
+	#region Scroll panel layout
+
+	public void CreateButton(string content, params UnityAction[] onClick)
+	{
+		GameObject go = Instantiate(ButtonPrefab, buttonPanel);
+		go.GetComponentInChildren<Text>().text = content;
+		var button = go.GetComponent<Button>();
+		button.onClick.AddListener(ClearButtons);
+		foreach (UnityAction action in onClick)
+		{
+			if (action != null)
+				button.onClick.AddListener(action);
+		}
+		
+
+		buttonsDisplayed = true;
+	}
+
+	public void CreateText(string content)
+	{
+		GameObject textBox = Instantiate(TextBoxPrefab, textPanel);
+		Text text = textBox.transform.Find("Panel/Line").GetComponent<Text>();
+		if (text == null) throw new System.Exception("[GameManager] Cannot find Text component of TextBox prefab ");
+		text.text = content;
+	}
 
 	public void ClearText()
 	{
@@ -306,11 +307,13 @@ public class GameManager : MonoBehaviour {
 
 	static void ClearChilds(Transform t)
 	{
-		for (int i = 0; i < t.childCount; i++)
+		foreach (Transform child in t)
 		{
-			Destroy(t.GetChild(i).gameObject);
+			Destroy(child.gameObject);
 		}
 	}
+
+	#endregion
 
 	public void UpdatePlayerInfo()
 	{
@@ -322,5 +325,7 @@ public class GameManager : MonoBehaviour {
 		playerXpInfoText.text = "XP : " + Player.Xp.ToString();
 
 	}
+
+
 
 }

@@ -14,10 +14,15 @@ public class Enemy : Unit
 	}
 
 	[Header("Fight Style")]
-	
+	Vector2Int damage;
 
 	[Header("Drop")]
 	public int xpDrop;
 	public LootDrop[] lootDrops;
+
+	public override void Attack(Unit other)
+	{
+		other.TakeDamage(Random.Range(damage.x, damage.y));
+	}
 
 }

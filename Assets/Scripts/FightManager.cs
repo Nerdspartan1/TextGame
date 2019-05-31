@@ -20,30 +20,45 @@ public class FightManager : MonoBehaviour
 	public GameObject unitTargetObject;
 
 	[SerializeField]
-	private Enemy foe;
+	private Enemy Enemy;
 	[SerializeField]
 	private FightStatus fightStatus = FightStatus.Idle;
 
 
 	public void BeginFight(Enemy foe)
 	{
-		Debug.Log("Fight start !");
-		this.foe = foe;
-		foe.Init();
+		Enemy = foe;
+		Enemy.Init();
+		GameManager.Instance.ClearText();
+
+		//placeholder for fight comment
+		GameManager.Instance.CreateText($"The fight between you and {Enemy.Name} has begun !");
 		DoPlayerTurn();
 	}
 
 
 	private void DoPlayerTurn()
 	{
+		//placeholder for fight comment
+		GameManager.Instance.CreateText($"Your turn!");
 		fightStatus = FightStatus.Idle;
-		GenerateButtons();
 		GameManager.Instance.UpdatePlayerInfo();
+
+		DisplayPlayerTurnButtons();
+		
 	}
 
 	private void DoEnemyTurn()
 	{
-		StartCoroutine("EnemyAttackCoroutine");
+		//StartCoroutine("EnemyAttackCoroutine");
+		//placeholder for fight comment
+		GameManager.Instance.CreateText($"{Enemy.Name} attacks you !");
+		Enemy.Attack(GameManager.Instance.Player);
+
+		if (GameManager.Instance.Player.IsDead)
+			EndFight(false);
+		else
+			DoPlayerTurn();
 	}
 
 	private IEnumerator EnemyAttackCoroutine()
@@ -75,45 +90,42 @@ public class FightManager : MonoBehaviour
 		}
 	}
 
-	void GenerateButtons()
+	void DisplayPlayerTurnButtons()
 	{
 		GameManager.Instance.ClearButtons();
-		GameObject go = GameObject.Instantiate(GameManager.Instance.ButtonPrefab, GameManager.Instance.buttonPanel);
-		go.GetComponentInChildren<Text>().text = "Attack";
-		go.GetComponent<Button>().onClick.AddListener(PlayerAttack);
-		go.GetComponent<Button>().onClick.AddListener(GameManager.Instance.ClearButtons);
-
+		GameManager.Instance.CreateButton("Attack", PlayerAttack);
 	}
 
 	void PlayerAttack()
 	{
 		fightStatus = FightStatus.PlayerAttack;
-		Debug.Log("Vous attaquez l'ennemi !");
-		GameManager.Instance.Player.Attack(foe);
+		//placeholder for fight comment
+		GameManager.Instance.CreateText($"You attack {Enemy.Name} !");
+		GameManager.Instance.Player.Attack(Enemy);
 
-		if (!foe.IsDead)
-		{
-			DoEnemyTurn();
-		}
-		else
-		{
+		if (Enemy.IsDead)
 			EndFight(true);
-		}
+		else
+			DoEnemyTurn();
+		
 	}
 
 	void EndFight(bool victory)
 	{
 		if (victory)
 		{
-			GameManager.Instance.Player.Xp += foe.xpDrop;
-			Debug.Log("You Win !");
+			GameManager.Instance.Player.Xp += Enemy.xpDrop;
+			//placeholder for fight comment
+			GameManager.Instance.CreateText($"You defeated {Enemy.Name}!");
 		}
 		else
 		{
-			Debug.Log("Game Over !");
+			//placeholder for fight comment
+			GameManager.Instance.CreateText($"You died !");
+
 		}
 
-		foe = null;
+		Enemy = null;
 		Debug.Log("Fight end.");
 	}
 

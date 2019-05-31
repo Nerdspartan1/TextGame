@@ -12,23 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e73a754d86d544e84f2285f9652c3c, type: 3}
   m_Name: Enemy
   m_EditorClassIdentifier: 
-  Id: 
-  Name: 
-  Description: 
-  Weapon: {fileID: 0}
-  Stats:
-    Level: 0
-    Strength: 0
-    Dexterity: 0
-    Perception: 0
-    Skill: 0
-    Endurance: 0
-    moveSpeed: 0
-    damageMultiplier: 0
-    MaxHp: 0
-  maxHp: 13
-  hp: 0
-  xpDrop: 0
-  lootDrops:
-  - loot: {fileID: 0}
-    dropChance: 0
+  Name: Headcrab
+  Description: A headcrab.
+  Strength: 2
+  Dexterity: 3
+  Perception: 1
+  Skill: 0
+  Endurance: 0
+  Level: 0
+  maxHp: 24
+  hp: 12
+  MoveSpeed: 0
+  DamageMultiplier: 0
+  xpDrop: 10
+  lootDrops: []

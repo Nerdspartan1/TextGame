@@ -8,7 +8,6 @@ using System.Reflection;
 [CustomEditor(typeof(Unit),true)]
 public class UnitEditor : Editor
 {
-
 	public override void OnInspectorGUI()
 	{
 		base.OnInspectorGUI();
@@ -17,6 +16,4 @@ public class UnitEditor : Editor
 			((Unit)serializedObject.targetObject).CalculateStatsFromAttributes();
 		}
 	}
-
-
 }

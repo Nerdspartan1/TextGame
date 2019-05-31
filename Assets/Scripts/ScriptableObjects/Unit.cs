@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Unit", menuName = "ScriptableObjects/Unit/Unit", order = 1)]
-public class Unit : ScriptableObject
+public abstract class Unit : ScriptableObject
 {
-	public string Id;
-
 	[Header("Identity")]
 	public string Name;
 	[TextArea(3,10)]
 	public string Description;
-	
-	[Header("Weapon")]
-	public Weapon Weapon;
 
 	[Header("Attributes")]
 	public uint Strength;
@@ -53,7 +48,8 @@ public class Unit : ScriptableObject
 
 	public virtual void Init()
 	{
-		Debug.Log($"{Id} initialized.");
+		Hp = MaxHp;
+		Debug.Log($"{Name} initialized.");
 	}
 
 	public void CalculateStatsFromAttributes()
@@ -63,10 +59,7 @@ public class Unit : ScriptableObject
 
 	public bool IsDead{ get { return Hp <= 0; }}
 
-	public void Attack(Unit other)
-	{
-		other.TakeDamage(Weapon.GetDamage());
-	}
+	public abstract void Attack(Unit other);
 
 	public void TakeDamage(int dmg, out int dmgDone, out bool dies)
 	{

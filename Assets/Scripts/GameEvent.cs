@@ -65,7 +65,7 @@ public struct Condition{
 		}
 	}
 
-	public static bool AreVerified(List<Condition> conditions)
+	public static bool AreVerified(IEnumerable<Condition> conditions)
 	{
 		bool verified = true;
 		foreach (Condition c in conditions)
@@ -114,6 +114,14 @@ public struct Operation
 		}
 
 
+	}
+
+	public static void ApplyAll(IEnumerable<Operation> operations)
+	{
+		foreach(Operation operation in operations)
+		{
+			operation.Apply();
+		}
 	}
 }
 
