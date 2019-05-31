@@ -170,6 +170,7 @@ public class GameManager : MonoBehaviour {
 			CreateButton(choice.text, delegate{Operation.ApplyAll(choice.operations);}, onNext);
 		}
 
+		BalanceTextButtonPanel();
 		//apply operations
 		paragraph.ApplyOperations();
 	}
@@ -274,7 +275,7 @@ public class GameManager : MonoBehaviour {
 			if (action != null)
 				button.onClick.AddListener(action);
 		}
-		
+		BalanceTextButtonPanel(); //should not be called at every button created but let's put it here anyway for clean code 
 
 		buttonsDisplayed = true;
 	}
@@ -296,6 +297,7 @@ public class GameManager : MonoBehaviour {
 	{
 		ClearChilds(buttonPanel);
 		buttonsDisplayed = false;
+		BalanceTextButtonPanel();
 	}
 
 	public void ClearMap()
@@ -323,6 +325,12 @@ public class GameManager : MonoBehaviour {
 		{
 			Destroy(child.gameObject);
 		}
+	}
+
+	public void BalanceTextButtonPanel()
+	{
+		float targetTextHeight = 768f - buttonPanel.GetComponent<RectTransform>().rect.height;
+		textPanel.GetComponent<LayoutElement>().minHeight = targetTextHeight;
 	}
 
 	#endregion
