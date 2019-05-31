@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b70150883d7af3a408ea3a61cf74adaf, type: 3}
-  m_Name: Stick
+  m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
+  m_Name: Garden
   m_EditorClassIdentifier: 
-  name: Wooden stick
-  desc: 
-  value: 0
-  minDmg: 1
-  maxDmg: 5
+  description:
+    conditions: []
+    text: You are just outside of your home, in your little green garden.
+    operations: []
+    choices: []
+  randomEvents: []

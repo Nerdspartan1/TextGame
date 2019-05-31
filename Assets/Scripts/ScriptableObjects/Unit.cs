@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Unit", menuName = "ScriptableObjects/Unit/Unit", order = 1)]
 public class Unit : ScriptableObject
 {
 	public string Id;
@@ -14,9 +15,15 @@ public class Unit : ScriptableObject
 	[Header("Weapon")]
 	public Weapon Weapon;
 
-	[Header("Stats")]
-	public int Level;
+	[Header("Attributes")]
+	public uint Strength;
+	public uint Dexterity;
+	public uint Perception;
+	public uint Skill;
+	public uint Endurance;
 
+	[Header("Stats")]
+	public uint Level;
 	[SerializeField]
 	private int maxHp;
 	public int MaxHp
@@ -40,6 +47,8 @@ public class Unit : ScriptableObject
 		}
 
 	}
+	public float MoveSpeed;
+	public float DamageMultiplier;
 
 
 	public virtual void Init()
@@ -47,7 +56,10 @@ public class Unit : ScriptableObject
 		Debug.Log($"{Id} initialized.");
 	}
 
-
+	public void CalculateStatsFromAttributes()
+	{
+		MaxHp = (int)(20 + Endurance * 5 + Strength * 2);
+	}
 
 	public bool IsDead{ get { return Hp <= 0; }}
 

@@ -12,13 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e73a754d86d544e84f2285f9652c3c, type: 3}
   m_Name: Enemy
   m_EditorClassIdentifier: 
-  idName: some_foe
-  name: Foe
-  desc: He looks nasty.
-  weapon: {fileID: 11400000, guid: 4686765a9260fb04a852613799798c2e, type: 2}
-  STR: 3
-  END: 0
-  SPD: 0
-  fightPattern: {fileID: 0}
-  xpDrop: 10
-  lootDrops: []
+  Id: 
+  Name: 
+  Description: 
+  Weapon: {fileID: 0}
+  Stats:
+    Level: 0
+    Strength: 0
+    Dexterity: 0
+    Perception: 0
+    Skill: 0
+    Endurance: 0
+    moveSpeed: 0
+    damageMultiplier: 0
+    MaxHp: 0
+  maxHp: 13
+  hp: 0
+  xpDrop: 0
+  lootDrops:
+  - loot: {fileID: 0}
+    dropChance: 0

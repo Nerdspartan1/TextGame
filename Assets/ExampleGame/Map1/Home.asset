@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdff682ccdd28b3429496e6ba4c9e5db, type: 3}
-  m_Name: Player
+  m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
+  m_Name: Home
   m_EditorClassIdentifier: 
-  idName: player
-  name: Henry
-  desc: A fine young lad.
-  weapon: {fileID: 11400000, guid: 291726b15936e83459c46e466abe951b, type: 2}
-  STR: 1
-  END: 1
-  SPD: 1
-  inventory: []
+  description:
+    conditions: []
+    text: 'It''s your home. There is a nice fireplace in a corner and a really comfy
+      looking bed.
+
+'
+    operations: []
+    choices: []
+  randomEvents: []
