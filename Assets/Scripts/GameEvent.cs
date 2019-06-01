@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 
 public enum ConditionType { Exists, DoesNotExist, IsEqualTo, IsNotEqualTo, IsGreaterThan }
-public enum OperationType { None, Set, Add, ChangeMap, ChangeCell}
+public enum OperationType { None, Set, Add, ChangeMap, ChangeCell, InitiateFight}
 
 [System.Serializable]
 public struct Condition{
@@ -90,10 +90,16 @@ public struct Operation
 		switch (operationType)
 		{
 			case OperationType.ChangeMap:
+				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.GoToMap((Map)reference);
 				return;
 			case OperationType.ChangeCell:
+				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.GoToLocation(position.x,position.y);
+				return;
+			case OperationType.InitiateFight:
+				GameManager.Instance.ExitGameEvent();
+				GameManager.Instance.FightManager.BeginFight((Enemy)reference);
 				return;
 		}
 
@@ -189,10 +195,7 @@ public class Paragraph
 
 	public void ApplyOperations()
 	{
-		foreach(Operation op in operations)
-		{
-			op.Apply();
-		}
+		Operation.ApplyAll(operations);
 	}
 
 }

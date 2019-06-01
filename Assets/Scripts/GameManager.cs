@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour {
 	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
 	private float cellWidth, cellHeight;
 
-	private bool buttonsDisplayed = false;
+	private int buttonsDisplayed = 0;
 
 	[Header("Prefabs")]
 	public GameObject TextBoxPrefab;
@@ -107,10 +107,6 @@ public class GameManager : MonoBehaviour {
 		else
 			Destroy(this);
 
-		ClearText();
-		ClearButtons();
-		ClearMap();
-
 		//Référencement des autres managers
 		FightManager = GetComponent<FightManager>();
 
@@ -121,9 +117,9 @@ public class GameManager : MonoBehaviour {
 
 		Player.Init();
 
-		//PlayGameEvent(StartingGameEvent);
+		PlayGameEvent(StartingGameEvent);
 
-		FightManager.BeginFight(foe);
+		//FightManager.BeginFight(foe);
 
 		UpdatePlayerInfo();
 
@@ -134,7 +130,7 @@ public class GameManager : MonoBehaviour {
 		UpdatePlayerInfo();
 		if (CurrentGameEvent != null && Input.GetButtonDown("Fire1"))
 		{
-			if (!buttonsDisplayed)
+			if (buttonsDisplayed == 0)
 			{
 				DisplayNextParagraphInGameEvent();
 			}
@@ -151,6 +147,7 @@ public class GameManager : MonoBehaviour {
 
 		ClearText();
 		ClearButtons();
+		HideMap = true;
 
 		DisplayNextParagraphInGameEvent();
 	}
@@ -170,25 +167,30 @@ public class GameManager : MonoBehaviour {
 			CreateButton(choice.text, delegate{Operation.ApplyAll(choice.operations);}, onNext);
 		}
 
-		BalanceTextButtonPanel();
 		//apply operations
 		paragraph.ApplyOperations();
 	}
 
 	public void DisplayNextParagraphInGameEvent()
 	{
-		if (CurrentGameEvent == null) throw new System.Exception("[GameManager] No current GameEvent. Cannot display next paragraph");
+		if (CurrentGameEvent == null) return;
 
 		Paragraph p = CurrentGameEvent.GetNextParagraph();
 		if (p == null) //end of game event, back to map
 		{
-			CurrentGameEvent = null;
+			ExitGameEvent();
 			ClearText();
+			HideMap = false;
 			DisplayParagraph(CurrentMap[CurrentLocation.x, CurrentLocation.y].description);
 			return;
 		}
 
 		DisplayParagraph(p, delegate { DisplayNextParagraphInGameEvent(); });
+	}
+
+	public void ExitGameEvent()
+	{
+		CurrentGameEvent = null;
 	}
 	#endregion
 
@@ -274,10 +276,9 @@ public class GameManager : MonoBehaviour {
 		{
 			if (action != null)
 				button.onClick.AddListener(action);
-		}
-		BalanceTextButtonPanel(); //should not be called at every button created but let's put it here anyway for clean code 
-
-		buttonsDisplayed = true;
+		} 
+		buttonsDisplayed++;
+		BalanceTextButtonPanels(); //should not be called at every button created but let's put it here anyway for clean code
 	}
 
 	public void CreateText(string content)
@@ -296,8 +297,8 @@ public class GameManager : MonoBehaviour {
 	public void ClearButtons()
 	{
 		ClearChilds(buttonPanel);
-		buttonsDisplayed = false;
-		BalanceTextButtonPanel();
+		buttonsDisplayed = 0;
+		BalanceTextButtonPanels();
 	}
 
 	public void ClearMap()
@@ -327,10 +328,13 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void BalanceTextButtonPanel()
+	public void BalanceTextButtonPanels()
 	{
-		float targetTextHeight = 768f - buttonPanel.GetComponent<RectTransform>().rect.height;
-		textPanel.GetComponent<LayoutElement>().minHeight = targetTextHeight;
+		float buttonHeight = buttonsDisplayed > 0 ? Mathf.Pow(0.95f, buttonsDisplayed-1) * 50f : 0f;
+		Debug.Log(buttonHeight);
+		textPanel.GetComponent<LayoutElement>().minHeight = 768f - buttonsDisplayed*buttonHeight;
+		var grid = buttonPanel.GetComponent<GridLayoutGroup>();
+		grid.cellSize = new Vector2(grid.cellSize.x, buttonHeight);
 	}
 
 	#endregion

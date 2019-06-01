@@ -568,7 +568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 722.14
+  m_MinHeight: 667.27
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -1401,7 +1401,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: 1
-  m_FlexibleHeight: 10
+  m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!114 &1334614486
 MonoBehaviour:
@@ -1988,7 +1988,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1655402121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1297475563, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -1997,13 +1997,12 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 740, y: 50}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 1
+  m_ConstraintCount: 1
 --- !u!1 &1700758562
 GameObject:
   m_ObjectHideFlags: 0
@@ -2056,7 +2055,7 @@ MonoBehaviour:
   MapCursorPrefab: {fileID: 151370142}
   StartingGameEvent: {fileID: 11400000, guid: a4c8953992d41504faee327597441dd5, type: 2}
   StartingMap: {fileID: 11400000, guid: 83b92eddad84d2845a3628734ce38ef3, type: 2}
-  StartingLocation: {x: 2, y: 1}
+  StartingLocation: {x: 1, y: 1}
   foe: {fileID: 11400000, guid: d4ee3f9948f8f3a4da05a480575f75db, type: 2}
 --- !u!4 &1700758564
 Transform:
@@ -2173,7 +2172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1833624016
 RectTransform:
   m_ObjectHideFlags: 0

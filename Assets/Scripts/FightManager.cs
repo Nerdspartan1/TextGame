@@ -24,7 +24,6 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	private FightStatus fightStatus = FightStatus.Idle;
 
-
 	public void BeginFight(Enemy foe)
 	{
 		Enemy = foe;

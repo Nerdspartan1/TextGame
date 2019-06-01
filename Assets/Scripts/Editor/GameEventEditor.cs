@@ -120,6 +120,7 @@ public class OperationDrawer : PropertyDrawer
 				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("value"), GUIContent.none);
 				break;
 			case OperationType.ChangeMap:
+			case OperationType.InitiateFight:
 				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("reference"), GUIContent.none);
 				break;
 			case OperationType.ChangeCell:

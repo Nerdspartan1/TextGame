@@ -14,6 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   paragraphs:
   - conditions: []
-    text: 'Oh ! A random event is occuring : a car just went by.'
+    text: 'Oh ! A random event is occuring : a random imp attacks !'
     operations: []
-    choices: []
+    choices:
+    - conditions: []
+      text: Fight !
+      operations:
+      - key: 
+        operationType: 5
+        value: 
+        reference: {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
+        position: {x: 0, y: 0}
