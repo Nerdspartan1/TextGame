@@ -119,11 +119,12 @@ public class OperationDrawer : PropertyDrawer
 			case OperationType.Add:
 				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("value"), GUIContent.none);
 				break;
-			case OperationType.ChangeMap:
+			case OperationType.GoToMap:
 			case OperationType.InitiateFight:
+			case OperationType.PlayGameEvent:
 				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("reference"), GUIContent.none);
 				break;
-			case OperationType.ChangeCell:
+			case OperationType.GoToCell:
 				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("position"), GUIContent.none);
 				break;
 		}

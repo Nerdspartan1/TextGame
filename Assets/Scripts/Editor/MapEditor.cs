@@ -3,6 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+[CustomPropertyDrawer(typeof(Location.RandomOperation))]
+public class RandomOperationDrawer : PropertyDrawer
+{
+	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+	{
+		return 18 + EditorUtils.GetPropertyListHeight(property.FindPropertyRelative(nameof(Location.RandomOperation.operations)));
+	}
+
+	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+	{
+		EditorGUI.BeginProperty(position, label, property);
+
+		position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), GUIContent.none);
+
+		SerializedProperty operations = property.FindPropertyRelative(nameof(Location.RandomOperation.operations));
+		SerializedProperty probability = property.FindPropertyRelative(nameof(Location.RandomOperation.probability));
+
+		probability.floatValue = EditorGUI.Slider(new Rect(position.x, position.y, position.width, 16), "Probability", probability.floatValue, 0, 1);
+		position.y += 18;
+
+		position.y += EditorUtils.PropertyList(position, operations).height;
+
+		EditorGUI.EndProperty();
+	}
+}
+
 [CustomEditor(typeof(Map))]
 public class MapEditor : Editor
 {

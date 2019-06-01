@@ -140,7 +140,8 @@ public class GameManager : MonoBehaviour {
 	#region GameEvent handling
 	public void PlayGameEvent(GameEvent ge)
 	{
-		if (ge == null) return;
+		if (ge == null) { Debug.LogWarning("(PlayGameEvent) GameEvent provided is null"); return; }
+		if (CurrentGameEvent != null) Debug.LogWarning("(PlayGameEvent) Playing a GameEvent while already playing one");
 
 		CurrentGameEvent = ge;
 		CurrentGameEvent.Init();
@@ -238,18 +239,9 @@ public class GameManager : MonoBehaviour {
 			return;
 		}
 
+		//update position on map
 		MapCursorPrefab.transform.localPosition = new Vector2(u * cellWidth, -v* cellHeight);
 
-		ClearText();
-		GameEvent randomEvent = location.GetRandomEvent();
-		if (randomEvent != null) PlayGameEvent(randomEvent);
-		else
-		{
-			DisplayParagraph(location.description);
-		}
-
-
-		//set the possible destinations
 		foreach(KeyValuePair<Vector2Int,Button> pair in MapCells)
 		{
 			pair.Value.interactable = false;
@@ -260,6 +252,14 @@ public class GameManager : MonoBehaviour {
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.right, out b)) b.interactable = true;
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.down, out b)) b.interactable = true;
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.left, out b)) b.interactable = true;
+
+
+		//update text
+		ClearText();
+		DisplayParagraph(location.description);
+
+		//apply random operations
+		Operation.ApplyAll(location.GetRandomOperation());
 
 	}
 	#endregion

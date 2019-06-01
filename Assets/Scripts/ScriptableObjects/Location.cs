@@ -6,28 +6,29 @@ using UnityEngine;
 public class Location : ScriptableObject
 {
 	[System.Serializable]
-	public struct RandomEvent
+	public struct RandomOperation
 	{
-		public GameEvent gameEvent;
-		[Range(0,1)]
+		[Range(0, 1)]
 		public float probability;
+		public List<Operation> operations;
+
 	}
 
 	[SerializeField]
 	public Paragraph description;
 	[SerializeField]
-	public List<RandomEvent> randomEvents;
+	public List<RandomOperation> randomEvents;
 
-	public GameEvent GetRandomEvent()
+	public List<Operation> GetRandomOperation()
 	{
 		float r = Random.Range(0f, (float)randomEvents.Count);
 		float probOffset = 0f;
-		foreach(RandomEvent rev in randomEvents)
+		foreach(RandomOperation rev in randomEvents)
 		{
-			if (r < probOffset + rev.probability) return rev.gameEvent;
+			if (r < probOffset + rev.probability) return rev.operations;
 			else probOffset += rev.probability;
 		}
-		return null;
+		return new List<Operation>();
 	}
 
 

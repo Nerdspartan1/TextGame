@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 
 public enum ConditionType { Exists, DoesNotExist, IsEqualTo, IsNotEqualTo, IsGreaterThan }
-public enum OperationType { None, Set, Add, ChangeMap, ChangeCell, InitiateFight}
+public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent}
 
 [System.Serializable]
 public struct Condition{
@@ -89,11 +89,11 @@ public struct Operation
 	{
 		switch (operationType)
 		{
-			case OperationType.ChangeMap:
+			case OperationType.GoToMap:
 				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.GoToMap((Map)reference);
 				return;
-			case OperationType.ChangeCell:
+			case OperationType.GoToCell:
 				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.GoToLocation(position.x,position.y);
 				return;
@@ -101,20 +101,19 @@ public struct Operation
 				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.FightManager.BeginFight((Enemy)reference);
 				return;
-		}
-
-
-		switch (operationType)
-		{
+			case OperationType.PlayGameEvent:
+				GameManager.Instance.ExitGameEvent();
+				GameManager.Instance.PlayGameEvent((GameEvent)reference);
+				return;
 			case OperationType.Set:
 				Values.SetValueAsString(key, value.ToString());
-				break;
+				return;
 			case OperationType.Add:
 				float v1, v2;
 				if (!Values.GetValueAsFloat(key, out v1)) throw new System.Exception($"[Operation] Cannot add : key {key} is not a float");
 				if (!float.TryParse(value, out v2)) throw new System.Exception($"[Operation] Cannot add : value {value} is not a float");
 				Values.SetValueAsFloat(key, v1 + v2);
-				break;
+				return;
 			default:
 				throw new System.Exception("[Operation] Operation type not supported");
 		}
@@ -129,6 +128,7 @@ public struct Operation
 			operation.Apply();
 		}
 	}
+
 }
 
 [System.Serializable]
