@@ -325,12 +325,13 @@ public class GameEventEditor : Editor
 
 		scrollPosition = GUI.BeginScrollView(scrollRect, scrollPosition, scrollView);
 
+		EditorGUI.BeginChangeCheck();
+
 		position.y += EditorUtils.PropertyList(position, paragraphs).height;
 
 		GUI.EndScrollView();
 
-		Rect saveButtonRect = new Rect(position.x, 600, position.width, 20);
-		if (GUI.Button(saveButtonRect,"Save changes"))
+		if (EditorGUI.EndChangeCheck())
 		{
 			serializedObject.ApplyModifiedProperties();
 		}
