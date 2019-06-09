@@ -56,14 +56,11 @@ public class Values
 
 public class GameManager : MonoBehaviour {
 	//Singleton instance
-	private static GameManager instance = null;
-	public static GameManager Instance{ get { return instance; } }
-
-	[Header("Player")]
-	public Player Player;
+	public static GameManager Instance;
 
 	[HideInInspector]
 	public FightManager FightManager;
+	public Player Player;
 
 	[Header("UI References")]
 	public Transform textPanel;
@@ -75,6 +72,8 @@ public class GameManager : MonoBehaviour {
 	public Text playerLevelInfoText;
 	public Text playerXpInfoText;
 	public Transform mapPanel;
+	public Transform InventoryPanel;
+
 	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
 	private float cellWidth, cellHeight;
 
@@ -86,6 +85,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject ButtonPrefab;
 	public GameObject LocationPrefab;
 	public GameObject MapCursorPrefab;
+	public GameObject ItemSlotPrefab;
 
 
 	[Header("Initial values")]
@@ -98,14 +98,13 @@ public class GameManager : MonoBehaviour {
 
 	[Header("Debug")]
 	public Enemy foe;
-	
+
+	private void Awake()
+	{
+		Instance = this;
+	}
 
 	void Start () {
-		//Singleton
-		if(instance == null)
-			instance = this;
-		else
-			Destroy(this);
 
 		//Référencement des autres managers
 		FightManager = GetComponent<FightManager>();
@@ -264,7 +263,7 @@ public class GameManager : MonoBehaviour {
 	}
 	#endregion
 
-	#region Scroll panel layout
+	#region Panels layout
 
 	public void CreateButton(string content, params UnityAction[] onClick)
 	{
@@ -331,25 +330,28 @@ public class GameManager : MonoBehaviour {
 	public void BalanceTextButtonPanels()
 	{
 		float buttonHeight = buttonsDisplayed > 0 ? Mathf.Pow(0.95f, buttonsDisplayed-1) * 50f : 0f;
-		Debug.Log(buttonHeight);
 		textPanel.GetComponent<LayoutElement>().minHeight = 768f - buttonsDisplayed*buttonHeight;
 		var grid = buttonPanel.GetComponent<GridLayoutGroup>();
 		grid.cellSize = new Vector2(grid.cellSize.x, buttonHeight);
 	}
 
-	#endregion
-
 	public void UpdatePlayerInfo()
 	{
-		if (Player == null) return;
+		Player player = Player.Instance;
+		if (player == null) return;
 
-		playerNameInfoText.text = Player.Name;
-		playerHpInfoText.text = Player.Hp.ToString() + " / " + Player.MaxHp.ToString();
-		playerLevelInfoText.text = "Lvl. " + Player.Level.ToString();
-		playerXpInfoText.text = "XP : " + Player.Xp.ToString();
+		playerNameInfoText.text = player.Name;
+		playerHpInfoText.text = player.Hp.ToString() + " / " + player.MaxHp.ToString();
+		playerLevelInfoText.text = "Lvl. " + player.Level.ToString();
+		playerXpInfoText.text = "XP : " + player.Xp.ToString();
 
 	}
 
+	public void ToggleInventory()
+	{
+		InventoryPanel.gameObject.SetActive(!InventoryPanel.gameObject.activeInHierarchy);
+	}
 
+	#endregion
 
 }

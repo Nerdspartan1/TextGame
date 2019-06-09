@@ -11,6 +11,7 @@ public class Item : ScriptableObject{
 	
 	[Header("Identity")]
 	new public string name;
+	public Sprite icon;
 	[TextArea(3,10)]
 	public string desc;
 	public int value;

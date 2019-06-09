@@ -39,9 +39,76 @@ MonoBehaviour:
     choices:
     - conditions: []
       text: Okay
-      operations:
-      - key: 
-        operationType: 4
-        value: 
-        reference: {fileID: 0}
-        position: {x: 1, y: 1}
+      operations: []
+  - conditions: []
+    text: Let's test how many buttons can be printed on screen
+    operations: []
+    choices:
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+  - conditions: []
+    text: Let's test how many buttons can be printed on screen
+    operations: []
+    choices:
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+  - conditions: []
+    text: Let's test how many buttons can be printed on screen
+    operations: []
+    choices:
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
+    - conditions: []
+      text: Okay
+      operations: []
