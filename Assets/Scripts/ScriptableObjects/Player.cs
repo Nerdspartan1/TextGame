@@ -5,13 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/Unit/Player", order = 1)]
 public class Player : Unit {
 
-	public static Player Instance;
-
-	private void Awake()
-	{
-		Instance = this;
-	}
-
 	public int Xp;
 
 	[Header("Weapon")]

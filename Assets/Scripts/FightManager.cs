@@ -53,9 +53,9 @@ public class FightManager : MonoBehaviour
 		//StartCoroutine("EnemyAttackCoroutine");
 		//placeholder for fight comment
 		GameManager.Instance.CreateText($"{Enemy.Name} attacks you !");
-		Enemy.Attack(Player.Instance);
+		Enemy.Attack(GameManager.Instance.Player);
 
-		if (Player.Instance.IsDead)
+		if (GameManager.Instance.Player.IsDead)
 			EndFight(false);
 		else
 			DoPlayerTurn();
@@ -80,7 +80,7 @@ public class FightManager : MonoBehaviour
 		fightPanel.SetActive(false);
 		fightMaskPanel.SetActive(false);
 
-		if (!Player.Instance.IsDead)
+		if (!GameManager.Instance.Player.IsDead)
 		{
 			DoPlayerTurn();
 		}
@@ -101,7 +101,7 @@ public class FightManager : MonoBehaviour
 		fightStatus = FightStatus.PlayerAttack;
 		//placeholder for fight comment
 		GameManager.Instance.CreateText($"You attack {Enemy.Name} !");
-		Player.Instance.Attack(Enemy);
+		GameManager.Instance.Player.Attack(Enemy);
 
 		if (Enemy.IsDead)
 			EndFight(true);
@@ -114,7 +114,7 @@ public class FightManager : MonoBehaviour
 	{
 		if (victory)
 		{
-			Player.Instance.Xp += Enemy.xpDrop;
+			GameManager.Instance.Player.Xp += Enemy.xpDrop;
 			//placeholder for fight comment
 			GameManager.Instance.CreateText($"You defeated {Enemy.Name}!");
 		}

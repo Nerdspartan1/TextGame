@@ -337,13 +337,12 @@ public class GameManager : MonoBehaviour {
 
 	public void UpdatePlayerInfo()
 	{
-		Player player = Player.Instance;
-		if (player == null) return;
+		if (Player == null) return;
 
-		playerNameInfoText.text = player.Name;
-		playerHpInfoText.text = player.Hp.ToString() + " / " + player.MaxHp.ToString();
-		playerLevelInfoText.text = "Lvl. " + player.Level.ToString();
-		playerXpInfoText.text = "XP : " + player.Xp.ToString();
+		playerNameInfoText.text = Player.Name;
+		playerHpInfoText.text = Player.Hp.ToString() + " / " + Player.MaxHp.ToString();
+		playerLevelInfoText.text = "Lvl. " + Player.Level.ToString();
+		playerXpInfoText.text = "XP : " + Player.Xp.ToString();
 
 	}
 
