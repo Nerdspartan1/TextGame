@@ -12,15 +12,15 @@ public class ItemSlot : MonoBehaviour
 	private void Awake()
 	{
 		icon = transform.GetChild(0).GetComponent<Image>();
-		//icon = GetComponentInChildren<Image>();
 	}
 
 	public void SetItem(Item newItem)
 	{
 		item = newItem;
 
-		icon.sprite = item.icon;
 		icon.enabled = true;
+		icon.sprite = item.icon;
+		
 	}
 
 	public void Clear()

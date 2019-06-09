@@ -122,6 +122,8 @@ public class OperationDrawer : PropertyDrawer
 			case OperationType.GoToMap:
 			case OperationType.InitiateFight:
 			case OperationType.PlayGameEvent:
+			case OperationType.AddItem:
+			case OperationType.RemoveItem:
 				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("reference"), GUIContent.none);
 				break;
 			case OperationType.GoToCell:

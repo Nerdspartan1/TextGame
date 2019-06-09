@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 
 public enum ConditionType { Exists, DoesNotExist, IsEqualTo, IsNotEqualTo, IsGreaterThan }
-public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent}
+public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem}
 
 [System.Serializable]
 public struct Condition{
@@ -113,6 +113,12 @@ public struct Operation
 				if (!Values.GetValueAsFloat(key, out v1)) throw new System.Exception($"[Operation] Cannot add : key {key} is not a float");
 				if (!float.TryParse(value, out v2)) throw new System.Exception($"[Operation] Cannot add : value {value} is not a float");
 				Values.SetValueAsFloat(key, v1 + v2);
+				return;
+			case OperationType.AddItem:
+				Inventory.Instance.Add((Item)reference);
+				return;
+			case OperationType.RemoveItem:
+				Inventory.Instance.Remove((Item)reference);
 				return;
 			default:
 				throw new System.Exception("[Operation] Operation type not supported");

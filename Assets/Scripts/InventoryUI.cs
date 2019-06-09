@@ -17,7 +17,7 @@ public class InventoryUI : MonoBehaviour
 
 		//create the slots
 		foreach (Transform child in transform)
-			Destroy(child.gameObject);
+			DestroyImmediate(child.gameObject);
 		for(int i = 0; i < inventory.Size; i++)
 			Instantiate(ItemSlotPrefab, transform);
 
