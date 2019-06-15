@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
-	Inventory inventory;
+	[Header("Prefabs")]
+	public GameObject DescriptionPanelPrefab;
+	public GameObject ItemSlotInstance;
 
-	public GameObject ItemSlotPrefab;
+	[Header("Properties")]
+	Inventory inventory;
+	static public DescriptionPanel DescriptionPanel;
 
 	ItemSlot[] slots;
+
+	public void Awake()
+	{
+		DescriptionPanel = Instantiate(DescriptionPanelPrefab, GameManager.Instance.Canvas).GetComponent<DescriptionPanel>();
+		DescriptionPanel.Hide();
+	}
 
 	public void Start()
 	{
 		inventory = Inventory.Instance;
 		inventory.onItemChanged += UpdateUI;
 
-		//create the slots
-		foreach (Transform child in transform)
-			DestroyImmediate(child.gameObject);
-		for(int i = 0; i < inventory.Size; i++)
-			Instantiate(ItemSlotPrefab, transform);
+		//create (size-1) slots, because the 1st one already exists
+		for(int i = 1; i < inventory.Size; i++)
+			Instantiate(ItemSlotInstance, transform);
 
 		slots = GetComponentsInChildren<ItemSlot>();
 

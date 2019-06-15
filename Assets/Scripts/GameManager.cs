@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour {
 	public Player Player;
 
 	[Header("UI References")]
+	public Transform Canvas;
 	public Transform textPanel;
 	public Transform buttonPanel;
 	public Transform infoPanel;

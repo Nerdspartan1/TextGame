@@ -10,15 +10,15 @@ public class Item : ScriptableObject{
 	public static Dictionary<string,Item> items = new Dictionary<string,Item>();
 	
 	[Header("Identity")]
-	new public string name;
+	public string Name;
 	public Sprite icon;
 	[TextArea(3,10)]
-	public string desc;
-	public int value;
+	public string Description;
+	public int Value;
 
 	public virtual string Describe()
 	{
-		return name + ":\n" + desc;
+		return Name + ":\n" + Description;
 	}
 
 }

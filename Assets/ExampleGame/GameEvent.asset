@@ -34,81 +34,15 @@ MonoBehaviour:
         reference: {fileID: 0}
         position: {x: 0, y: 0}
   - conditions: []
-    text: "Oh ! So your name is {name} ! \nAwesome, now go explore your map !"
-    operations: []
+    text: "Oh ! So your name is {name} ! \nHere, take a medikit.\nAwesome, now go
+      explore your map !"
+    operations:
+    - key: 
+      operationType: 7
+      value: 
+      reference: {fileID: 11400000, guid: ac8da9a563476ed4aa7d70dfbe756c64, type: 2}
+      position: {x: 0, y: 0}
     choices:
-    - conditions: []
-      text: Okay
-      operations: []
-  - conditions: []
-    text: Let's test how many buttons can be printed on screen
-    operations: []
-    choices:
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-  - conditions: []
-    text: Let's test how many buttons can be printed on screen
-    operations: []
-    choices:
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-  - conditions: []
-    text: Let's test how many buttons can be printed on screen
-    operations: []
-    choices:
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
-    - conditions: []
-      text: Okay
-      operations: []
     - conditions: []
       text: Okay
       operations: []

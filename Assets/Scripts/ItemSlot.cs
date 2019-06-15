@@ -7,7 +7,7 @@ public class ItemSlot : MonoBehaviour
 {
 	private Image icon;
 
-	public Item item;
+	public Item Item;
 
 	private void Awake()
 	{
@@ -16,17 +16,30 @@ public class ItemSlot : MonoBehaviour
 
 	public void SetItem(Item newItem)
 	{
-		item = newItem;
+		Item = newItem;
 
 		icon.enabled = true;
-		icon.sprite = item.icon;
+		icon.sprite = Item.icon;
 		
 	}
 
 	public void Clear()
 	{
-		item = null;
+		Item = null;
 
 		icon.enabled = false;
+	}
+
+	public void ShowDescription()
+	{
+		if(Item != null)
+		{
+			InventoryUI.DescriptionPanel.Show(Item);
+		}
+	}
+
+	public void HideDescription()
+	{
+		InventoryUI.DescriptionPanel.Hide();
 	}
 }
