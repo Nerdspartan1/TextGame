@@ -40,7 +40,7 @@ MonoBehaviour:
     - key: 
       operationType: 7
       value: 
-      reference: {fileID: 11400000, guid: ac8da9a563476ed4aa7d70dfbe756c64, type: 2}
+      reference: {fileID: 11400000, guid: 680bc4937d96b5348be7273d31fdd9fd, type: 2}
       position: {x: 0, y: 0}
     choices:
     - conditions: []
