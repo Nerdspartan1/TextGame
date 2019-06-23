@@ -1,4 +1,0 @@
-﻿£enerve=0£{Ah oui, j'ai oublié de te dire que tout ça est un test.}£enerve=1£{C'est un test abruti !}
-
-#test.txt# £enerve=0£{Ah d'accord.}£enerve=1£{Euh ouais désolé...}
-#test3.txt# Mais c'est quoi ce bordel ?!
