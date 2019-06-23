@@ -17,6 +17,7 @@ public class ItemSlot : MonoBehaviour
 	{
 		Item = newItem;
 		optionPanel.Item = Item;
+		optionPanel.UpdateUI();
 
 		icon.enabled = true;
 		icon.sprite = Item.icon;
@@ -27,6 +28,7 @@ public class ItemSlot : MonoBehaviour
 	{
 		Item = null;
 		optionPanel.Item = null;
+		optionPanel.UpdateUI();
 
 		icon.enabled = false;
 	}
@@ -38,7 +40,6 @@ public class ItemSlot : MonoBehaviour
 			InventoryUI.DescriptionPanel.Show(Item);
 
 			optionPanel.gameObject.SetActive(true);
-			optionPanel.UpdateUI();
 		}
 	}
 
