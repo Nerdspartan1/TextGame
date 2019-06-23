@@ -16,6 +16,8 @@ public class DescriptionPanel : MonoBehaviour
 		Name.text = item.Name;
 		Description.text = item.Description;
 		Value.text = item.Value.ToString();
+
+		transform.position = Input.mousePosition;
 	}
 
 
