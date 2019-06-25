@@ -2,8 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Hand
+{
+	Right,
+	Left
+}
+
 public class Inventory
 {
+
 	private static Inventory instance;
 	public static Inventory Instance
 	{
@@ -16,6 +23,8 @@ public class Inventory
 	}
 
 	public readonly List<Item> items = new List<Item>();
+
+	public readonly Weapon[] hands = new Weapon[2];
 
 	public int Size = 20;
 
@@ -44,5 +53,14 @@ public class Inventory
 
 		return true;
 
+	}
+
+	public bool EquipHand(Weapon weapon, Hand hand)
+	{
+		if (hands[(int)hand] != null)
+		{
+			
+		}
+		return false;
 	}
 }
