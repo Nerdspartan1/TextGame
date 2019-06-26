@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ItemSlot : MonoBehaviour
 {
 
+	public static ItemSlot ItemSlotUnderPointer;
+
 	public Image icon;
 	public ItemSelectionOptionPanel optionPanel;
 
@@ -39,12 +41,14 @@ public class ItemSlot : MonoBehaviour
 
 			optionPanel.gameObject.SetActive(true);
 		}
+		ItemSlotUnderPointer = this;
 	}
 
 	public void OnPointerExit()
 	{
 		InventoryUI.DescriptionPanel?.Hide();
 		optionPanel.gameObject.SetActive(false);
+		ItemSlotUnderPointer = null;
 	}
 
 }

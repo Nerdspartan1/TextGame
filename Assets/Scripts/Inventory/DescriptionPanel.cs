@@ -10,6 +10,15 @@ public class DescriptionPanel : MonoBehaviour
 	public Text Description;
 	public Text Value;
 
+	public RectTransform canvasRect;
+	new private Camera camera;
+
+	private void Start()
+	{
+		canvasRect = GameManager.Instance.Canvas.GetComponent<RectTransform>();
+		camera = Camera.main;
+	}
+
 	public void Show(Item item)
 	{
 		gameObject.SetActive(true);
@@ -17,13 +26,15 @@ public class DescriptionPanel : MonoBehaviour
 		Description.text = item.Description;
 		Value.text = item.Value.ToString();
 
-		transform.position = Input.mousePosition;
+		Update();
 	}
 
 
 	public void Update()
 	{
-		transform.position = Input.mousePosition;
+		Vector3 position;
+		RectTransformUtility.ScreenPointToWorldPointInRectangle(canvasRect, Input.mousePosition, camera, out position);
+		transform.position = position;
 	}
 
 	public void Hide()

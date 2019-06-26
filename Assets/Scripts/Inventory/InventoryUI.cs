@@ -16,7 +16,7 @@ public class InventoryUI : MonoBehaviour
 
 	public void Awake()
 	{
-		DescriptionPanel = Instantiate(DescriptionPanelPrefab).GetComponentInChildren<DescriptionPanel>();
+		DescriptionPanel = Instantiate(DescriptionPanelPrefab, GameManager.Instance.FrontCanvas).GetComponentInChildren<DescriptionPanel>();
 		DescriptionPanel.Hide();
 	}
 
@@ -48,5 +48,15 @@ public class InventoryUI : MonoBehaviour
 				slots[i].Clear();
 			}
 		}
+	}
+
+	public void BeginMove(Item item)
+	{
+
+	}
+
+	public void EndMove(ItemSlot itemSlot)
+	{
+
 	}
 }
