@@ -1,31 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(Draggable))]
+[RequireComponent(typeof(Draggable),typeof(Image))]
 public class DraggableIcon : MonoBehaviour
 {
 	private ItemSlot itemSlot;
+	private Image image;
 	private Vector2 originalPosition;
 
-	private void Awake()
+	public void Awake()
 	{
 		itemSlot = GetComponentInParent<ItemSlot>();
+		image = GetComponent<Image>();
 		originalPosition = transform.localPosition;
 	}
 
 	public void BeginDrag()
 	{
-		transform.parent = GameManager.Instance.FrontCanvas;
+		transform.SetParent(GameManager.Instance.FrontCanvas);
+		image.raycastTarget = false;
 	}
 
 	public void EndDrag()
 	{
 		if (ItemSlot.ItemSlotUnderPointer)
-		{
+			itemSlot.Swap(ItemSlot.ItemSlotUnderPointer);
 
-		}
-		transform.parent = itemSlot.transform;
+		transform.SetParent(itemSlot.transform);
 		transform.localPosition = originalPosition;
+		image.raycastTarget = true;
 	}
 }

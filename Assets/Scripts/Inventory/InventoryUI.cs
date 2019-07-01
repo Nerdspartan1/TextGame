@@ -45,7 +45,7 @@ public class InventoryUI : MonoBehaviour
 			}
 			else
 			{
-				slots[i].Clear();
+				slots[i].SetItem(null);
 			}
 		}
 	}

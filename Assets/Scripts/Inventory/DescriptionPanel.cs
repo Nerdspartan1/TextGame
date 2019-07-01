@@ -13,7 +13,7 @@ public class DescriptionPanel : MonoBehaviour
 	public RectTransform canvasRect;
 	new private Camera camera;
 
-	private void Start()
+	private void Awake()
 	{
 		canvasRect = GameManager.Instance.Canvas.GetComponent<RectTransform>();
 		camera = Camera.main;

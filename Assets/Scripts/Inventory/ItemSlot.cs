@@ -19,18 +19,16 @@ public class ItemSlot : MonoBehaviour
 		optionPanel.Item = Item;
 		optionPanel.UpdateUI();
 
-		icon.enabled = true;
-		icon.sprite = Item.icon;
-		
-	}
+		if(Item != null)
+		{
+			icon.enabled = true;
+			icon.sprite = Item.icon;
+		}
+		else
+		{
+			icon.enabled = false;
+		}
 
-	public void Clear()
-	{
-		Item = null;
-		optionPanel.Item = null;
-		optionPanel.UpdateUI();
-
-		icon.enabled = false;
 	}
 
 	public void OnPointerEnter()
@@ -51,4 +49,12 @@ public class ItemSlot : MonoBehaviour
 		ItemSlotUnderPointer = null;
 	}
 
+	public void Swap(ItemSlot other)
+	{
+		if (this == other) return;
+
+		Item formerItem = Item;
+		SetItem(other.Item);
+		other.SetItem(formerItem);
+	}
 }
