@@ -6,16 +6,16 @@ public class ItemSelectionOptionPanel : MonoBehaviour
 {
 	public GameObject buttonPrefab;
 
-	public Item Item;
+	public ItemSlot ItemSlot;
 
 	public void UpdateUI()
 	{
 		ClearButtons();
-		if (Item is Consumable c)
+		if (ItemSlot.Item is Consumable c)
 		{
 			AddButton("Use", c.Use);
 		}
-		AddButton("Discard", delegate { Inventory.Instance.Remove(Item); });
+		AddButton("Discard", delegate { Inventory.Instance.Remove(ItemSlot.Item); });
 	}
 
 	private void AddButton(string name, UnityAction onClick)

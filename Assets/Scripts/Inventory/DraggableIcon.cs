@@ -26,7 +26,7 @@ public class DraggableIcon : MonoBehaviour
 	public void EndDrag()
 	{
 		if (ItemSlot.ItemSlotUnderPointer)
-			itemSlot.Swap(ItemSlot.ItemSlotUnderPointer);
+			Inventory.Instance.Swap(itemSlot.transform.GetSiblingIndex(), ItemSlot.ItemSlotUnderPointer.transform.GetSiblingIndex());
 
 		transform.SetParent(itemSlot.transform);
 		transform.localPosition = originalPosition;

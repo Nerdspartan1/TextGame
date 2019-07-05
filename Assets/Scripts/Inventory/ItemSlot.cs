@@ -8,7 +8,7 @@ public class ItemSlot : MonoBehaviour
 
 	public static ItemSlot ItemSlotUnderPointer;
 
-	public Image icon;
+	public Image Icon;
 	public ItemSelectionOptionPanel optionPanel;
 
 	public Item Item;
@@ -16,17 +16,16 @@ public class ItemSlot : MonoBehaviour
 	public void SetItem(Item newItem)
 	{
 		Item = newItem;
-		optionPanel.Item = Item;
 		optionPanel.UpdateUI();
 
 		if(Item != null)
 		{
-			icon.enabled = true;
-			icon.sprite = Item.icon;
+			Icon.enabled = true;
+			Icon.sprite = Item.icon;
 		}
 		else
 		{
-			icon.enabled = false;
+			Icon.enabled = false;
 		}
 
 	}
@@ -49,12 +48,4 @@ public class ItemSlot : MonoBehaviour
 		ItemSlotUnderPointer = null;
 	}
 
-	public void Swap(ItemSlot other)
-	{
-		if (this == other) return;
-
-		Item formerItem = Item;
-		SetItem(other.Item);
-		other.SetItem(formerItem);
-	}
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 public enum Hand
 {
@@ -22,37 +20,72 @@ public class Inventory
 		}
 	}
 
-	public readonly List<Item> items = new List<Item>();
+	private readonly List<Item> items = new List<Item>(new Item[20]);
 
 	public readonly Weapon[] hands = new Weapon[2];
 
-	public int Size = 20;
+	public int Size { get { return items.Count; } }
 
-	public delegate void OnItemChanged();
+	private int itemCount = 0;
+
+	public int ItemCount { get => itemCount; }
+
+	public delegate void OnItemChanged(int i);
 	public OnItemChanged onItemChanged;
+
+
+	public Item this[int i]
+	{
+		get { return items[i]; }
+	}
 
 	public bool Add(Item item)
 	{
-		if (items.Count >= Size) return false;
+		if (!Find(null, out int i)) return false;
 
-		items.Add(item);
+		items[i] = Item.Instantiate(item);
+		itemCount++;
 
 		if (onItemChanged != null)
-			onItemChanged.Invoke();
+			onItemChanged.Invoke(i);
 
 		return true;
 	}
 
 	public bool Remove(Item item)
 	{
+		if (!Find(item, out int i)) return false;
 
-		if (!items.Remove(item)) return false;
-		
+		items[i] = null;
+		itemCount--;
+
 		if (onItemChanged != null)
-			onItemChanged.Invoke();
+			onItemChanged.Invoke(i);
 
 		return true;
+	}
 
+	public void Swap(int i1, int i2)
+	{
+		Item it = items[i1];
+		items[i1] = items[i2];
+		items[i2] = it;
+
+		if (onItemChanged != null)
+		{
+			onItemChanged.Invoke(i1);
+			onItemChanged.Invoke(i2);
+		}
+
+	}
+
+	public bool Find(Item item, out int id)
+	{
+		for(id = 0; id < Size; ++id)
+		{
+			if (item == items[id]) return true;
+		}
+		return false;
 	}
 
 	public bool EquipHand(Weapon weapon, Hand hand)
