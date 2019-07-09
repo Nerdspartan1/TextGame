@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
 {
-
 	public static ItemSlot ItemSlotUnderPointer;
 
 	public Image Icon;
@@ -34,7 +33,7 @@ public class ItemSlot : MonoBehaviour
 	{
 		if(Item != null)
 		{
-			InventoryUI.DescriptionPanel.Show(Item);
+			Inventory.DescriptionPanel.Show(Item);
 
 			optionPanel.gameObject.SetActive(true);
 		}
@@ -43,7 +42,7 @@ public class ItemSlot : MonoBehaviour
 
 	public void OnPointerExit()
 	{
-		InventoryUI.DescriptionPanel?.Hide();
+		Inventory.DescriptionPanel?.Hide();
 		optionPanel.gameObject.SetActive(false);
 		ItemSlotUnderPointer = null;
 	}

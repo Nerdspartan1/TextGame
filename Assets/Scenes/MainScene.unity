@@ -2716,6 +2716,7 @@ GameObject:
   - component: {fileID: 1700758564}
   - component: {fileID: 1700758563}
   - component: {fileID: 1700758565}
+  - component: {fileID: 1700758566}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2795,6 +2796,24 @@ MonoBehaviour:
     type: 3}
   Enemy: {fileID: 0}
   fightStatus: 2
+--- !u!114 &1700758566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700758562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26bb70e1c1d65654b97737b12695aee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescriptionPanelPrefab: {fileID: 9104096979425429754, guid: af10c193e99980148976dd8f191694ff,
+    type: 3}
+  ItemSlotInstance: {fileID: 937801689}
+  InventoryPanel: {fileID: 1865027589}
+  items: []
+  Size: 20
 --- !u!1 &1747562752
 GameObject:
   m_ObjectHideFlags: 0
@@ -3070,7 +3089,6 @@ GameObject:
   - component: {fileID: 1865027593}
   - component: {fileID: 1865027592}
   - component: {fileID: 1865027591}
-  - component: {fileID: 1865027594}
   m_Layer: 5
   m_Name: Inventory Panel
   m_TagString: Untagged
@@ -3159,21 +3177,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865027589}
   m_CullTransparentMesh: 0
---- !u!114 &1865027594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1865027589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae5317ae16c1fa147ace8b9e92067c81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DescriptionPanelPrefab: {fileID: 9104096979425429754, guid: af10c193e99980148976dd8f191694ff,
-    type: 3}
-  ItemSlotInstance: {fileID: 937801689}
 --- !u!224 &1911041133 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3445653613382151165, guid: 1365e2bbae1d84d4b87b4533edf80c5c,
