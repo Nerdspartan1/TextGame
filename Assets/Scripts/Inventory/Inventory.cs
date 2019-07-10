@@ -3,8 +3,8 @@ using UnityEngine;
 
 public enum Hand
 {
-	Right,
-	Left
+	Right = 0,
+	Left = 1
 }
 
 public class Inventory : MonoBehaviour
@@ -19,12 +19,19 @@ public class Inventory : MonoBehaviour
 	public GameObject InventoryPanel;
 
 	public static DescriptionPanel DescriptionPanel;
-	[SerializeField]
-	private List<Item> items = new List<Item>();
+
 
 	private ItemSlot[] inventorySlots;
+	public ItemSlot[] handSlots = new ItemSlot[2];
+	public ItemSlot armorSlot;
 
-	public readonly Weapon[] hands = new Weapon[2];
+	[Header("Inventory")]
+	[SerializeField]
+	private List<Item> items = new List<Item>();
+	[SerializeField]
+	private Weapon[] hands = new Weapon[2];
+	[SerializeField]
+	private Item armor = null;
 
 	public int Size = 20; //max size of the inventory
 
@@ -56,6 +63,9 @@ public class Inventory : MonoBehaviour
 			if (i < items.Count) inventorySlots[i].SetItem(items[i]);
 			else inventorySlots[i].SetItem(null);
 		}
+		handSlots[0].SetItem(hands[0]);
+		handSlots[1].SetItem(hands[1]);
+		armorSlot.SetItem(armor);
 
 	}
 
@@ -65,10 +75,10 @@ public class Inventory : MonoBehaviour
 
 		var newItem = Item.Instantiate(item);
 		
-		FindInSlots(null, out int i);
+		FindInSlots(null, out ItemSlot slot);
 
 		items.Add(newItem);
-		inventorySlots[i].SetItem(newItem);
+		slot.SetItem(newItem);
 
 		return true;
 	}
@@ -77,28 +87,49 @@ public class Inventory : MonoBehaviour
 	{
 		if (ItemCount == 0) return false;
 
-		FindInSlots(item, out int i);
+		FindInSlots(item, out ItemSlot slot);
 
 		if(!items.Remove(item)) return false;
-		inventorySlots[i].SetItem(null);
+		slot.SetItem(null);
 
 		return true;
 	}
 
-	public void Swap(int i1, int i2)
+	public void Swap(ItemSlot slot1, ItemSlot slot2)
 	{
-		var it = inventorySlots[i1].Item;
-		inventorySlots[i1].SetItem(inventorySlots[i2].Item);
-		inventorySlots[i2].SetItem(it);
+		var it = slot1.Item;
+		slot1.SetItem(slot2.Item);
+		slot2.SetItem(it);
 
 	}
 
-	public bool FindInSlots(Item item, out int i)
+	public bool FindInSlots(Item item, out ItemSlot slot)
 	{
-		for(i = 0; i < Size; ++i)
+		for(int i = 0; i < Size; ++i)
 		{
-			if (inventorySlots[i].Item == item) return true;
+			if (inventorySlots[i].Item == item)
+			{
+				slot = inventorySlots[i];
+				return true;
+			}
 		}
+		if(item == handSlots[(int)Hand.Right].Item)
+		{
+			slot = handSlots[0];
+			return true;
+		}
+		else if (item == handSlots[(int)Hand.Left].Item)
+		{
+			slot = handSlots[1];
+			return true;
+		}else if (item == armorSlot.Item)
+		{
+			slot = armorSlot;
+			return true;
+		}
+
+		slot = null;
+
 		return false;
 	}
 
