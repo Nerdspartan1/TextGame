@@ -21,15 +21,25 @@ public class DraggableIcon : MonoBehaviour
 	{
 		transform.SetParent(GameManager.Instance.FrontCanvas);
 		image.raycastTarget = false;
+
+		itemSlot.OnPointerExit();
+		ItemSlot.ShowDescriptionOnCursorHover = false;
 	}
 
 	public void EndDrag()
 	{
 		if (ItemSlot.ItemSlotUnderPointer)
+		{
 			Inventory.Instance.Swap(itemSlot, ItemSlot.ItemSlotUnderPointer);
+			ItemSlot.ItemSlotUnderPointer.OnPointerEnter();
+		}
 
 		transform.SetParent(itemSlot.transform);
 		transform.localPosition = originalPosition;
 		image.raycastTarget = true;
+
+		ItemSlot.ShowDescriptionOnCursorHover = true;
+		
+
 	}
 }

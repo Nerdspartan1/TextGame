@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ItemSlot : MonoBehaviour
 {
 	public static ItemSlot ItemSlotUnderPointer;
+	public static bool ShowDescriptionOnCursorHover = true;
 
 	public Image Icon;
 	public ItemSelectionOptionPanel optionPanel;
@@ -15,7 +16,6 @@ public class ItemSlot : MonoBehaviour
 	public void SetItem(Item newItem)
 	{
 		Item = newItem;
-		optionPanel.UpdateUI();
 
 		if(Item != null)
 		{
@@ -27,11 +27,13 @@ public class ItemSlot : MonoBehaviour
 			Icon.enabled = false;
 		}
 
+		optionPanel.UpdateUI();
+
 	}
 
 	public void OnPointerEnter()
 	{
-		if(Item != null)
+		if(ShowDescriptionOnCursorHover && Item != null)
 		{
 			Inventory.DescriptionPanel.Show(Item);
 

@@ -11,6 +11,9 @@ public class ItemSelectionOptionPanel : MonoBehaviour
 	public void UpdateUI()
 	{
 		ClearButtons();
+
+		if (ItemSlot.Item == null) return;
+
 		if (ItemSlot.Item is Consumable c)
 		{
 			AddButton("Use", c.Use);
