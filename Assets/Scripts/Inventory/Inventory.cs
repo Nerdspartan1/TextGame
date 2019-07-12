@@ -1,12 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum Hand
-{
-	Right = 0,
-	Left = 1
-}
-
 public class Inventory : MonoBehaviour
 {
 	public static Inventory Instance;
@@ -64,13 +58,18 @@ public class Inventory : MonoBehaviour
 			else inventorySlots[i].SetItem(null);
 		}
 		handSlots[0].SetItem(hands[0]);
+		handSlots[0].AllowedItemType = typeof(Weapon);
 		handSlots[1].SetItem(hands[1]);
+		handSlots[1].AllowedItemType = typeof(Weapon);
 		armorSlot.SetItem(armor);
+		armorSlot.AllowedItemType = typeof(Item);
 
 	}
 
 	public bool Add(Item item)
 	{
+		if (item == null) return true;
+
 		if (ItemCount >= Size) return false;
 
 		var newItem = Item.Instantiate(item);
@@ -85,6 +84,8 @@ public class Inventory : MonoBehaviour
 
 	public bool Remove(Item item)
 	{
+		if (item == null) return true;
+
 		if (ItemCount == 0) return false;
 
 		FindInSlots(item, out ItemSlot slot);
@@ -95,12 +96,29 @@ public class Inventory : MonoBehaviour
 		return true;
 	}
 
-	public void Swap(ItemSlot slot1, ItemSlot slot2)
+	public bool Swap(ItemSlot from, ItemSlot to)
 	{
-		var it = slot1.Item;
-		slot1.SetItem(slot2.Item);
-		slot2.SetItem(it);
+		if (to.AllowedItemType != from.Item.GetType())
+		{
+			Debug.Log("Unable to swap :");
+			Debug.Log(to.AllowedItemType);
+			Debug.Log(from.Item.GetType());
+			return false;
+		}
 
+		var it = from.Item;
+		from.SetItem(to.Item);
+		to.SetItem(it);
+
+		UpdateEquipment();
+		return true;
+	}
+
+	public void UpdateEquipment()
+	{
+		hands[0] = (Weapon)handSlots[0].Item;
+		hands[1] = (Weapon)handSlots[1].Item;
+		armor = (Item)armorSlot.Item;
 	}
 
 	public bool FindInSlots(Item item, out ItemSlot slot)
@@ -113,12 +131,12 @@ public class Inventory : MonoBehaviour
 				return true;
 			}
 		}
-		if(item == handSlots[(int)Hand.Right].Item)
+		if(item == handSlots[0].Item)
 		{
 			slot = handSlots[0];
 			return true;
 		}
-		else if (item == handSlots[(int)Hand.Left].Item)
+		else if (item == handSlots[1].Item)
 		{
 			slot = handSlots[1];
 			return true;
@@ -133,12 +151,10 @@ public class Inventory : MonoBehaviour
 		return false;
 	}
 
-	public bool EquipHand(Weapon weapon, Hand hand)
+	public void EquipHand(Weapon weapon, int hand)
 	{
-		if (hands[(int)hand] != null)
-		{
-			
-		}
-		return false;
+		Remove(weapon);
+		Add(hands[hand]);
+		hands[hand] = weapon;
 	}
 }

@@ -344,7 +344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Icon: {fileID: 3445653614971846027}
-  optionPanel: {fileID: 3445653613237278021}
+  OptionPanel: {fileID: 3445653613237278021}
   Item: {fileID: 0}
 --- !u!114 &3445653614421520458
 MonoBehaviour:

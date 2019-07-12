@@ -5,30 +5,33 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
 {
+	public System.Type AllowedItemType;
 	public static ItemSlot ItemSlotUnderPointer;
 	public static bool ShowDescriptionOnCursorHover = true;
 
 	public Image Icon;
-	public ItemSelectionOptionPanel optionPanel;
+	public ItemSelectionOptionPanel OptionPanel;
 
 	public Item Item;
 
-	public void SetItem(Item newItem)
+	public virtual bool SetItem(Item newItem)
 	{
-		Item = newItem;
-
-		if(Item != null)
+		if(newItem == null)
 		{
-			Icon.enabled = true;
-			Icon.sprite = Item.icon;
+			Item = null;
+			Icon.enabled = false;
 		}
 		else
 		{
-			Icon.enabled = false;
+			if (AllowedItemType != newItem.GetType()) return false;
+			Item = newItem;
+
+			Icon.enabled = true;
+			Icon.sprite = Item.icon;
 		}
 
-		optionPanel.UpdateUI();
-
+		OptionPanel.UpdateUI();
+		return true;
 	}
 
 	public void OnPointerEnter()
@@ -37,7 +40,7 @@ public class ItemSlot : MonoBehaviour
 		{
 			Inventory.DescriptionPanel.Show(Item);
 
-			optionPanel.gameObject.SetActive(true);
+			OptionPanel.gameObject.SetActive(true);
 		}
 		ItemSlotUnderPointer = this;
 	}
@@ -45,8 +48,9 @@ public class ItemSlot : MonoBehaviour
 	public void OnPointerExit()
 	{
 		Inventory.DescriptionPanel?.Hide();
-		optionPanel.gameObject.SetActive(false);
+		OptionPanel.gameObject.SetActive(false);
 		ItemSlotUnderPointer = null;
 	}
 
 }
+
