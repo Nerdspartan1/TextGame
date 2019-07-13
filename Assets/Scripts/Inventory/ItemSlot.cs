@@ -14,7 +14,7 @@ public class ItemSlot : MonoBehaviour
 
 	public Item Item;
 
-	public virtual bool SetItem(Item newItem)
+	public void SetItem(Item newItem)
 	{
 		if(newItem == null)
 		{
@@ -23,7 +23,7 @@ public class ItemSlot : MonoBehaviour
 		}
 		else
 		{
-			if (AllowedItemType != newItem.GetType()) return false;
+			if (!CanSet(newItem)) throw new System.Exception("Cannot set item : incompatible types");
 			Item = newItem;
 
 			Icon.enabled = true;
@@ -31,7 +31,11 @@ public class ItemSlot : MonoBehaviour
 		}
 
 		OptionPanel.UpdateUI();
-		return true;
+	}
+
+	public bool CanSet(Item item)
+	{
+		return item.GetType().Equals(AllowedItemType) || item.GetType().IsSubclassOf(AllowedItemType);
 	}
 
 	public void OnPointerEnter()

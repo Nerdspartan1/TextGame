@@ -56,6 +56,7 @@ public class Inventory : MonoBehaviour
 		{
 			if (i < items.Count) inventorySlots[i].SetItem(items[i]);
 			else inventorySlots[i].SetItem(null);
+			inventorySlots[i].AllowedItemType = typeof(Item);
 		}
 		handSlots[0].SetItem(hands[0]);
 		handSlots[0].AllowedItemType = typeof(Weapon);
@@ -98,13 +99,8 @@ public class Inventory : MonoBehaviour
 
 	public bool Swap(ItemSlot from, ItemSlot to)
 	{
-		if (to.AllowedItemType != from.Item.GetType())
-		{
-			Debug.Log("Unable to swap :");
-			Debug.Log(to.AllowedItemType);
-			Debug.Log(from.Item.GetType());
+		if (!to.CanSet(from.Item))
 			return false;
-		}
 
 		var it = from.Item;
 		from.SetItem(to.Item);
