@@ -25,7 +25,7 @@ public class Inventory : MonoBehaviour
 	[SerializeField]
 	private Weapon[] hands = new Weapon[2];
 	[SerializeField]
-	private Item armor = null;
+	private Armor armor = null;
 
 	public int Size = 20; //max size of the inventory
 
@@ -63,7 +63,7 @@ public class Inventory : MonoBehaviour
 		handSlots[1].SetItem(hands[1]);
 		handSlots[1].AllowedItemType = typeof(Weapon);
 		armorSlot.SetItem(armor);
-		armorSlot.AllowedItemType = typeof(Item);
+		armorSlot.AllowedItemType = typeof(Armor);
 
 	}
 
@@ -114,7 +114,7 @@ public class Inventory : MonoBehaviour
 	{
 		hands[0] = (Weapon)handSlots[0].Item;
 		hands[1] = (Weapon)handSlots[1].Item;
-		armor = (Item)armorSlot.Item;
+		armor = (Armor)armorSlot.Item;
 	}
 
 	public bool FindInSlots(Item item, out ItemSlot slot)

@@ -19,9 +19,11 @@ public class DraggableIcon : MonoBehaviour
 
 	public void BeginDrag()
 	{
+		if (itemSlot.Item == null) return;
 		transform.SetParent(GameManager.Instance.FrontCanvas);
 		image.raycastTarget = false;
 
+		if(itemSlot.IconEmpty != null) itemSlot.IconEmpty.enabled = true;
 		itemSlot.OnPointerExit();
 		ItemSlot.ShowDescriptionOnCursorHover = false;
 	}

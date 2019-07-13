@@ -10,6 +10,7 @@ public class ItemSlot : MonoBehaviour
 	public static bool ShowDescriptionOnCursorHover = true;
 
 	public Image Icon;
+	public Image IconEmpty = null;
 	public ItemSelectionOptionPanel OptionPanel;
 
 	public Item Item;
@@ -19,6 +20,8 @@ public class ItemSlot : MonoBehaviour
 		if(newItem == null)
 		{
 			Item = null;
+			if (IconEmpty != null) IconEmpty.enabled = true;
+
 			Icon.enabled = false;
 		}
 		else
@@ -26,8 +29,10 @@ public class ItemSlot : MonoBehaviour
 			if (!CanSet(newItem)) throw new System.Exception("Cannot set item : incompatible types");
 			Item = newItem;
 
+			if(IconEmpty != null) IconEmpty.enabled = false;
 			Icon.enabled = true;
 			Icon.sprite = Item.icon;
+			Icon.color = Color.white;
 		}
 
 		OptionPanel.UpdateUI();

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b70150883d7af3a408ea3a61cf74adaf, type: 3}
   m_Name: M16
   m_EditorClassIdentifier: 
-  Name: 
-  icon: {fileID: 0}
-  Description: 
-  Value: 0
-  minDmg: 0
-  maxDmg: 0
+  Name: M16
+  icon: {fileID: 21300000, guid: fb4ab86fe30fe614691615b8ae2f1917, type: 3}
+  Description: Brand new American 5.56mm assault rifle.
+  Value: 1800
+  minDmg: 45
+  maxDmg: 65
