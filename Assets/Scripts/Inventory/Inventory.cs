@@ -10,7 +10,10 @@ public class Inventory : MonoBehaviour
 	
 	[Header("References")]
 	public GameObject ItemSlotInstance;
+	public GameObject InventoryWindow;
 	public GameObject InventoryPanel;
+
+	private Vector3 InitialWindowPosition;
 
 	public static DescriptionPanel DescriptionPanel;
 
@@ -31,6 +34,18 @@ public class Inventory : MonoBehaviour
 
 	public int ItemCount { get => items.Count; }
 
+	public void ToggleWindow()
+	{
+		InventoryWindow.gameObject.SetActive(!InventoryWindow.gameObject.activeInHierarchy);
+		if (InventoryWindow.gameObject.activeInHierarchy)
+			ResetWindowPosition();
+	}
+
+	public void ResetWindowPosition()
+	{
+		InventoryWindow.transform.position = InitialWindowPosition;
+	}
+
 	public Item this[int i]
 	{
 		get { return inventorySlots[i].Item; }
@@ -39,6 +54,7 @@ public class Inventory : MonoBehaviour
 	public void Awake()
 	{
 		Instance = this;
+		InitialWindowPosition = InventoryWindow.transform.position;
 	}
 
 	public void Start()

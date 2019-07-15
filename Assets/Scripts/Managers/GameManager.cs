@@ -74,7 +74,6 @@ public class GameManager : MonoBehaviour {
 	public Text playerLevelInfoText;
 	public Text playerXpInfoText;
 	public Transform mapPanel;
-	public Transform InventoryPanel;
 
 	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
 	private float cellWidth, cellHeight;
@@ -346,11 +345,6 @@ public class GameManager : MonoBehaviour {
 		playerLevelInfoText.text = "Lvl. " + Player.Level.ToString();
 		playerXpInfoText.text = "XP : " + Player.Xp.ToString();
 
-	}
-
-	public void ToggleInventory()
-	{
-		InventoryPanel.gameObject.SetActive(!InventoryPanel.gameObject.activeInHierarchy);
 	}
 
 	#endregion
