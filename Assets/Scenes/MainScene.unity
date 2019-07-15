@@ -505,6 +505,10 @@ PrefabInstance:
       propertyPath: canvasRect
       value: 
       objectReference: {fileID: 1425434191}
+    - target: {fileID: 1344207586, guid: 1365e2bbae1d84d4b87b4533edf80c5c, type: 3}
+      propertyPath: CenterOnMouse
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3445653614971846025, guid: 1365e2bbae1d84d4b87b4533edf80c5c,
         type: 3}
       propertyPath: m_IsActive
@@ -854,6 +858,10 @@ PrefabInstance:
       propertyPath: canvasRect
       value: 
       objectReference: {fileID: 1425434191}
+    - target: {fileID: 1344207586, guid: 1365e2bbae1d84d4b87b4533edf80c5c, type: 3}
+      propertyPath: CenterOnMouse
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3445653614971846025, guid: 1365e2bbae1d84d4b87b4533edf80c5c,
         type: 3}
       propertyPath: m_IsActive
@@ -3584,6 +3592,10 @@ PrefabInstance:
       propertyPath: canvasRect
       value: 
       objectReference: {fileID: 1425434191}
+    - target: {fileID: 1344207586, guid: 1365e2bbae1d84d4b87b4533edf80c5c, type: 3}
+      propertyPath: CenterOnMouse
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3445653614971846025, guid: 1365e2bbae1d84d4b87b4533edf80c5c,
         type: 3}
       propertyPath: m_IsActive
@@ -4318,6 +4330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasRect: {fileID: 1425434191}
+  CenterOnMouse: 0
 --- !u!222 &2094890277
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4447,5 +4460,9 @@ PrefabInstance:
       propertyPath: canvasRect
       value: 
       objectReference: {fileID: 1425434191}
+    - target: {fileID: 1344207586, guid: 1365e2bbae1d84d4b87b4533edf80c5c, type: 3}
+      propertyPath: CenterOnMouse
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1365e2bbae1d84d4b87b4533edf80c5c, type: 3}

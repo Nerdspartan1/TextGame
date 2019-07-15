@@ -6,6 +6,7 @@ public class Draggable : MonoBehaviour
 {
 	private bool dragging = false;
 	public RectTransform canvasRect;
+	public bool CenterOnMouse = false;
 
 	private Vector3 dragPointLocalPosition;
 
@@ -25,7 +26,7 @@ public class Draggable : MonoBehaviour
 
 			RectTransformUtility.ScreenPointToWorldPointInRectangle(canvasRect, Input.mousePosition, camera, out position);
 
-			dragPointLocalPosition = position - transform.position;
+			dragPointLocalPosition = CenterOnMouse ? Vector3.zero : position - transform.position;
 		}
 	}
 	private void Update()
