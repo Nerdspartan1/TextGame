@@ -1,6 +1,0 @@
-﻿0	0	0	0	0	0	0
-0	0	armry	0	0	0	0
-0	0	corrn	0	0	0	0
-labr0	labr1	centr	corre	briefr	hangar	exit
-0	0	corrs	0	0	0	0
-0	0	window	0	0	0	0

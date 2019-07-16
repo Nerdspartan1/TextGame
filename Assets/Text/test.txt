@@ -1,5 +1,0 @@
-﻿> ??? : Par ma barbe ! Mais c'est $player.name$ ! 
-
-£player.hp=player.maxHp£{> ??? : Et en plus il pète la forme ! }
-
-#test2# Euh... Okay ?

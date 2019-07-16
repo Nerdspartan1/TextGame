@@ -1,5 +1,0 @@
-﻿"W- Why, that would be the protectors of the galaxy, of course ! The Phalanx is composed of the best warriors of the world who shield our home against evil ! And you, loyal customer of Hubris Industries, are humbly invited to join them for their next crucially capital missions to save the system, is that not great ?"
-
-#start1# Never heard of them... @enthusiastic=0@
-#start1# Sounds nice. @enthusiastic=1@
-

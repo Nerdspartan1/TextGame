@@ -1,6 +1,0 @@
-﻿£enthusiastic=0£{"Err well, I'm sure you will enjoy your stay. A chopper is on its way to get you right now."}
-£enthusiastic=1£{"Right ? Well let's get started ! I'm sending a chopper to pick you up !"}
-
-
-#start2# Hey WHAT ?
-#start2# Err... wait a minute.
