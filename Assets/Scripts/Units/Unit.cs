@@ -11,78 +11,55 @@ public abstract class Unit : ScriptableObject
 	public string Description;
 
 	[Header("Attributes")]
-	public uint Strength;
-	public uint Dexterity;
-	public uint Perception;
-	public uint Skill;
-	public uint Endurance;
+	public ushort Strength;
+	public ushort Dexterity;
+	public ushort Perception;
+	public ushort Skill;
+	public ushort Endurance;
 
 	[Header("Stats")]
-	public uint Level;
+	public ushort Level;
 	[SerializeField]
 	private int maxHp;
-	public int MaxHp
-	{
-		get { return maxHp; }
-		set
-		{
-			maxHp = value;
-			if (hp > maxHp) hp = maxHp;
-		}
-	}
+	public int MaxHp {get => maxHp;}
 	[SerializeField]
 	private int hp;
-	public int Hp
-	{
-		get { return hp; }
-		set
-		{
-			hp = value;
-			if (hp > maxHp) hp = maxHp;
-		}
-
-	}
-	public float MoveSpeed;
-	public float DamageMultiplier;
-
+	public int Hp {get => hp;}
 
 	public virtual void Init()
 	{
-		Hp = MaxHp;
+		hp = MaxHp;
 		Debug.Log($"{Name} initialized.");
 	}
 
 	public void CalculateStatsFromAttributes()
 	{
-		MaxHp = (int)(20 + Endurance * 5 + Strength * 2);
+		maxHp = (int)(20 + Endurance * 5 + Strength * 2);
+		if (hp > maxHp) hp = maxHp;
 	}
 
-	public bool IsDead{ get { return Hp <= 0; }}
+	public bool IsDead{ get => Hp <= 0; }
 
 	public abstract void Attack(Unit other);
 
-	public void TakeDamage(int dmg, out int dmgDone, out bool dies)
+	public void TakeDamage(int dmg)
 	{
-		Hp -= dmg;
-		dmgDone = dmg;
-		dies = false;
-		Debug.Log($"Damage inflicted to {Name} : {dmgDone}");
-		if(Hp <= 0)
+		hp -= dmg;
+
+		if(hp <= 0)
 		{
 			Die();
-			dies = true;
 		}
 	}
 
-	public void TakeDamage(int dmg)
+	public void Heal(int heal)
 	{
-		int dmgDone;
-		bool dies;
-		TakeDamage(dmg,out dmgDone,out dies);
+		hp += heal;
+		if(hp > MaxHp)
+		{
+			hp = MaxHp;
+		}
 	}
 
-	public void Die()
-	{
-		Debug.Log(Name + " has died !");
-	}
+	public abstract void Die();
 }

@@ -116,6 +116,7 @@ public class GameManager : MonoBehaviour {
 		GoToLocation(StartingLocation.x, StartingLocation.y);
 
 		Player.Init();
+		Player.TakeDamage(15);
 
 		PlayGameEvent(StartingGameEvent);
 

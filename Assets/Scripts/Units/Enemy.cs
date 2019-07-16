@@ -7,9 +7,10 @@ public class Enemy : Unit
 {
 
 	[System.Serializable]
-	public class LootDrop
+	public struct LootDrop
 	{
 		public Item loot;
+		[Range(0,1)]
 		public float dropChance;
 	}
 
@@ -23,6 +24,15 @@ public class Enemy : Unit
 	public override void Attack(Unit other)
 	{
 		other.TakeDamage(Random.Range(damage.x, damage.y));
+	}
+
+	public override void Die()
+	{
+		foreach(var lootDrop in lootDrops)
+		{
+			if (Random.value < lootDrop.dropChance)
+				Inventory.Instance.Add(lootDrop.loot);
+		}
 	}
 
 }

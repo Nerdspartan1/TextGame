@@ -25,4 +25,9 @@ public class Player : Unit {
 			other.TakeDamage(1);
 	}
 
+	public override void Die()
+	{
+		Debug.Log("You died ! Game Over");
+	}
+
 }
