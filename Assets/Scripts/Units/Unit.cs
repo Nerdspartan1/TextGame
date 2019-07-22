@@ -2,6 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Team", menuName = "ScriptableObjects/Unit/Team", order = 1)]
+public class Team : ScriptableObject, IEnumerable<Unit>
+{
+	public List<Unit> Units = new List<Unit>();
+
+	public Unit this[int i]
+	{
+		get => Units[i];
+	}
+
+	public IEnumerator<Unit> GetEnumerator()
+	{
+		return Units.GetEnumerator();
+	}
+
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
+}
+
 [CreateAssetMenu(fileName = "Unit", menuName = "ScriptableObjects/Unit/Unit", order = 1)]
 public abstract class Unit : ScriptableObject
 {

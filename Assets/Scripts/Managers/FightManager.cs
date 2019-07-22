@@ -20,114 +20,63 @@ public class FightManager : MonoBehaviour
 	public GameObject unitTargetObject;
 
 	[SerializeField]
-	private Enemy Enemy;
-	[SerializeField]
-	private FightStatus fightStatus = FightStatus.Idle;
+	private Team EnemyTeam;
 
-	public void BeginFight(Enemy foe)
+	private bool waitForInput = false;
+
+	public void BeginFight(Enemy enemy)
 	{
-		Enemy = foe;
-		Enemy.Init();
+		var team = Team.CreateInstance<Team>();
+		team.Units.Add(enemy);
+		BeginFight(team);
+	}
+	public void BeginFight(Team enemies)
+	{
+		foreach(var enemy in enemies)
+			enemy.Init();
+		EnemyTeam = enemies;
+
 		GameManager.Instance.ClearText();
 		GameManager.Instance.HideMap = true;
 
 		//placeholder for fight comment
-		GameManager.Instance.CreateText($"The fight between you and {Enemy.Name} has begun !");
-		DoPlayerTurn();
+		GameManager.Instance.CreateText($"The fight begins !");
+
+		StartCoroutine(CombatLoopCoroutine());
+
 	}
 
-
-	private void DoPlayerTurn()
+	IEnumerator CombatLoopCoroutine()
 	{
-		//placeholder for fight comment
-		GameManager.Instance.CreateText($"Your turn!");
-		fightStatus = FightStatus.Idle;
-		GameManager.Instance.UpdatePlayerInfo();
+		//Player chooses strategy
+		foreach(Unit teammate in GameManager.Instance.PlayerTeam)
+		{
+			DisplayButtons(teammate);
+			yield return WaitForInput();
+			Debug.Log("Ok !");
+		}
 
-		DisplayPlayerTurnButtons();
+
+		//Fight plays
+
 		
 	}
 
-	private void DoEnemyTurn()
+	IEnumerator WaitForInput()
 	{
-		//StartCoroutine("EnemyAttackCoroutine");
-		//placeholder for fight comment
-		GameManager.Instance.CreateText($"{Enemy.Name} attacks you !");
-		Enemy.Attack(GameManager.Instance.Player);
-
-		if (GameManager.Instance.Player.IsDead)
-			EndFight(false);
-		else
-			DoPlayerTurn();
+		waitForInput = true;
+		while (waitForInput) yield return null;
 	}
 
-	private IEnumerator EnemyAttackCoroutine()
+	void InputReceived()
 	{
-		fightStatus = FightStatus.EnemyAttack;
-		fightPanel.SetActive(true);
-		fightMaskPanel.SetActive(true);
-
-		//Mettre ça dans le beginFight pour ne créer les unitTarget qu'une fois au début et les enlever à la fin
-		GameObject unitTarget = Instantiate(unitTargetObject,fightPanel.transform);
-		unitTarget.transform.localPosition = Vector3.zero;
-		//unitTarget.GetComponent<UnitTarget>().unit = GameManager.Instance.player;
-
-
-		yield return new WaitForSeconds(5);
-
-		
-
-		fightPanel.SetActive(false);
-		fightMaskPanel.SetActive(false);
-
-		if (!GameManager.Instance.Player.IsDead)
-		{
-			DoPlayerTurn();
-		}
-		else
-		{
-			EndFight(false);
-		}
+		waitForInput = false;
 	}
 
-	void DisplayPlayerTurnButtons()
+	void DisplayButtons(Unit teammate)
 	{
-		GameManager.Instance.ClearButtons();
-		GameManager.Instance.CreateButton("Attack", PlayerAttack);
+		GameManager.Instance.CreateButton("Attack", InputReceived);
 	}
-
-	void PlayerAttack()
-	{
-		fightStatus = FightStatus.PlayerAttack;
-		//placeholder for fight comment
-		GameManager.Instance.CreateText($"You attack {Enemy.Name} !");
-		GameManager.Instance.Player.Attack(Enemy);
-
-		if (Enemy.IsDead)
-			EndFight(true);
-		else
-			DoEnemyTurn();
-		
-	}
-
-	void EndFight(bool victory)
-	{
-		if (victory)
-		{
-			GameManager.Instance.Player.Xp += Enemy.xpDrop;
-			//placeholder for fight comment
-			GameManager.Instance.CreateText($"You defeated {Enemy.Name}!");
-		}
-		else
-		{
-			//placeholder for fight comment
-			GameManager.Instance.CreateText($"You died !");
-
-		}
-
-		Enemy = null;
-		GameManager.Instance.HideMap = false;
-		Debug.Log("Fight end.");
-	}
+	
 
 }

@@ -99,7 +99,10 @@ public struct Operation
 				return;
 			case OperationType.InitiateFight:
 				GameManager.Instance.ExitGameEvent();
-				GameManager.Instance.FightManager.BeginFight((Enemy)reference);
+				if(reference is Team)
+					GameManager.Instance.FightManager.BeginFight((Team)reference);
+				else
+					GameManager.Instance.FightManager.BeginFight((Enemy)reference);
 				return;
 			case OperationType.PlayGameEvent:
 				GameManager.Instance.ExitGameEvent();

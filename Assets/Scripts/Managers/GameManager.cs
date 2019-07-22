@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour {
 	[HideInInspector]
 	public FightManager FightManager;
 	public Player Player;
+	public Team PlayerTeam;
 
 	[Header("UI References")]
 	public Transform Canvas;
@@ -115,8 +116,12 @@ public class GameManager : MonoBehaviour {
 
 		GoToLocation(StartingLocation.x, StartingLocation.y);
 
+
 		Player.Init();
 		Player.TakeDamage(15);
+		//PlayerTeam = new Team { Units = new List<Unit>(new Unit[] { Player }) };
+		PlayerTeam = ScriptableObject.CreateInstance<Team>();
+		PlayerTeam.Units.Add(Player);
 
 		PlayGameEvent(StartingGameEvent);
 
