@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
+using UnityEngine.Events;
 
 public enum FightStatus
 {
@@ -24,10 +26,18 @@ public class FightManager : MonoBehaviour
 
 	private bool waitForInput = false;
 
+	class CombatAction
+	{
+		public delegate void ActionDelegate(Unit Target);
+		public ActionDelegate Action;
+		public Unit Target;
+	}
+	
+
 	public void BeginFight(Enemy enemy)
 	{
 		var team = Team.CreateInstance<Team>();
-		team.Units.Add(enemy);
+		team.Add(enemy);
 		BeginFight(team);
 	}
 	public void BeginFight(Team enemies)
@@ -48,18 +58,40 @@ public class FightManager : MonoBehaviour
 
 	IEnumerator CombatLoopCoroutine()
 	{
+		Dictionary<Unit, CombatAction> actions = new Dictionary<Unit, CombatAction>();
+
 		//Player chooses strategy
 		foreach(Unit teammate in GameManager.Instance.PlayerTeam)
 		{
-			DisplayButtons(teammate);
-			yield return WaitForInput();
+			yield return ChooseAction(teammate, actions);
 			Debug.Log("Ok !");
 		}
 
+		//Enemy AI strategy
+		foreach(Enemy enemy in EnemyTeam)
+		{
+
+		}
+
+		//Build order by speed
+		List<Unit> order = BuildOrder();
 
 		//Fight plays
+		foreach(var unit in order)
+		{
 
+		}
 		
+	}
+
+	private List<Unit> BuildOrder()
+	{
+		List<Unit> order = GameManager.Instance.PlayerTeam.Units;
+		order.AddRange(EnemyTeam);
+
+		order.OrderByDescending(unit => unit.Speed);
+
+		return order;
 	}
 
 	IEnumerator WaitForInput()
@@ -73,10 +105,57 @@ public class FightManager : MonoBehaviour
 		waitForInput = false;
 	}
 
-	void DisplayButtons(Unit teammate)
+	IEnumerator ChooseAction(Unit teammate, Dictionary<Unit, CombatAction> actions)
 	{
-		GameManager.Instance.CreateButton("Attack", InputReceived);
-	}
-	
+		CombatAction action = null;
+		do
+		{
+			GameManager.Instance.CreateButton("Attack", InputReceived,
+				delegate { action = new CombatAction() { Action = teammate.Attack }; });
 
+			GameManager.Instance.CreateButton("Escape");
+
+			yield return WaitForInput();
+
+			GameManager.Instance.ClearButtons();
+
+			if (action != null)
+			{
+				yield return DisplayTargets(action);
+
+			}
+			else
+			{
+				Debug.Log("Escape here");
+			}
+
+		} while (action?.Target == null);
+
+	}
+
+	IEnumerator DisplayTargets(CombatAction action)
+	{
+		foreach(Enemy enemy in EnemyTeam)
+		{
+			GameManager.Instance.CreateButton(enemy.Name, InputReceived, delegate {
+				action.Target = enemy;
+			});
+		}
+		GameManager.Instance.CreateButton("Back", InputReceived);
+
+		yield return WaitForInput();
+
+		GameManager.Instance.ClearButtons();
+
+		if(action.Target != null)
+		{
+			Debug.Log($"Target is set to : {action.Target.Name}");
+		}
+		else
+		{
+			Debug.Log("Cancelled. Target is null, back to action choice");
+			action = null;
+		}
+
+	}
 }
