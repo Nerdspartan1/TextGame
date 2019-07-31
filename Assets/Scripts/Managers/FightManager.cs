@@ -24,8 +24,6 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	private Team EnemyTeam;
 
-	private bool waitForInput = false;
-
 	class CombatAction
 	{
 		public delegate void ActionDelegate(Unit Target);
@@ -33,6 +31,63 @@ public class FightManager : MonoBehaviour
 		public Unit Target;
 	}
 	
+	class Prompt
+	{
+		public Prompt Next;
+		public Prompt(System.Action<StrategyInfo, Prompt> method)
+		{
+			Method = method;
+		}
+
+		private bool waitForInput = false;
+		private bool cancelled = false;
+
+		public System.Action<StrategyInfo, Prompt> Method;
+
+		IEnumerator WaitForInput()
+		{
+			waitForInput = true;
+			while (waitForInput) yield return null;
+		}
+		public void Proceed()
+		{
+			waitForInput = false;
+		}
+
+		public IEnumerator Execute(StrategyInfo info)
+		{
+			do
+			{
+				//do thing
+				Method.Invoke(info, this); // Next is null here
+
+				yield return WaitForInput();
+
+				GameManager.Instance.ClearButtons();
+
+				if(Next == null)
+				{
+					cancelled = true;
+					yield break;
+				}
+				else if (Next.Method == null)
+				{
+					yield break;
+				}
+				else
+				{
+					yield return Next.Execute(info);
+				}
+
+			} while (Next.cancelled);
+		}
+	}
+
+	class StrategyInfo
+	{
+		public int CurrentTeammateId = 0;
+		public CombatAction[] CombatActions = new CombatAction[GameManager.Instance.PlayerTeam.Count];
+	}
 
 	public void BeginFight(Enemy enemy)
 	{
@@ -58,14 +113,10 @@ public class FightManager : MonoBehaviour
 
 	IEnumerator CombatLoopCoroutine()
 	{
-		Dictionary<Unit, CombatAction> actions = new Dictionary<Unit, CombatAction>();
+		StrategyInfo strategyInfo = new StrategyInfo();
 
-		//Player chooses strategy
-		foreach(Unit teammate in GameManager.Instance.PlayerTeam)
-		{
-			yield return ChooseAction(teammate, actions);
-			Debug.Log("Ok !");
-		}
+		//Fill the object with player choices
+		yield return new Prompt(ChooseAction).Execute(strategyInfo);
 
 		//Enemy AI strategy
 		foreach(Enemy enemy in EnemyTeam)
@@ -94,68 +145,44 @@ public class FightManager : MonoBehaviour
 		return order;
 	}
 
-	IEnumerator WaitForInput()
+
+	void ChooseAction(StrategyInfo info, Prompt prompt)
 	{
-		waitForInput = true;
-		while (waitForInput) yield return null;
-	}
-
-	void InputReceived()
-	{
-		waitForInput = false;
-	}
-
-	IEnumerator ChooseAction(Unit teammate, Dictionary<Unit, CombatAction> actions)
-	{
-		CombatAction action = null;
-		do
-		{
-			GameManager.Instance.CreateButton("Attack", InputReceived,
-				delegate { action = new CombatAction() { Action = teammate.Attack }; });
-
-			GameManager.Instance.CreateButton("Escape");
-
-			yield return WaitForInput();
-
-			GameManager.Instance.ClearButtons();
-
-			if (action != null)
-			{
-				yield return DisplayTargets(action);
-
-			}
-			else
-			{
-				Debug.Log("Escape here");
-			}
-
-		} while (action?.Target == null);
-
-	}
-
-	IEnumerator DisplayTargets(CombatAction action)
-	{
-		foreach(Enemy enemy in EnemyTeam)
-		{
-			GameManager.Instance.CreateButton(enemy.Name, InputReceived, delegate {
-				action.Target = enemy;
+		GameManager.Instance.CreateButton("Attack",
+			delegate {
+				info.CombatActions[info.CurrentTeammateId] = new CombatAction() { Action = GameManager.Instance.PlayerTeam[info.CurrentTeammateId].Attack };
+				prompt.Next = new Prompt(ChooseTargets);
+				prompt.Proceed();
 			});
-		}
-		GameManager.Instance.CreateButton("Back", InputReceived);
 
-		yield return WaitForInput();
+		GameManager.Instance.CreateButton("Back",
+			delegate {
+				prompt.Next = null;
+				prompt.Proceed();
+			});
 
-		GameManager.Instance.ClearButtons();
+	}
 
-		if(action.Target != null)
+	void ChooseTargets(StrategyInfo info, Prompt prompt)
+	{
+		foreach (Enemy enemy in EnemyTeam)
 		{
-			Debug.Log($"Target is set to : {action.Target.Name}");
+			GameManager.Instance.CreateButton(enemy.Name,
+				delegate
+				{
+					info.CombatActions[info.CurrentTeammateId++].Target = enemy;
+				
+					if(info.CurrentTeammateId < info.CombatActions.Length)
+						prompt.Next = new Prompt(ChooseAction);
+					else
+						prompt.Next = new Prompt(null); //end the chain
+					prompt.Proceed();
+				});
 		}
-		else
-		{
-			Debug.Log("Cancelled. Target is null, back to action choice");
-			action = null;
-		}
-
+		GameManager.Instance.CreateButton("Back",
+			delegate {
+				prompt.Next = null;
+				prompt.Proceed();
+			});
 	}
 }
