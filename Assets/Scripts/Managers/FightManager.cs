@@ -56,30 +56,20 @@ public class FightManager : MonoBehaviour
 
 		public IEnumerator Execute(StrategyInfo info)
 		{
-			do
-			{
-				//do thing
-				Method.Invoke(info, this); // Next is null here
+			//do thing
+			Method.Invoke(info, this);
 
-				yield return WaitForInput();
+			yield return WaitForInput();
 
-				GameManager.Instance.ClearButtons();
+			GameManager.Instance.ClearButtons();
 
-				if(Next == null)
-				{
-					cancelled = true;
-					yield break;
-				}
-				else if (Next.Method == null)
-				{
-					yield break;
-				}
-				else
-				{
-					yield return Next.Execute(info);
-				}
+			if(Next == null)
+				throw new System.Exception("Next has not been set");
 
-			} while (Next.cancelled);
+			if (Next.Method == null) //end of prompt chain
+				yield break;
+			else
+				yield return Next.Execute(info);
 		}
 	}
 
@@ -116,7 +106,7 @@ public class FightManager : MonoBehaviour
 		StrategyInfo strategyInfo = new StrategyInfo();
 
 		//Fill the object with player choices
-		yield return new Prompt(ChooseAction).Execute(strategyInfo);
+		yield return new Prompt(ChooseFightOrEscape).Execute(strategyInfo);
 
 		//Enemy AI strategy
 		foreach(Enemy enemy in EnemyTeam)
@@ -145,6 +135,20 @@ public class FightManager : MonoBehaviour
 		return order;
 	}
 
+	void ChooseFightOrEscape(StrategyInfo info, Prompt prompt)
+	{
+		GameManager.Instance.CreateButton("Fight",
+			delegate {
+				info.CurrentTeammateId = 0;
+				prompt.Next = new Prompt(ChooseAction);
+				prompt.Proceed();
+			});
+
+		GameManager.Instance.CreateButton("Escape",
+			delegate {
+				//Escape here
+			});
+	}
 
 	void ChooseAction(StrategyInfo info, Prompt prompt)
 	{
@@ -157,7 +161,11 @@ public class FightManager : MonoBehaviour
 
 		GameManager.Instance.CreateButton("Back",
 			delegate {
-				prompt.Next = null;
+				info.CurrentTeammateId--; // go to previous team member
+				if (info.CurrentTeammateId >= 0)
+					prompt.Next = new Prompt(ChooseAction);
+				else
+					prompt.Next = new Prompt(ChooseFightOrEscape);
 				prompt.Proceed();
 			});
 
@@ -170,18 +178,18 @@ public class FightManager : MonoBehaviour
 			GameManager.Instance.CreateButton(enemy.Name,
 				delegate
 				{
-					info.CombatActions[info.CurrentTeammateId++].Target = enemy;
+					info.CombatActions[info.CurrentTeammateId++].Target = enemy; //set target and go to next teammate in team
 				
-					if(info.CurrentTeammateId < info.CombatActions.Length)
+					if(info.CurrentTeammateId < info.CombatActions.Length) //if there is a next teammate, make him choose action
 						prompt.Next = new Prompt(ChooseAction);
 					else
-						prompt.Next = new Prompt(null); //end the chain
+						prompt.Next = new Prompt(null); // else end the chain
 					prompt.Proceed();
 				});
 		}
 		GameManager.Instance.CreateButton("Back",
 			delegate {
-				prompt.Next = null;
+				prompt.Next = new Prompt(ChooseAction);
 				prompt.Proceed();
 			});
 	}
