@@ -26,7 +26,7 @@ public class Enemy : Unit
 		other.TakeDamage(Random.Range(damage.x, damage.y));
 	}
 
-	public override void Die()
+	protected override void Die()
 	{
 		foreach(var lootDrop in lootDrops)
 		{

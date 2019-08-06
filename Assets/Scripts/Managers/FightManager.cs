@@ -21,6 +21,7 @@ public class FightManager : MonoBehaviour
 	public GameObject fightMaskPanel;
 	public GameObject unitTargetObject;
 
+	public Team PlayerTeam;
 	[SerializeField]
 	private Team EnemyTeam;
 
@@ -40,7 +41,6 @@ public class FightManager : MonoBehaviour
 		}
 
 		private bool waitForInput = false;
-		private bool cancelled = false;
 
 		public System.Action<StrategyInfo, Prompt> Method;
 
@@ -76,7 +76,16 @@ public class FightManager : MonoBehaviour
 	class StrategyInfo
 	{
 		public int CurrentTeammateId = 0;
-		public CombatAction[] CombatActions = new CombatAction[GameManager.Instance.PlayerTeam.Count];
+		public CombatAction[] CombatActions;
+	}
+
+	public void Start()
+	{
+		if (PlayerTeam == null)
+		{
+			PlayerTeam = ScriptableObject.CreateInstance<Team>();
+			PlayerTeam.Units.Add(GameManager.Instance.Player);
+		}
 	}
 
 	public void BeginFight(Enemy enemy)
@@ -104,6 +113,7 @@ public class FightManager : MonoBehaviour
 	IEnumerator CombatLoopCoroutine()
 	{
 		StrategyInfo strategyInfo = new StrategyInfo();
+		strategyInfo.CombatActions = new CombatAction[PlayerTeam.Count];
 
 		//Fill the object with player choices
 		yield return new Prompt(ChooseFightOrEscape).Execute(strategyInfo);
@@ -127,7 +137,7 @@ public class FightManager : MonoBehaviour
 
 	private List<Unit> BuildOrder()
 	{
-		List<Unit> order = GameManager.Instance.PlayerTeam.Units;
+		List<Unit> order = PlayerTeam.Units;
 		order.AddRange(EnemyTeam);
 
 		order.OrderByDescending(unit => unit.Speed);
@@ -154,7 +164,7 @@ public class FightManager : MonoBehaviour
 	{
 		GameManager.Instance.CreateButton("Attack",
 			delegate {
-				info.CombatActions[info.CurrentTeammateId] = new CombatAction() { Action = GameManager.Instance.PlayerTeam[info.CurrentTeammateId].Attack };
+				info.CombatActions[info.CurrentTeammateId] = new CombatAction() { Action = PlayerTeam[info.CurrentTeammateId].Attack };
 				prompt.Next = new Prompt(ChooseTargets);
 				prompt.Proceed();
 			});

@@ -52,7 +52,6 @@ public class Team : ScriptableObject, ICollection<Unit>
 	}
 }
 
-[CreateAssetMenu(fileName = "Unit", menuName = "ScriptableObjects/Unit/Unit", order = 1)]
 public abstract class Unit : ScriptableObject
 {
 	[Header("Identity")]
@@ -71,10 +70,25 @@ public abstract class Unit : ScriptableObject
 	public ushort Level;
 	[SerializeField]
 	private int maxHp;
-	public int MaxHp {get => maxHp;}
+	public int MaxHp {
+		get => maxHp;
+		set
+		{
+			maxHp = value;
+			if (hp > maxHp) hp = maxHp;
+		}
+	}
 	[SerializeField]
 	private int hp;
-	public int Hp {get => hp;}
+	public int Hp {
+		get => hp;
+		set
+		{
+			hp = value;
+			if (hp > maxHp) Debug.LogWarning("Hp is over MaxHp");
+			else if (hp <= 0) Die();
+		}
+	}
 
 	public virtual void Init()
 	{
@@ -84,8 +98,7 @@ public abstract class Unit : ScriptableObject
 
 	public void CalculateStatsFromAttributes()
 	{
-		maxHp = (int)(20 + Endurance * 5 + Strength * 2);
-		if (hp > maxHp) hp = maxHp;
+		MaxHp = (int)(20 + Endurance * 5 + Strength * 2);
 	}
 
 	public bool IsDead{ get => Hp <= 0; }
@@ -111,5 +124,5 @@ public abstract class Unit : ScriptableObject
 		}
 	}
 
-	public abstract void Die();
+	protected abstract void Die();
 }
