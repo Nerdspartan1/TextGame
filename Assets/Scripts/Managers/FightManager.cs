@@ -33,23 +33,34 @@ public class FightManager : MonoBehaviour
 			Heal,
 		}
 
-		public delegate void ActionDelegate(Unit Target);
 		public ActionType Type;
-		public ActionDelegate Action;
+		public Unit Actor;
 		public Unit Target;
+
+		public void Execute()
+		{
+			switch (Type)
+			{
+				case ActionType.Attack:
+					GameManager.Instance.CreateText($"{Actor.Name} attacks {Target.Name} !");
+					Actor.Attack(Target);
+					break;
+				default: break;
+			}
+		}
 	}
 	
 	class Prompt
 	{
 		public Prompt Next;
-		public Prompt(System.Action<StrategyInfo, Prompt> method)
+		public Prompt(System.Action<CombatInfo, Prompt> method)
 		{
 			Method = method;
 		}
 
 		private bool waitForInput = false;
 
-		public System.Action<StrategyInfo, Prompt> Method;
+		public System.Action<CombatInfo, Prompt> Method;
 
 		IEnumerator WaitForInput()
 		{
@@ -61,7 +72,7 @@ public class FightManager : MonoBehaviour
 			waitForInput = false;
 		}
 
-		public IEnumerator Execute(StrategyInfo info)
+		public IEnumerator Display(CombatInfo info)
 		{
 			//do thing
 			Method.Invoke(info, this);
@@ -76,14 +87,8 @@ public class FightManager : MonoBehaviour
 			if (Next.Method == null) //end of prompt chain
 				yield break;
 			else
-				yield return Next.Execute(info);
+				yield return Next.Display(info);
 		}
-	}
-
-	class StrategyInfo
-	{
-		public int CurrentTeammateId = 0;
-		public CombatAction[] CombatActions;
 	}
 
 	public void Start()
@@ -121,27 +126,43 @@ public class FightManager : MonoBehaviour
 
 	}
 
+	class CombatInfo
+	{
+		public int CurrentTeammateId = 0;
+		public CombatAction[] CombatActions;
+	}
+
 	IEnumerator CombatLoopCoroutine()
 	{
-		StrategyInfo strategyInfo = new StrategyInfo();
-		strategyInfo.CombatActions = new CombatAction[PlayerTeam.Count];
+		CombatInfo combatInfo = new CombatInfo();
+		combatInfo.CombatActions = new CombatAction[PlayerTeam.Count + EnemyTeam.Count];
 
 		//Fill the object with player choices
-		yield return new Prompt(ChooseFightOrEscape).Execute(strategyInfo);
+		yield return new Prompt(ChooseFightOrEscape).Display(combatInfo);
+
+		GameManager.Instance.ClearText();
+		GameManager.Instance.CreateText("Player strategy chosen !");
 
 		//Enemy AI strategy
-		foreach(Enemy enemy in EnemyTeam)
+		for (int i = 0; i < EnemyTeam.Count; ++i)
 		{
-
+			combatInfo.CombatActions[PlayerTeam.Count + i] = new CombatAction()
+			{
+				Actor = EnemyTeam[i],
+				Type = CombatAction.ActionType.Attack,
+				Target = PlayerTeam[0]
+			};
 		}
+		GameManager.Instance.CreateText("Enemy strategy calculated !");
 
 		//Build order by speed
-		List<Unit> order = BuildOrder();
+		var orderedCombatActions = combatInfo.CombatActions.OrderByDescending(action => action.Actor.Speed);
+		GameManager.Instance.CreateText("Action ordered by speed.");
 
 		//Fight plays
-		foreach(var unit in order)
+		foreach(var action in orderedCombatActions)
 		{
-
+			action.Execute();
 		}
 		
 	}
@@ -158,7 +179,7 @@ public class FightManager : MonoBehaviour
 		return order;
 	}
 
-	private void DescribeStrategy(StrategyInfo info)
+	private void DescribeStrategy(CombatInfo info)
 	{
 		for(int i = 0; i < PlayerTeam.Count; i++)
 		{
@@ -179,7 +200,7 @@ public class FightManager : MonoBehaviour
 		}
 	}
 
-	void ChooseFightOrEscape(StrategyInfo info, Prompt prompt)
+	void ChooseFightOrEscape(CombatInfo info, Prompt prompt)
 	{
 		GameManager.Instance.CreateText("Should you fight, or escape ?");
 
@@ -196,7 +217,7 @@ public class FightManager : MonoBehaviour
 			});
 	}
 
-	void ChooseAction(StrategyInfo info, Prompt prompt)
+	void ChooseAction(CombatInfo info, Prompt prompt)
 	{
 		info.CombatActions[info.CurrentTeammateId] = null;
 
@@ -208,7 +229,7 @@ public class FightManager : MonoBehaviour
 		GameManager.Instance.CreateButton("Attack",
 			delegate {
 				info.CombatActions[info.CurrentTeammateId] = new CombatAction() {
-					Action = PlayerTeam[info.CurrentTeammateId].Attack,
+					Actor = PlayerTeam[info.CurrentTeammateId],
 					Type = CombatAction.ActionType.Attack};
 				prompt.Next = new Prompt(ChooseTargets);
 				prompt.Proceed();
@@ -226,7 +247,7 @@ public class FightManager : MonoBehaviour
 
 	}
 
-	void ChooseTargets(StrategyInfo info, Prompt prompt)
+	void ChooseTargets(CombatInfo info, Prompt prompt)
 	{
 		GameManager.Instance.CreateText($"What should {PlayerTeam[info.CurrentTeammateId].Name} attack ?");
 
@@ -237,7 +258,7 @@ public class FightManager : MonoBehaviour
 				{
 					info.CombatActions[info.CurrentTeammateId++].Target = enemy; //set target and go to next teammate in team
 				
-					if(info.CurrentTeammateId < info.CombatActions.Length) //if there is a next teammate, make him choose action
+					if(info.CurrentTeammateId < PlayerTeam.Count) //if there is a next teammate, make him choose action
 						prompt.Next = new Prompt(ChooseAction);
 					else
 						prompt.Next = new Prompt(null); // else end the chain
