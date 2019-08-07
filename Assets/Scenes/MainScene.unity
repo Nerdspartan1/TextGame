@@ -3073,7 +3073,7 @@ MonoBehaviour:
   fightMaskPanel: {fileID: 33088015}
   unitTargetObject: {fileID: 1943311110287095079, guid: 292501c1df5b39c43be979584d6fabc7,
     type: 3}
-  PlayerTeam: {fileID: 11400000, guid: 15b038f5dc250ca4b82a39f5bcc47602, type: 2}
+  PlayerTeam: {fileID: 11400000, guid: 0201b702a5c8ec745bbad197aba09b35, type: 2}
   EnemyTeam: {fileID: 0}
 --- !u!114 &1700758566
 MonoBehaviour:

@@ -27,7 +27,14 @@ public class FightManager : MonoBehaviour
 
 	class CombatAction
 	{
+		public enum ActionType
+		{
+			Attack,
+			Heal,
+		}
+
 		public delegate void ActionDelegate(Unit Target);
+		public ActionType Type;
 		public ActionDelegate Action;
 		public Unit Target;
 	}
@@ -63,7 +70,7 @@ public class FightManager : MonoBehaviour
 
 			GameManager.Instance.ClearButtons();
 
-			if(Next == null)
+			if (Next == null)
 				throw new System.Exception("Next has not been set");
 
 			if (Next.Method == null) //end of prompt chain
@@ -85,6 +92,10 @@ public class FightManager : MonoBehaviour
 		{
 			PlayerTeam = ScriptableObject.CreateInstance<Team>();
 			PlayerTeam.Units.Add(GameManager.Instance.Player);
+		}
+		else
+		{
+			PlayerTeam = Instantiate(PlayerTeam);
 		}
 	}
 
@@ -137,7 +148,9 @@ public class FightManager : MonoBehaviour
 
 	private List<Unit> BuildOrder()
 	{
-		List<Unit> order = PlayerTeam.Units;
+		List<Unit> order = new List<Unit>();
+
+		order.AddRange(PlayerTeam);
 		order.AddRange(EnemyTeam);
 
 		order.OrderByDescending(unit => unit.Speed);
@@ -145,8 +158,31 @@ public class FightManager : MonoBehaviour
 		return order;
 	}
 
+	private void DescribeStrategy(StrategyInfo info)
+	{
+		for(int i = 0; i < PlayerTeam.Count; i++)
+		{
+			if (info.CombatActions[i] == null) continue;
+			string actorName = PlayerTeam[i].Name;
+			var action = info.CombatActions[i];
+			string actionVerb = "???";
+			switch (action.Type)
+			{
+				case CombatAction.ActionType.Attack:
+					actionVerb = "attack";
+					break;
+				case CombatAction.ActionType.Heal:
+					actionVerb = "heal";
+					break;
+			}
+			GameManager.Instance.CreateText($"{actorName} will {actionVerb} {action.Target.Name}");
+		}
+	}
+
 	void ChooseFightOrEscape(StrategyInfo info, Prompt prompt)
 	{
+		GameManager.Instance.CreateText("Should you fight, or escape ?");
+
 		GameManager.Instance.CreateButton("Fight",
 			delegate {
 				info.CurrentTeammateId = 0;
@@ -162,9 +198,18 @@ public class FightManager : MonoBehaviour
 
 	void ChooseAction(StrategyInfo info, Prompt prompt)
 	{
+		info.CombatActions[info.CurrentTeammateId] = null;
+
+		GameManager.Instance.ClearText();
+		DescribeStrategy(info);
+
+		GameManager.Instance.CreateText($"What should {PlayerTeam[info.CurrentTeammateId].Name} do ?");
+
 		GameManager.Instance.CreateButton("Attack",
 			delegate {
-				info.CombatActions[info.CurrentTeammateId] = new CombatAction() { Action = PlayerTeam[info.CurrentTeammateId].Attack };
+				info.CombatActions[info.CurrentTeammateId] = new CombatAction() {
+					Action = PlayerTeam[info.CurrentTeammateId].Attack,
+					Type = CombatAction.ActionType.Attack};
 				prompt.Next = new Prompt(ChooseTargets);
 				prompt.Proceed();
 			});
@@ -183,6 +228,8 @@ public class FightManager : MonoBehaviour
 
 	void ChooseTargets(StrategyInfo info, Prompt prompt)
 	{
+		GameManager.Instance.CreateText($"What should {PlayerTeam[info.CurrentTeammateId].Name} attack ?");
+
 		foreach (Enemy enemy in EnemyTeam)
 		{
 			GameManager.Instance.CreateButton(enemy.Name,
