@@ -12,4 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
   m_Name: RarerEvent
   m_EditorClassIdentifier: 
-  paragraphs: []
+  paragraphs:
+  - conditions: []
+    text: 'Wow ! A really rare event is occuring : a headcrab just phase into existence
+      before you !'
+    operations: []
+    choices:
+    - conditions: []
+      text: OK
+      operations:
+      - key: 
+        operationType: 5
+        value: 
+        reference: {fileID: 11400000, guid: d4ee3f9948f8f3a4da05a480575f75db, type: 2}
+        position: {x: 0, y: 0}

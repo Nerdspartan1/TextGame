@@ -15,15 +15,13 @@ MonoBehaviour:
   Name: Imp
   Description: 
   Strength: 2
-  Dexterity: 1
+  Speed: 3
   Perception: 1
   Skill: 1
   Endurance: 1
   Level: 0
-  maxHp: 29
+  maxHp: 1
   hp: 0
-  MoveSpeed: 0
-  DamageMultiplier: 0
-  damage: {x: 0, y: 1}
+  damage: {x: 1, y: 2}
   xpDrop: 10
   lootDrops: []

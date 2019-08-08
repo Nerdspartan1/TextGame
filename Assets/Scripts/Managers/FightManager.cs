@@ -13,9 +13,6 @@ public class ActionResult
 
 public class FightManager : MonoBehaviour
 {
-	public Team PlayerTeam;
-	public Team EnemyTeam;
-
 
 	class CombatAction
 	{
@@ -46,27 +43,29 @@ public class FightManager : MonoBehaviour
 
 	class Prompt
 	{
+
 		public Prompt Next;
+		public System.Action<CombatInfo, Prompt> Method;
+
+		private bool waitForInput = false;
+
 		public Prompt(System.Action<CombatInfo, Prompt> method)
 		{
 			Method = method;
 		}
-
-		private bool waitForInput = false;
-
-		public System.Action<CombatInfo, Prompt> Method;
 
 		IEnumerator WaitForInput()
 		{
 			waitForInput = true;
 			while (waitForInput) yield return null;
 		}
+
 		public void Proceed()
 		{
 			waitForInput = false;
 		}
 
-		public IEnumerator Display(CombatInfo info)
+		public IEnumerator Display(CombatInfo info = null)
 		{
 			//do thing
 			Method.Invoke(info, this);
@@ -75,15 +74,15 @@ public class FightManager : MonoBehaviour
 
 			GameManager.Instance.ClearButtons();
 
-			if (Next == null)
-				throw new System.Exception("Next has not been set");
-
-			if (Next.Method == null) //end of prompt chain
+			if (Next == null) //end of prompt chain
 				yield break;
 			else
 				yield return Next.Display(info);
 		}
 	}
+
+	public Team PlayerTeam;
+	public Team EnemyTeam;
 
 	public void Start()
 	{
@@ -104,6 +103,7 @@ public class FightManager : MonoBehaviour
 		team.Add(enemy);
 		BeginFight(team);
 	}
+
 	public void BeginFight(Team enemies)
 	{
 		foreach(var enemy in enemies)
@@ -175,6 +175,8 @@ public class FightManager : MonoBehaviour
 				action.Execute();
 			}
 
+			yield return new Prompt(PressOKToContinue).Display();
+
 		} while (!CheckFightOver(out playerVictory));
 
 		if(playerVictory) GameManager.Instance.CreateText("You win !");
@@ -209,6 +211,7 @@ public class FightManager : MonoBehaviour
 
 		GameManager.Instance.CreateButton("Fight",
 			delegate {
+				info.CurrentTeammateId = 0;
 				prompt.Next = new Prompt(ChooseAction);
 				prompt.Proceed();
 			});
@@ -262,14 +265,21 @@ public class FightManager : MonoBehaviour
 				
 					if(info.CurrentTeammateId < PlayerTeam.Count) //if there is a next teammate, make him choose action
 						prompt.Next = new Prompt(ChooseAction);
-					else
-						prompt.Next = new Prompt(null); // else end the chain
+					// else end the chain
 					prompt.Proceed();
 				});
 		}
 		GameManager.Instance.CreateButton("Back",
 			delegate {
 				prompt.Next = new Prompt(ChooseAction);
+				prompt.Proceed();
+			});
+	}
+
+	void PressOKToContinue(CombatInfo info, Prompt prompt)
+	{
+		GameManager.Instance.CreateButton("OK", 
+			delegate {
 				prompt.Proceed();
 			});
 	}

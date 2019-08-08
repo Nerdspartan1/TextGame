@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b7679b7cd1c47c43b38c8cee697ddaf, type: 3}
-  m_Name: Character
+  m_Name: Tom
   m_EditorClassIdentifier: 
   Name: Tom
   Description: 
@@ -21,6 +21,6 @@ MonoBehaviour:
   Endurance: 1
   Level: 0
   maxHp: 27
-  hp: 0
+  hp: 26
   Xp: 0
   Weapon: {fileID: 0}

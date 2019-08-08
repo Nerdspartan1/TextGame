@@ -25,3 +25,10 @@ MonoBehaviour:
       value: 
       reference: {fileID: 11400000, guid: 0ceb006fa4261fd40b354ff8ea2b8e0b, type: 2}
       position: {x: 0, y: 0}
+  - probability: 0.096
+    operations:
+    - key: 
+      operationType: 6
+      value: 
+      reference: {fileID: 11400000, guid: e7a4f3a531206ab42bab105a9fb29c11, type: 2}
+      position: {x: 0, y: 0}

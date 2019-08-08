@@ -12,19 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdff682ccdd28b3429496e6ba4c9e5db, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  Id: 
   Name: Poppy Gloria
   Description: 
-  Weapon: {fileID: 0}
-  Strength: 0
-  Dexterity: 0
-  Perception: 0
-  Skill: 0
-  Endurance: 0
+  Strength: 1
+  Speed: 1
+  Perception: 1
+  Skill: 1
+  Endurance: 1
   Level: 0
   maxHp: 20
-  hp: 0
-  MoveSpeed: 0
-  DamageMultiplier: 0
-  inventory: []
+  hp: 5
   Xp: 0
+  Weapon: {fileID: 0}
