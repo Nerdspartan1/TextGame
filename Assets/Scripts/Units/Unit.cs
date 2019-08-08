@@ -53,9 +53,9 @@ public abstract class Unit : ScriptableObject
 
 	public bool IsDead{ get => Hp <= 0; }
 
-	public abstract void Attack(Unit other);
+	public abstract void Attack(Unit other, out ActionResult result);
 
-	public void TakeDamage(int dmg)
+	public int TakeDamage(int dmg)
 	{
 		hp -= dmg;
 
@@ -63,6 +63,8 @@ public abstract class Unit : ScriptableObject
 		{
 			Die();
 		}
+
+		return dmg;
 	}
 
 	public void Heal(int heal)

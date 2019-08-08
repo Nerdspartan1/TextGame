@@ -17,12 +17,15 @@ public class Character : Unit
 		Xp = 0;
 	}
 
-	public override void Attack(Unit other)
+	public override void Attack(Unit other, out ActionResult result)
 	{
+		result = new ActionResult();
 		if (Weapon != null)
-			other.TakeDamage(Weapon.GetDamage());
+			result.IntValue = other.TakeDamage(Weapon.GetDamage());
 		else
-			other.TakeDamage(1);
+			result.IntValue = other.TakeDamage(1);
+
+		result.Missed = false;
 	}
 
 	protected override void Die()

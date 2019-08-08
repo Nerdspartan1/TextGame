@@ -5,25 +5,17 @@ using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.Events;
 
-public enum FightStatus
+public class ActionResult
 {
-	EnemyAttack,
-	PlayerAttack,
-	Idle,
+	public bool Missed;
+	public int IntValue;
 }
 
 public class FightManager : MonoBehaviour
 {
-	public static float fightSceneWidth = 600;
-	public static float fightSceneHeight = 600;
-
-	public GameObject fightPanel;
-	public GameObject fightMaskPanel;
-	public GameObject unitTargetObject;
-
 	public Team PlayerTeam;
-	[SerializeField]
-	private Team EnemyTeam;
+	public Team EnemyTeam;
+
 
 	class CombatAction
 	{
@@ -39,17 +31,19 @@ public class FightManager : MonoBehaviour
 
 		public void Execute()
 		{
+			if (Actor.IsDead || Target.IsDead) return;
+
 			switch (Type)
 			{
 				case ActionType.Attack:
-					GameManager.Instance.CreateText($"{Actor.Name} attacks {Target.Name} !");
-					Actor.Attack(Target);
+					Actor.Attack(Target,out ActionResult result);
+					GameManager.Instance.CreateText($"{Actor.Name} attacks {Target.Name} for {result.IntValue} damage !");
 					break;
 				default: break;
 			}
 		}
 	}
-	
+
 	class Prompt
 	{
 		public Prompt Next;
@@ -126,6 +120,22 @@ public class FightManager : MonoBehaviour
 
 	}
 
+	public bool CheckFightOver(out bool playerVictory)
+	{
+		playerVictory = false;
+		if (PlayerTeam.All(unit => unit.IsDead))
+		{
+			playerVictory = false;
+			return true;
+		}
+		else if(EnemyTeam.All(unit => unit.IsDead))
+		{
+			playerVictory = true;
+			return true;
+		}
+		return false;
+	}
+
 	class CombatInfo
 	{
 		public int CurrentTeammateId = 0;
@@ -134,49 +144,42 @@ public class FightManager : MonoBehaviour
 
 	IEnumerator CombatLoopCoroutine()
 	{
-		CombatInfo combatInfo = new CombatInfo();
-		combatInfo.CombatActions = new CombatAction[PlayerTeam.Count + EnemyTeam.Count];
-
-		//Fill the object with player choices
-		yield return new Prompt(ChooseFightOrEscape).Display(combatInfo);
-
-		GameManager.Instance.ClearText();
-		GameManager.Instance.CreateText("Player strategy chosen !");
-
-		//Enemy AI strategy
-		for (int i = 0; i < EnemyTeam.Count; ++i)
+		bool playerVictory;
+		do
 		{
-			combatInfo.CombatActions[PlayerTeam.Count + i] = new CombatAction()
+			CombatInfo combatInfo = new CombatInfo();
+			combatInfo.CombatActions = new CombatAction[PlayerTeam.Count + EnemyTeam.Count];
+
+			//Fill the object with player choices
+			yield return new Prompt(ChooseAction).Display(combatInfo);
+
+			GameManager.Instance.ClearText();
+
+			//Enemy AI strategy
+			for (int i = 0; i < EnemyTeam.Count; ++i)
 			{
-				Actor = EnemyTeam[i],
-				Type = CombatAction.ActionType.Attack,
-				Target = PlayerTeam[0]
-			};
-		}
-		GameManager.Instance.CreateText("Enemy strategy calculated !");
+				combatInfo.CombatActions[PlayerTeam.Count + i] = new CombatAction()
+				{
+					Actor = EnemyTeam[i],
+					Type = CombatAction.ActionType.Attack,
+					Target = PlayerTeam[Random.Range(0,PlayerTeam.Count)]
+				};
+			}
 
-		//Build order by speed
-		var orderedCombatActions = combatInfo.CombatActions.OrderByDescending(action => action.Actor.Speed);
-		GameManager.Instance.CreateText("Action ordered by speed.");
+			//Build order by speed
+			var orderedCombatActions = combatInfo.CombatActions.OrderByDescending(action => action.Actor.Speed);
 
-		//Fight plays
-		foreach(var action in orderedCombatActions)
-		{
-			action.Execute();
-		}
-		
-	}
+			//Fight plays
+			foreach (var action in orderedCombatActions)
+			{
+				action.Execute();
+			}
 
-	private List<Unit> BuildOrder()
-	{
-		List<Unit> order = new List<Unit>();
+		} while (!CheckFightOver(out playerVictory));
 
-		order.AddRange(PlayerTeam);
-		order.AddRange(EnemyTeam);
+		if(playerVictory) GameManager.Instance.CreateText("You win !");
+		else GameManager.Instance.CreateText("You lose !");
 
-		order.OrderByDescending(unit => unit.Speed);
-
-		return order;
 	}
 
 	private void DescribeStrategy(CombatInfo info)
@@ -206,7 +209,6 @@ public class FightManager : MonoBehaviour
 
 		GameManager.Instance.CreateButton("Fight",
 			delegate {
-				info.CurrentTeammateId = 0;
 				prompt.Next = new Prompt(ChooseAction);
 				prompt.Proceed();
 			});

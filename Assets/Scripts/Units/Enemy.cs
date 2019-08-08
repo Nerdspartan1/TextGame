@@ -21,9 +21,11 @@ public class Enemy : Unit
 	public int xpDrop;
 	public LootDrop[] lootDrops;
 
-	public override void Attack(Unit other)
+	public override void Attack(Unit other, out ActionResult result)
 	{
-		other.TakeDamage(Random.Range(damage.x, damage.y));
+		result = new ActionResult();
+		result.IntValue = other.TakeDamage(Random.Range(damage.x, damage.y));
+		result.Missed = false;
 	}
 
 	protected override void Die()
