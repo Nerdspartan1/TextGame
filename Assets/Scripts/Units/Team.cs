@@ -7,6 +7,14 @@ public class Team : ScriptableObject, ICollection<Unit>
 {
 	public List<Unit> Units = new List<Unit>();
 
+	public void InstantiateUnits()
+	{
+		for(int i = 0; i < Units.Count; ++i)
+		{
+			Units[i] = Instantiate(Units[i]);
+		}
+	}
+
 	public Unit this[int i]
 	{
 		get => Units[i];

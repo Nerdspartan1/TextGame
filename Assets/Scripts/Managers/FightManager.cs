@@ -86,29 +86,22 @@ public class FightManager : MonoBehaviour
 
 	public void Start()
 	{
-		if (PlayerTeam == null)
-		{
-			PlayerTeam = ScriptableObject.CreateInstance<Team>();
-			PlayerTeam.Units.Add(GameManager.Instance.Player);
-		}
-		else
-		{
-			PlayerTeam = Instantiate(PlayerTeam);
-		}
+		//we need to instantiate these so that we don't modify the source scriptable object
+		PlayerTeam = Instantiate(PlayerTeam);
+		PlayerTeam.InstantiateUnits();
 	}
 
 	public void BeginFight(Enemy enemy)
 	{
-		var team = Team.CreateInstance<Team>();
-		team.Add(enemy);
-		BeginFight(team);
+		var enemyTeam = Team.CreateInstance<Team>();
+		enemyTeam.Add(enemy);
+		BeginFight(enemyTeam);
 	}
 
-	public void BeginFight(Team enemies)
+	public void BeginFight(Team enemyTeam)
 	{
-		foreach(var enemy in enemies)
-			enemy.Init();
-		EnemyTeam = enemies;
+		EnemyTeam = Instantiate(enemyTeam);
+		EnemyTeam.InstantiateUnits();
 
 		GameManager.Instance.ClearText();
 		GameManager.Instance.HideMap = true;

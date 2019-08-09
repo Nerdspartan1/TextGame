@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-
 public class Values
 {
 	static Dictionary<string, string> values = new Dictionary<string, string>();
@@ -60,7 +59,7 @@ public class GameManager : MonoBehaviour {
 
 	[HideInInspector]
 	public FightManager FightManager;
-	public Player Player;
+	//public Player Player;
 
 	[Header("UI References")]
 	public Transform Canvas;
@@ -69,10 +68,10 @@ public class GameManager : MonoBehaviour {
 	public Transform buttonPanel;
 	public Transform infoPanel;
 	public Transform mapHidingPanel;
-	public Text playerNameInfoText;
-	public Text playerHpInfoText;
-	public Text playerLevelInfoText;
-	public Text playerXpInfoText;
+	//public Text playerNameInfoText;
+	//public Text playerHpInfoText;
+	//public Text playerLevelInfoText;
+	//public Text playerXpInfoText;
 	public Transform mapPanel;
 
 	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
@@ -115,21 +114,19 @@ public class GameManager : MonoBehaviour {
 
 		GoToLocation(StartingLocation.x, StartingLocation.y);
 
-
-		Player.Init();
-		Player.TakeDamage(15);
+		//Player.Init(); 
 
 		PlayGameEvent(StartingGameEvent);
 
 		//FightManager.BeginFight(foe);
 
-		UpdatePlayerInfo();
+		//UpdatePlayerInfo();
 
 	}
 
 	private void Update()
 	{
-		UpdatePlayerInfo();
+		//UpdatePlayerInfo();
 		if (CurrentGameEvent != null && Input.GetButtonDown("Fire1"))
 		{
 			if (buttonsDisplayed == 0)
@@ -338,16 +335,16 @@ public class GameManager : MonoBehaviour {
 		grid.cellSize = new Vector2(grid.cellSize.x, buttonHeight);
 	}
 
-	public void UpdatePlayerInfo()
-	{
-		if (Player == null) return;
+	//public void UpdatePlayerInfo()
+	//{
+	//	if (Player == null) return;
 
-		playerNameInfoText.text = Player.Name;
-		playerHpInfoText.text = Player.Hp.ToString() + " / " + Player.MaxHp.ToString();
-		playerLevelInfoText.text = "Lvl. " + Player.Level.ToString();
-		playerXpInfoText.text = "XP : " + Player.Xp.ToString();
+	//	playerNameInfoText.text = Player.Name;
+	//	playerHpInfoText.text = Player.Hp.ToString() + " / " + Player.MaxHp.ToString();
+	//	playerLevelInfoText.text = "Lvl. " + Player.Level.ToString();
+	//	playerXpInfoText.text = "XP : " + Player.Xp.ToString();
 
-	}
+	//}
 
 	#endregion
 
