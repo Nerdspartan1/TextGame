@@ -20,8 +20,8 @@ MonoBehaviour:
   Skill: 1
   Endurance: 1
   Level: 0
-  maxHp: 1
-  hp: 0
+  maxHp: 29
+  hp: 29
   damage: {x: 1, y: 2}
   xpDrop: 10
   lootDrops: []

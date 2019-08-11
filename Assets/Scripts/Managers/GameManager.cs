@@ -64,8 +64,10 @@ public class GameManager : MonoBehaviour {
 	[Header("UI References")]
 	public Transform Canvas;
 	public Transform FrontCanvas;
-	public Transform textPanel;
-	public Transform buttonPanel;
+	public Transform ScrollPanel;
+	public Transform ContentPanel;
+	public Transform TextPanel;
+	public Transform ButtonPanel;
 	public Transform infoPanel;
 	public Transform mapHidingPanel;
 	//public Text playerNameInfoText;
@@ -267,7 +269,7 @@ public class GameManager : MonoBehaviour {
 
 	public void CreateButton(string content, params UnityAction[] onClick)
 	{
-		GameObject go = Instantiate(ButtonPrefab, buttonPanel);
+		GameObject go = Instantiate(ButtonPrefab, ButtonPanel);
 		go.GetComponentInChildren<Text>().text = content;
 		var button = go.GetComponent<Button>();
 		button.onClick.AddListener(ClearButtons);
@@ -277,27 +279,29 @@ public class GameManager : MonoBehaviour {
 				button.onClick.AddListener(action);
 		} 
 		buttonsDisplayed++;
-		BalanceTextButtonPanels(); //should not be called at every button created but let's put it here anyway for clean code
+		RefreshContent();
 	}
 
 	public void CreateText(string content)
 	{
-		GameObject textBox = Instantiate(TextBoxPrefab, textPanel);
-		Text text = textBox.transform.Find("Panel/Line").GetComponent<Text>();
+		GameObject textBox = Instantiate(TextBoxPrefab, TextPanel);
+		Text text = textBox.GetComponentInChildren<Text>();
 		if (text == null) throw new System.Exception("[GameManager] Cannot find Text component of TextBox prefab ");
 		text.text = content;
+		RefreshContent();
 	}
 
 	public void ClearText()
 	{
-		ClearChilds(textPanel);
+		ClearChilds(TextPanel);
+		RefreshContent();
 	}
 
 	public void ClearButtons()
 	{
-		ClearChilds(buttonPanel);
+		ClearChilds(ButtonPanel);
 		buttonsDisplayed = 0;
-		BalanceTextButtonPanels();
+		RefreshContent();
 	}
 
 	public void ClearMap()
@@ -327,12 +331,27 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void BalanceTextButtonPanels()
+	//This is the only way to force update the layout groups
+
+	bool willRefreshContent = false;
+	public void RefreshContent()
 	{
-		float buttonHeight = buttonsDisplayed > 0 ? Mathf.Pow(0.95f, buttonsDisplayed-1) * 50f : 0f;
-		textPanel.GetComponent<LayoutElement>().minHeight = 768f - buttonsDisplayed*buttonHeight;
-		var grid = buttonPanel.GetComponent<GridLayoutGroup>();
-		grid.cellSize = new Vector2(grid.cellSize.x, buttonHeight);
+		if (!willRefreshContent)
+			StartCoroutine(nameof(RefreshContentCoroutine));
+	}
+
+	public IEnumerator RefreshContentCoroutine()
+	{
+		willRefreshContent = true;
+
+		ContentPanel.localScale = Vector3.zero;
+		yield return null;
+		LayoutRebuilder.ForceRebuildLayoutImmediate(ContentPanel.GetComponent<RectTransform>());
+		LayoutRebuilder.ForceRebuildLayoutImmediate(TextPanel.GetComponent<RectTransform>());
+		LayoutRebuilder.ForceRebuildLayoutImmediate(ButtonPanel.GetComponent<RectTransform>());
+		ContentPanel.localScale = Vector3.one;
+
+		willRefreshContent = false;
 	}
 
 	//public void UpdatePlayerInfo()

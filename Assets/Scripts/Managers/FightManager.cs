@@ -28,8 +28,12 @@ public class FightManager : MonoBehaviour
 
 		public void Execute()
 		{
-			if (Actor.IsDead || Target.IsDead) return;
-
+			if (Actor.IsDead || Target.IsDead)
+			{
+				if (Actor.IsDead) Debug.Log($"{Actor.Name} is dead");
+				if (Target.IsDead) Debug.Log($"{Target.Name} is dead");
+				return;
+			}
 			switch (Type)
 			{
 				case ActionType.Attack:

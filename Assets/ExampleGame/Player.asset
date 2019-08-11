@@ -20,7 +20,7 @@ MonoBehaviour:
   Skill: 1
   Endurance: 1
   Level: 0
-  maxHp: 20
-  hp: 5
+  maxHp: 27
+  hp: 27
   Xp: 0
   Weapon: {fileID: 0}

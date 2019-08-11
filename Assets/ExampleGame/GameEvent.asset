@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NGameEvent
   paragraphs:
   - conditions: []
-    text: Hello ! What is your name ?
+    text: "Good day ! \nWhat is your name ?"
     operations: []
     choices:
     - conditions: []
