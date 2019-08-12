@@ -22,6 +22,6 @@ MonoBehaviour:
   Level: 0
   maxHp: 25
   hp: 23
-  damage: {x: 0, y: 0}
+  damage: {x: 2, y: 4}
   xpDrop: 10
   lootDrops: []

@@ -13,6 +13,13 @@ public class ActionResult
 
 public class FightManager : MonoBehaviour
 {
+	//Singleton instance
+	public static FightManager Instance;
+
+	public void Awake()
+	{
+		Instance = this;
+	}
 
 	class CombatAction
 	{
@@ -85,15 +92,7 @@ public class FightManager : MonoBehaviour
 		}
 	}
 
-	public Team PlayerTeam;
 	public Team EnemyTeam;
-
-	public void Start()
-	{
-		//we need to instantiate these so that we don't modify the source scriptable object
-		PlayerTeam = Instantiate(PlayerTeam);
-		PlayerTeam.InstantiateUnits();
-	}
 
 	public void BeginFight(Enemy enemy)
 	{
@@ -120,7 +119,7 @@ public class FightManager : MonoBehaviour
 	public bool CheckFightOver(out bool playerVictory)
 	{
 		playerVictory = false;
-		if (PlayerTeam.All(unit => unit.IsDead))
+		if (GameManager.Instance.PlayerTeam.All(unit => unit.IsDead))
 		{
 			playerVictory = false;
 			return true;
@@ -145,7 +144,7 @@ public class FightManager : MonoBehaviour
 		do
 		{
 			CombatInfo combatInfo = new CombatInfo();
-			combatInfo.CombatActions = new CombatAction[PlayerTeam.Count + EnemyTeam.Count];
+			combatInfo.CombatActions = new CombatAction[GameManager.Instance.PlayerTeam.Count + EnemyTeam.Count];
 
 			//Fill the object with player choices
 			yield return new Prompt(ChooseAction).Display(combatInfo);
@@ -155,11 +154,11 @@ public class FightManager : MonoBehaviour
 			//Enemy AI strategy
 			for (int i = 0; i < EnemyTeam.Count; ++i)
 			{
-				combatInfo.CombatActions[PlayerTeam.Count + i] = new CombatAction()
+				combatInfo.CombatActions[GameManager.Instance.PlayerTeam.Count + i] = new CombatAction()
 				{
 					Actor = EnemyTeam[i],
 					Type = CombatAction.ActionType.Attack,
-					Target = PlayerTeam[Random.Range(0,PlayerTeam.Count)]
+					Target = GameManager.Instance.PlayerTeam[Random.Range(0, GameManager.Instance.PlayerTeam.Count)]
 				};
 			}
 
@@ -183,10 +182,10 @@ public class FightManager : MonoBehaviour
 
 	private void DescribeStrategy(CombatInfo info)
 	{
-		for(int i = 0; i < PlayerTeam.Count; i++)
+		for(int i = 0; i < GameManager.Instance.PlayerTeam.Count; i++)
 		{
 			if (info.CombatActions[i] == null) continue;
-			string actorName = PlayerTeam[i].Name;
+			string actorName = GameManager.Instance.PlayerTeam[i].Name;
 			var action = info.CombatActions[i];
 			string actionVerb = "???";
 			switch (action.Type)
@@ -226,12 +225,12 @@ public class FightManager : MonoBehaviour
 		GameManager.Instance.ClearText();
 		DescribeStrategy(info);
 
-		GameManager.Instance.CreateText($"What should {PlayerTeam[info.CurrentTeammateId].Name} do ?");
+		GameManager.Instance.CreateText($"What should {GameManager.Instance.PlayerTeam[info.CurrentTeammateId].Name} do ?");
 
 		GameManager.Instance.CreateButton("Attack",
 			delegate {
 				info.CombatActions[info.CurrentTeammateId] = new CombatAction() {
-					Actor = PlayerTeam[info.CurrentTeammateId],
+					Actor = GameManager.Instance.PlayerTeam[info.CurrentTeammateId],
 					Type = CombatAction.ActionType.Attack};
 				prompt.Next = new Prompt(ChooseTargets);
 				prompt.Proceed();
@@ -251,7 +250,7 @@ public class FightManager : MonoBehaviour
 
 	void ChooseTargets(CombatInfo info, Prompt prompt)
 	{
-		GameManager.Instance.CreateText($"What should {PlayerTeam[info.CurrentTeammateId].Name} attack ?");
+		GameManager.Instance.CreateText($"What should {GameManager.Instance.PlayerTeam[info.CurrentTeammateId].Name} attack ?");
 
 		foreach (Enemy enemy in EnemyTeam)
 		{
@@ -260,7 +259,7 @@ public class FightManager : MonoBehaviour
 				{
 					info.CombatActions[info.CurrentTeammateId++].Target = enemy; //set target and go to next teammate in team
 				
-					if(info.CurrentTeammateId < PlayerTeam.Count) //if there is a next teammate, make him choose action
+					if(info.CurrentTeammateId < GameManager.Instance.PlayerTeam.Count) //if there is a next teammate, make him choose action
 						prompt.Next = new Prompt(ChooseAction);
 					// else end the chain
 					prompt.Proceed();

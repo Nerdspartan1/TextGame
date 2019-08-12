@@ -56,10 +56,12 @@ public class Values
 public class GameManager : MonoBehaviour {
 	//Singleton instance
 	public static GameManager Instance;
+	private void Awake()
+	{
+		Instance = this;
+	}
 
-	[HideInInspector]
-	public FightManager FightManager;
-	//public Player Player;
+	public Team PlayerTeam;
 
 	[Header("UI References")]
 	public Transform Canvas;
@@ -70,10 +72,7 @@ public class GameManager : MonoBehaviour {
 	public Transform ButtonPanel;
 	public Transform infoPanel;
 	public Transform mapHidingPanel;
-	//public Text playerNameInfoText;
-	//public Text playerHpInfoText;
-	//public Text playerLevelInfoText;
-	//public Text playerXpInfoText;
+	public TeamPanel TeamPanel;
 	public Transform mapPanel;
 
 	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
@@ -101,34 +100,25 @@ public class GameManager : MonoBehaviour {
 	[Header("Debug")]
 	public Enemy foe;
 
-	private void Awake()
-	{
-		Instance = this;
-	}
-
 	void Start () {
 
-		//Référencement des autres managers
-		FightManager = GetComponent<FightManager>();
+		//we need to instantiate these so that we don't modify the source scriptable object
+		PlayerTeam = Instantiate(PlayerTeam);
+		PlayerTeam.InstantiateUnits();
+
+		TeamPanel.Team = PlayerTeam;
+		TeamPanel.RebuildPanel();
 
 		//starting map
 		GoToMap(StartingMap);
-
 		GoToLocation(StartingLocation.x, StartingLocation.y);
 
-		//Player.Init(); 
-
 		PlayGameEvent(StartingGameEvent);
-
-		//FightManager.BeginFight(foe);
-
-		//UpdatePlayerInfo();
 
 	}
 
 	private void Update()
 	{
-		//UpdatePlayerInfo();
 		if (CurrentGameEvent != null && Input.GetButtonDown("Fire1"))
 		{
 			if (buttonsDisplayed == 0)
@@ -136,6 +126,7 @@ public class GameManager : MonoBehaviour {
 				DisplayNextParagraphInGameEvent();
 			}
 		}
+		TeamPanel.UpdateSlots();
 	}
 
 	#region GameEvent handling
@@ -354,16 +345,10 @@ public class GameManager : MonoBehaviour {
 		willRefreshContent = false;
 	}
 
-	//public void UpdatePlayerInfo()
-	//{
-	//	if (Player == null) return;
-
-	//	playerNameInfoText.text = Player.Name;
-	//	playerHpInfoText.text = Player.Hp.ToString() + " / " + Player.MaxHp.ToString();
-	//	playerLevelInfoText.text = "Lvl. " + Player.Level.ToString();
-	//	playerXpInfoText.text = "XP : " + Player.Xp.ToString();
-
-	//}
+	public void UpdateTeamPanel()
+	{
+		
+	}
 
 	#endregion
 
