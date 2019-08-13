@@ -92,6 +92,7 @@ public class FightManager : MonoBehaviour
 		}
 	}
 
+	public TeamPanel EnemyTeamPanel;
 	public Team EnemyTeam;
 
 	public void BeginFight(Enemy enemy)
@@ -105,6 +106,10 @@ public class FightManager : MonoBehaviour
 	{
 		EnemyTeam = Instantiate(enemyTeam);
 		EnemyTeam.InstantiateUnits();
+
+		GameManager.Instance.RightPanel.gameObject.SetActive(true);
+		EnemyTeamPanel.Team = EnemyTeam;
+		EnemyTeamPanel.RebuildPanel();
 
 		GameManager.Instance.ClearText();
 		GameManager.Instance.HideMap = true;
@@ -171,11 +176,15 @@ public class FightManager : MonoBehaviour
 				action.Execute();
 			}
 
+			EnemyTeamPanel.UpdateSlots();
+
 			yield return new Prompt(PressOKToContinue).Display();
 
 		} while (!CheckFightOver(out playerVictory));
 
-		if(playerVictory) GameManager.Instance.CreateText("You win !");
+
+		GameManager.Instance.RightPanel.gameObject.SetActive(false);
+		if (playerVictory) GameManager.Instance.CreateText("You win !");
 		else GameManager.Instance.CreateText("You lose !");
 
 	}

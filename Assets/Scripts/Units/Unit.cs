@@ -61,6 +61,7 @@ public abstract class Unit : ScriptableObject
 
 		if(hp <= 0)
 		{
+			hp = 0;
 			Die();
 		}
 

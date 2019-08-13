@@ -23,4 +23,4 @@ MonoBehaviour:
   maxHp: 27
   hp: 27
   Xp: 0
-  Weapon: {fileID: 0}
+  Weapon: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}

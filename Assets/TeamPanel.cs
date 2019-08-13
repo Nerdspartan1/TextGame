@@ -7,11 +7,11 @@ public class TeamPanel : MonoBehaviour
 	public Team Team;
 	public GameObject CharacterSlotPrefab;
 
-	private CharacterSlot[] characterSlots;
+	private UnitSlot[] unitSlots;
 	
 	public void UpdateSlots()
 	{
-		foreach(var cs in characterSlots)
+		foreach(var cs in unitSlots)
 		{
 			cs.UpdateSlot();
 		}
@@ -24,13 +24,14 @@ public class TeamPanel : MonoBehaviour
 		{
 			Destroy(child.gameObject);
 		}
-		var cslist = new List<CharacterSlot>();
-		foreach(Character c in Team)
+		var uslist = new List<UnitSlot>();
+		foreach(Unit u in Team)
 		{
-			var cs = Instantiate(CharacterSlotPrefab, transform).GetComponent<CharacterSlot>();
-			cs.Character = c;
-			cslist.Add(cs);
+			var us = Instantiate(CharacterSlotPrefab, transform).GetComponent<UnitSlot>();
+			us.Unit = u;
+			uslist.Add(us);
 		}
-		characterSlots = cslist.ToArray();
+		unitSlots = uslist.ToArray();
+		UpdateSlots();
 	}
 }

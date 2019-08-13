@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour {
 	public Transform Canvas;
 	public Transform FrontCanvas;
 	public Transform ScrollPanel;
+	public Transform RightPanel;
 	public Transform ContentPanel;
 	public Transform TextPanel;
 	public Transform ButtonPanel;
