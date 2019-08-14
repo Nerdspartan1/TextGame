@@ -92,11 +92,14 @@ public class GameManager : MonoBehaviour {
 
 	[Header("Initial values")]
 	public GameEvent StartingGameEvent;
-	private GameEvent CurrentGameEvent;
+	[HideInInspector]
+	public GameEvent CurrentGameEvent;
 	public Map StartingMap;
-	private Map CurrentMap;
+	[HideInInspector]
+	public Map CurrentMap;
 	public Vector2Int StartingLocation;
-	private Vector2Int CurrentLocation;
+	[HideInInspector]
+	public Vector2Int CurrentLocation;
 
 	[Header("Debug")]
 	public Enemy foe;
@@ -112,7 +115,7 @@ public class GameManager : MonoBehaviour {
 
 		//starting map
 		GoToMap(StartingMap);
-		GoToLocation(StartingLocation.x, StartingLocation.y);
+		GoToLocation(StartingLocation);
 
 		PlayGameEvent(StartingGameEvent);
 
@@ -175,7 +178,7 @@ public class GameManager : MonoBehaviour {
 			ExitGameEvent();
 			ClearText();
 			HideMap = false;
-			DisplayParagraph(CurrentMap[CurrentLocation.x, CurrentLocation.y].description);
+			DisplayParagraph(CurrentMap[CurrentLocation].description);
 			return;
 		}
 
@@ -204,20 +207,19 @@ public class GameManager : MonoBehaviour {
 		{
 			for(int u = 0; u<map.Width; u++)
 			{
-				if (map[u, v] != null)
+				if (map[new Vector2Int(u,v)] != null)
 				{
 					GameObject go = Instantiate(LocationPrefab, mapPanel);
 					go.transform.localPosition = new Vector3(cellWidth * u, -v * cellHeight, 0);
-					int _u = u;
-					int _v = v;
-					go.GetComponent<Button>().onClick.AddListener(delegate { GoToLocation(_u,_v); });
-					MapCells.Add(new Vector2Int(_u, _v), go.GetComponent<Button>());
+					Vector2Int pos = new Vector2Int(u, v);
+					go.GetComponent<Button>().onClick.AddListener(delegate { GoToLocation(pos); });
+					MapCells.Add(pos, go.GetComponent<Button>());
 				}
 			}
 		}
 	}
 
-	public void GoToLocation(int u, int v)
+	public void GoToLocation(Vector2Int pos)
 	{
 		if(CurrentMap == null)
 		{
@@ -225,21 +227,21 @@ public class GameManager : MonoBehaviour {
 			return;
 		}
 		
-		Location location = CurrentMap[u, v];
+		Location location = CurrentMap[pos];
 		if(location == null)
 		{
-			Debug.LogError($"[GameManager] No location found at ({u},{v})");
+			Debug.LogError($"[GameManager] No location found at {pos}");
 			return;
 		}
 
 		//update position on map
-		MapCursorPrefab.transform.localPosition = new Vector2(u * cellWidth, -v* cellHeight);
+		MapCursorPrefab.transform.localPosition = new Vector2(pos.x * cellWidth, -pos.y* cellHeight);
 
 		foreach(KeyValuePair<Vector2Int,Button> pair in MapCells)
 		{
 			pair.Value.interactable = false;
 		}
-		CurrentLocation = new Vector2Int(u, v);
+		CurrentLocation = pos;
 		Button b;
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.up, out b)) b.interactable = true;
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.right, out b)) b.interactable = true;

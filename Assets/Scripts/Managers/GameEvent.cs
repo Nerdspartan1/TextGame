@@ -95,7 +95,7 @@ public struct Operation
 				return;
 			case OperationType.GoToCell:
 				GameManager.Instance.ExitGameEvent();
-				GameManager.Instance.GoToLocation(position.x,position.y);
+				GameManager.Instance.GoToLocation(position);
 				return;
 			case OperationType.InitiateFight:
 				GameManager.Instance.ExitGameEvent();

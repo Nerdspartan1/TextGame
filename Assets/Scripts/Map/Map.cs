@@ -17,15 +17,15 @@ public class Map : ScriptableObject
 	private int height = 1;
 	public int Height { get { return height; } }
 
-	public Location this[int u, int v]{
+	public Location this[Vector2Int v]{
 		get {
-			if (u >= width || u < 0 ||
-				v >= height|| v < 0)
+			if (v.x >= width || v.x < 0 ||
+				v.y >= height|| v.y < 0)
 			{
-				Debug.LogError($"[Map] ({u},{v}) is out of bounds (width={width},height={height}) ");
+				Debug.LogError($"[Map] {v} is out of bounds (width={width},height={height}) ");
 				return null;
 			}
-			return locations[v * width + u];
+			return locations[v.y * width + v.x];
 		}
 	}
 }

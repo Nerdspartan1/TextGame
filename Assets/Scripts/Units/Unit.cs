@@ -36,7 +36,6 @@ public abstract class Unit : ScriptableObject
 		{
 			hp = value;
 			if (hp > maxHp) Debug.LogWarning("Hp is over MaxHp");
-			else if (hp <= 0) Die();
 		}
 	}
 

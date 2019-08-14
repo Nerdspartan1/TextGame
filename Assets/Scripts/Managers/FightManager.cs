@@ -92,6 +92,14 @@ public class FightManager : MonoBehaviour
 		}
 	}
 
+	enum FightOutcome
+	{
+		NotFinished,
+		Victory,
+		Defeat,
+		Escape
+	}
+
 	public TeamPanel EnemyTeamPanel;
 	public Team EnemyTeam;
 
@@ -114,38 +122,30 @@ public class FightManager : MonoBehaviour
 		GameManager.Instance.ClearText();
 		GameManager.Instance.HideMap = true;
 
-		//placeholder for fight comment
-		GameManager.Instance.CreateText($"The fight begins !");
-
 		StartCoroutine(CombatLoopCoroutine());
 
 	}
 
-	public bool CheckFightOver(out bool playerVictory)
+	private FightOutcome CheckFightOutcome()
 	{
-		playerVictory = false;
 		if (GameManager.Instance.PlayerTeam.All(unit => unit.IsDead))
-		{
-			playerVictory = false;
-			return true;
-		}
+			return FightOutcome.Defeat;
 		else if(EnemyTeam.All(unit => unit.IsDead))
-		{
-			playerVictory = true;
-			return true;
-		}
-		return false;
+			return FightOutcome.Victory;
+		else
+			return FightOutcome.NotFinished;
 	}
 
 	class CombatInfo
 	{
 		public int CurrentTeammateId = 0;
 		public CombatAction[] CombatActions;
+		public bool Escape = false;
 	}
 
 	IEnumerator CombatLoopCoroutine()
 	{
-		bool playerVictory;
+		FightOutcome outcome;
 		do
 		{
 			CombatInfo combatInfo = new CombatInfo();
@@ -153,6 +153,12 @@ public class FightManager : MonoBehaviour
 
 			//Fill the object with player choices
 			yield return new Prompt(ChooseAction).Display(combatInfo);
+
+			if (combatInfo.Escape)
+			{
+				outcome = FightOutcome.Escape;
+				break;
+			}
 
 			GameManager.Instance.ClearText();
 
@@ -180,13 +186,35 @@ public class FightManager : MonoBehaviour
 
 			yield return new Prompt(PressOKToContinue).Display();
 
-		} while (!CheckFightOver(out playerVictory));
+			outcome = CheckFightOutcome();
+		} while (outcome == FightOutcome.NotFinished);
 
+		yield return EndFight(outcome);
+	}
 
+	private IEnumerator EndFight(FightOutcome outcome)
+	{
 		GameManager.Instance.RightPanel.gameObject.SetActive(false);
-		if (playerVictory) GameManager.Instance.CreateText("You win !");
-		else GameManager.Instance.CreateText("You lose !");
+		switch (outcome)
+		{
+			case FightOutcome.Victory:
+				GameManager.Instance.CreateText("You win !");
+				//rewards
+				break;
+			case FightOutcome.Defeat:
+				GameManager.Instance.CreateText("You lose !");
+				//game over
+				break;
+			case FightOutcome.Escape:
+				GameManager.Instance.CreateText("You escape successfully.");
+				break;
+		}
 
+		yield return new Prompt(PressOKToContinue).Display();
+
+		GameManager.Instance.HideMap = false;
+		//TODO: return to a chosen game event
+		GameManager.Instance.DisplayParagraph(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation].description);
 	}
 
 	private void DescribeStrategy(CombatInfo info)
@@ -223,7 +251,7 @@ public class FightManager : MonoBehaviour
 
 		GameManager.Instance.CreateButton("Escape",
 			delegate {
-				//Escape here
+				info.Escape = true;
 			});
 	}
 
