@@ -21,77 +21,6 @@ public class FightManager : MonoBehaviour
 		Instance = this;
 	}
 
-	class CombatAction
-	{
-		public enum ActionType
-		{
-			Attack,
-			Heal,
-		}
-
-		public ActionType Type;
-		public Unit Actor;
-		public Unit Target;
-
-		public void Execute()
-		{
-			if (Actor.IsDead || Target.IsDead)
-			{
-				if (Actor.IsDead) Debug.Log($"{Actor.Name} is dead");
-				if (Target.IsDead) Debug.Log($"{Target.Name} is dead");
-				return;
-			}
-			switch (Type)
-			{
-				case ActionType.Attack:
-					Actor.Attack(Target,out ActionResult result);
-					GameManager.Instance.CreateText($"{Actor.Name} attacks {Target.Name} for {result.IntValue} damage !");
-					break;
-				default: break;
-			}
-		}
-	}
-
-	class Prompt
-	{
-
-		public Prompt Next;
-		public System.Action<CombatInfo, Prompt> Method;
-
-		private bool waitForInput = false;
-
-		public Prompt(System.Action<CombatInfo, Prompt> method)
-		{
-			Method = method;
-		}
-
-		IEnumerator WaitForInput()
-		{
-			waitForInput = true;
-			while (waitForInput) yield return null;
-		}
-
-		public void Proceed()
-		{
-			waitForInput = false;
-		}
-
-		public IEnumerator Display(CombatInfo info = null)
-		{
-			//do thing
-			Method.Invoke(info, this);
-
-			yield return WaitForInput();
-
-			GameManager.Instance.ClearButtons();
-
-			if (Next == null) //end of prompt chain
-				yield break;
-			else
-				yield return Next.Display(info);
-		}
-	}
-
 	enum FightOutcome
 	{
 		NotFinished,
@@ -101,7 +30,8 @@ public class FightManager : MonoBehaviour
 	}
 
 	public TeamPanel EnemyTeamPanel;
-	public Team EnemyTeam;
+
+	public Fight Fight;
 
 	public void BeginFight(Enemy enemy)
 	{
@@ -112,11 +42,12 @@ public class FightManager : MonoBehaviour
 
 	public void BeginFight(Team enemyTeam)
 	{
-		EnemyTeam = Instantiate(enemyTeam);
-		EnemyTeam.InstantiateUnits();
+		Fight = new Fight();
+		Fight.EnemyTeam = Instantiate(enemyTeam);
+		Fight.EnemyTeam.InstantiateUnits();
 
 		GameManager.Instance.RightPanel.gameObject.SetActive(true);
-		EnemyTeamPanel.Team = EnemyTeam;
+		EnemyTeamPanel.Team = Fight.EnemyTeam;
 		EnemyTeamPanel.RebuildPanel();
 
 		GameManager.Instance.ClearText();
@@ -130,17 +61,10 @@ public class FightManager : MonoBehaviour
 	{
 		if (GameManager.Instance.PlayerTeam.All(unit => unit.IsDead))
 			return FightOutcome.Defeat;
-		else if(EnemyTeam.All(unit => unit.IsDead))
+		else if(Fight.EnemyTeam.All(unit => unit.IsDead))
 			return FightOutcome.Victory;
 		else
 			return FightOutcome.NotFinished;
-	}
-
-	class CombatInfo
-	{
-		public int CurrentTeammateId = 0;
-		public CombatAction[] CombatActions;
-		public bool Escape = false;
 	}
 
 	IEnumerator CombatLoopCoroutine()
@@ -148,13 +72,12 @@ public class FightManager : MonoBehaviour
 		FightOutcome outcome;
 		do
 		{
-			CombatInfo combatInfo = new CombatInfo();
-			combatInfo.CombatActions = new CombatAction[GameManager.Instance.PlayerTeam.Count + EnemyTeam.Count];
+			Fight.ResetCombatActions();
 
-			//Fill the object with player choices
-			yield return new Prompt(ChooseAction).Display(combatInfo);
+			//Player Strategy
+			yield return new Prompt(Fight.ChooseAction).Display();
 
-			if (combatInfo.Escape)
+			if (Fight.Escape)
 			{
 				outcome = FightOutcome.Escape;
 				break;
@@ -163,18 +86,10 @@ public class FightManager : MonoBehaviour
 			GameManager.Instance.ClearText();
 
 			//Enemy AI strategy
-			for (int i = 0; i < EnemyTeam.Count; ++i)
-			{
-				combatInfo.CombatActions[GameManager.Instance.PlayerTeam.Count + i] = new CombatAction()
-				{
-					Actor = EnemyTeam[i],
-					Type = CombatAction.ActionType.Attack,
-					Target = GameManager.Instance.PlayerTeam[Random.Range(0, GameManager.Instance.PlayerTeam.Count)]
-				};
-			}
+			Fight.MakeEnemyActions();
 
 			//Build order by speed
-			var orderedCombatActions = combatInfo.CombatActions.OrderByDescending(action => action.Actor.Speed);
+			var orderedCombatActions = Fight.GetOrderedActions();
 
 			//Fight plays
 			foreach (var action in orderedCombatActions)
@@ -184,7 +99,7 @@ public class FightManager : MonoBehaviour
 
 			EnemyTeamPanel.UpdateSlots();
 
-			yield return new Prompt(PressOKToContinue).Display();
+			yield return new Prompt(Prompt.PressOKToContinue).Display();
 
 			outcome = CheckFightOutcome();
 		} while (outcome == FightOutcome.NotFinished);
@@ -210,110 +125,11 @@ public class FightManager : MonoBehaviour
 				break;
 		}
 
-		yield return new Prompt(PressOKToContinue).Display();
+		yield return new Prompt(Prompt.PressOKToContinue).Display();
 
 		GameManager.Instance.HideMap = false;
 		//TODO: return to a chosen game event
 		GameManager.Instance.DisplayParagraph(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation].description);
 	}
 
-	private void DescribeStrategy(CombatInfo info)
-	{
-		for(int i = 0; i < GameManager.Instance.PlayerTeam.Count; i++)
-		{
-			if (info.CombatActions[i] == null) continue;
-			string actorName = GameManager.Instance.PlayerTeam[i].Name;
-			var action = info.CombatActions[i];
-			string actionVerb = "???";
-			switch (action.Type)
-			{
-				case CombatAction.ActionType.Attack:
-					actionVerb = "attack";
-					break;
-				case CombatAction.ActionType.Heal:
-					actionVerb = "heal";
-					break;
-			}
-			GameManager.Instance.CreateText($"{actorName} will {actionVerb} {action.Target.Name}");
-		}
-	}
-
-	void ChooseFightOrEscape(CombatInfo info, Prompt prompt)
-	{
-		GameManager.Instance.CreateText("Should you fight, or escape ?");
-
-		GameManager.Instance.CreateButton("Fight",
-			delegate {
-				info.CurrentTeammateId = 0;
-				prompt.Next = new Prompt(ChooseAction);
-				prompt.Proceed();
-			});
-
-		GameManager.Instance.CreateButton("Escape",
-			delegate {
-				info.Escape = true;
-			});
-	}
-
-	void ChooseAction(CombatInfo info, Prompt prompt)
-	{
-		info.CombatActions[info.CurrentTeammateId] = null;
-
-		GameManager.Instance.ClearText();
-		DescribeStrategy(info);
-
-		GameManager.Instance.CreateText($"What should {GameManager.Instance.PlayerTeam[info.CurrentTeammateId].Name} do ?");
-
-		GameManager.Instance.CreateButton("Attack",
-			delegate {
-				info.CombatActions[info.CurrentTeammateId] = new CombatAction() {
-					Actor = GameManager.Instance.PlayerTeam[info.CurrentTeammateId],
-					Type = CombatAction.ActionType.Attack};
-				prompt.Next = new Prompt(ChooseTargets);
-				prompt.Proceed();
-			});
-
-		GameManager.Instance.CreateButton("Back",
-			delegate {
-				info.CurrentTeammateId--; // go to previous team member
-				if (info.CurrentTeammateId >= 0)
-					prompt.Next = new Prompt(ChooseAction);
-				else
-					prompt.Next = new Prompt(ChooseFightOrEscape);
-				prompt.Proceed();
-			});
-
-	}
-
-	void ChooseTargets(CombatInfo info, Prompt prompt)
-	{
-		GameManager.Instance.CreateText($"What should {GameManager.Instance.PlayerTeam[info.CurrentTeammateId].Name} attack ?");
-
-		foreach (Enemy enemy in EnemyTeam)
-		{
-			GameManager.Instance.CreateButton(enemy.Name,
-				delegate
-				{
-					info.CombatActions[info.CurrentTeammateId++].Target = enemy; //set target and go to next teammate in team
-				
-					if(info.CurrentTeammateId < GameManager.Instance.PlayerTeam.Count) //if there is a next teammate, make him choose action
-						prompt.Next = new Prompt(ChooseAction);
-					// else end the chain
-					prompt.Proceed();
-				});
-		}
-		GameManager.Instance.CreateButton("Back",
-			delegate {
-				prompt.Next = new Prompt(ChooseAction);
-				prompt.Proceed();
-			});
-	}
-
-	void PressOKToContinue(CombatInfo info, Prompt prompt)
-	{
-		GameManager.Instance.CreateButton("OK", 
-			delegate {
-				prompt.Proceed();
-			});
-	}
 }
