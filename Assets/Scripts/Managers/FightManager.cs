@@ -2,132 +2,146 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public enum FightStatus
-{
-	EnemyAttack,
-	PlayerAttack,
-	Idle,
-}
+using System.Linq;
+using UnityEngine.Events;
 
 public class FightManager : MonoBehaviour
 {
-	public static float fightSceneWidth = 600;
-	public static float fightSceneHeight = 600;
+	//Singleton instance
+	public static FightManager Instance;
 
-	public GameObject fightPanel;
-	public GameObject fightMaskPanel;
-	public GameObject unitTargetObject;
-
-	[SerializeField]
-	private Enemy Enemy;
-	[SerializeField]
-	private FightStatus fightStatus = FightStatus.Idle;
-
-	public void BeginFight(Enemy foe)
+	public void Awake()
 	{
-		Enemy = foe;
-		Enemy.Init();
+		Instance = this;
+	}
+
+	enum FightOutcome
+	{
+		NotFinished,
+		Victory,
+		Defeat,
+		Escape
+	}
+
+	public TeamPanel EnemyTeamPanel;
+
+	public Fight Fight;
+
+	public void BeginFight(Enemy enemy)
+	{
+		var enemyTeam = Team.CreateInstance<Team>();
+		enemyTeam.Add(enemy);
+		BeginFight(enemyTeam);
+	}
+
+	public void BeginFight(Team enemyTeam)
+	{
+		Fight = new Fight();
+		Fight.EnemyTeam = Instantiate(enemyTeam);
+		Fight.EnemyTeam.InstantiateUnits();
+
+		GameManager.Instance.RightPanel.gameObject.SetActive(true);
+		EnemyTeamPanel.Team = Fight.EnemyTeam;
+		EnemyTeamPanel.RebuildPanel();
+
 		GameManager.Instance.ClearText();
 		GameManager.Instance.HideMap = true;
+		Inventory.Instance.Lock();
 
-		//placeholder for fight comment
-		GameManager.Instance.CreateText($"The fight between you and {Enemy.Name} has begun !");
-		DoPlayerTurn();
+		StartCoroutine(CombatLoopCoroutine());
+
 	}
 
-
-	private void DoPlayerTurn()
+	private FightOutcome CheckFightOutcome()
 	{
-		//placeholder for fight comment
-		GameManager.Instance.CreateText($"Your turn!");
-		fightStatus = FightStatus.Idle;
-		GameManager.Instance.UpdatePlayerInfo();
-
-		DisplayPlayerTurnButtons();
-		
-	}
-
-	private void DoEnemyTurn()
-	{
-		//StartCoroutine("EnemyAttackCoroutine");
-		//placeholder for fight comment
-		GameManager.Instance.CreateText($"{Enemy.Name} attacks you !");
-		Enemy.Attack(GameManager.Instance.Player);
-
-		if (GameManager.Instance.Player.IsDead)
-			EndFight(false);
+		if (GameManager.Instance.PlayerTeam.All(unit => unit.IsDead))
+			return FightOutcome.Defeat;
+		else if(Fight.EnemyTeam.All(unit => unit.IsDead))
+			return FightOutcome.Victory;
 		else
-			DoPlayerTurn();
+			return FightOutcome.NotFinished;
 	}
 
-	private IEnumerator EnemyAttackCoroutine()
+	IEnumerator CombatLoopCoroutine()
 	{
-		fightStatus = FightStatus.EnemyAttack;
-		fightPanel.SetActive(true);
-		fightMaskPanel.SetActive(true);
-
-		//Mettre ça dans le beginFight pour ne créer les unitTarget qu'une fois au début et les enlever à la fin
-		GameObject unitTarget = Instantiate(unitTargetObject,fightPanel.transform);
-		unitTarget.transform.localPosition = Vector3.zero;
-		//unitTarget.GetComponent<UnitTarget>().unit = GameManager.Instance.player;
-
-
-		yield return new WaitForSeconds(5);
-
-		
-
-		fightPanel.SetActive(false);
-		fightMaskPanel.SetActive(false);
-
-		if (!GameManager.Instance.Player.IsDead)
+		FightOutcome outcome;
+		do
 		{
-			DoPlayerTurn();
+			Fight.ResetCombatActions();
+
+			//Player Strategy
+			yield return new Prompt(Fight.ChooseAction).Display();
+
+			if (Fight.Escape)
+			{
+				outcome = FightOutcome.Escape;
+				break;
+			}
+
+			GameManager.Instance.ClearText();
+
+			//Enemy AI strategy
+			Fight.MakeEnemyActions();
+
+			//Build order by speed
+			var orderedCombatActions = Fight.GetOrderedActions();
+
+			//Fight plays
+			foreach (var action in orderedCombatActions)
+			{
+				action.Execute(Fight);
+			}
+
+			EnemyTeamPanel.UpdateSlots();
+
+			yield return new Prompt(Prompt.PressOKToContinue).Display();
+
+			outcome = CheckFightOutcome();
+		} while (outcome == FightOutcome.NotFinished);
+
+		yield return EndFight(outcome);
+	}
+
+	private IEnumerator EndFight(FightOutcome outcome)
+	{
+		GameManager.Instance.RightPanel.gameObject.SetActive(false);
+
+		if (outcome == FightOutcome.Defeat)
+		{
+			GameManager.Instance.CreateText("You lose ! Game over !");
 		}
 		else
 		{
-			EndFight(false);
-		}
-	}
+			if(outcome == FightOutcome.Victory) GameManager.Instance.CreateText("You win !");
+			else GameManager.Instance.CreateText("You escape successfully.");
 
-	void DisplayPlayerTurnButtons()
-	{
-		GameManager.Instance.ClearButtons();
-		GameManager.Instance.CreateButton("Attack", PlayerAttack);
-	}
+			if(Fight.XP > 0)
+			{
+				foreach(Character character in GameManager.Instance.PlayerTeam)
+				{
+					character.GainXP(Fight.XP);
+					GameManager.Instance.CreateText($"{character.Name} gained {Fight.XP} XP.");
+				}
+			}
+			if(Fight.Loot.Count > 0)
+			{
+				foreach(Item loot in Fight.Loot)
+				{
+					if (Inventory.Instance.Add(loot))
+						GameManager.Instance.CreateText($"You received {loot.Name}.");
+					else
+						GameManager.Instance.CreateText($"You can't pick up {loot.Name} because your inventory is full.");
+				}
+			}
 
-	void PlayerAttack()
-	{
-		fightStatus = FightStatus.PlayerAttack;
-		//placeholder for fight comment
-		GameManager.Instance.CreateText($"You attack {Enemy.Name} !");
-		GameManager.Instance.Player.Attack(Enemy);
+			yield return new Prompt(Prompt.PressOKToContinue).Display();
 
-		if (Enemy.IsDead)
-			EndFight(true);
-		else
-			DoEnemyTurn();
-		
-	}
-
-	void EndFight(bool victory)
-	{
-		if (victory)
-		{
-			GameManager.Instance.Player.Xp += Enemy.xpDrop;
-			//placeholder for fight comment
-			GameManager.Instance.CreateText($"You defeated {Enemy.Name}!");
-		}
-		else
-		{
-			//placeholder for fight comment
-			GameManager.Instance.CreateText($"You died !");
-
+			GameManager.Instance.HideMap = false;
+			Inventory.Instance.Unlock();
+			//TODO: return to a chosen game event
+			GameManager.Instance.GoToLocation(GameManager.Instance.CurrentLocation, true);
 		}
 
-		Enemy = null;
-		GameManager.Instance.HideMap = false;
-		Debug.Log("Fight end.");
 	}
 
 }

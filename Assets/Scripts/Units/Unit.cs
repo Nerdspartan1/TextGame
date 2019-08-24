@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Unit", menuName = "ScriptableObjects/Unit/Unit", order = 1)]
 public abstract class Unit : ScriptableObject
 {
 	[Header("Identity")]
@@ -11,20 +10,34 @@ public abstract class Unit : ScriptableObject
 	public string Description;
 
 	[Header("Attributes")]
-	public ushort Strength;
-	public ushort Dexterity;
-	public ushort Perception;
-	public ushort Skill;
-	public ushort Endurance;
+	public int Strength;
+	public int Speed;
+	public int Perception;
+	public int Skill;
+	public int Endurance;
 
 	[Header("Stats")]
-	public ushort Level;
+	public int Level = 1;
 	[SerializeField]
 	private int maxHp;
-	public int MaxHp {get => maxHp;}
+	public int MaxHp {
+		get => maxHp;
+		set
+		{
+			maxHp = value;
+			if (hp > maxHp) hp = maxHp;
+		}
+	}
 	[SerializeField]
 	private int hp;
-	public int Hp {get => hp;}
+	public int Hp {
+		get => hp;
+		set
+		{
+			hp = value;
+			if (hp > maxHp) Debug.LogWarning("Hp is over MaxHp");
+		}
+	}
 
 	public virtual void Init()
 	{
@@ -34,22 +47,21 @@ public abstract class Unit : ScriptableObject
 
 	public void CalculateStatsFromAttributes()
 	{
-		maxHp = (int)(20 + Endurance * 5 + Strength * 2);
-		if (hp > maxHp) hp = maxHp;
+		MaxHp = (int)(20 + Endurance * 5 + Strength * 2);
 	}
 
 	public bool IsDead{ get => Hp <= 0; }
 
-	public abstract void Attack(Unit other);
+	public abstract void Attack(Unit other, out ActionResult result);
 
-	public void TakeDamage(int dmg)
+	public int TakeDamage(int dmg)
 	{
 		hp -= dmg;
 
 		if(hp <= 0)
-		{
-			Die();
-		}
+			hp = 0;
+
+		return dmg;
 	}
 
 	public void Heal(int heal)
@@ -61,5 +73,4 @@ public abstract class Unit : ScriptableObject
 		}
 	}
 
-	public abstract void Die();
 }

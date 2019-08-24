@@ -13,11 +13,6 @@ MonoBehaviour:
   m_Name: Home
   m_EditorClassIdentifier: 
   description:
-    conditions: []
-    text: 'It''s your home. There is a nice fireplace in a corner and a really comfy
-      looking bed.
-
-'
+    RawText: This is your home. Nothing really out of the ordinary.
     operations: []
-    choices: []
   randomEvents: []

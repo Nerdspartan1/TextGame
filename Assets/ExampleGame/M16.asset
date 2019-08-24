@@ -15,6 +15,6 @@ MonoBehaviour:
   Name: M16
   icon: {fileID: 21300000, guid: fb4ab86fe30fe614691615b8ae2f1917, type: 3}
   Description: Brand new American 5.56mm assault rifle.
-  Value: 1800
-  minDmg: 45
-  maxDmg: 65
+  Value: 600
+  minDmg: 16
+  maxDmg: 24

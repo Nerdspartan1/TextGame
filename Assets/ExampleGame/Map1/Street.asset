@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: Street
   m_EditorClassIdentifier: 
   description:
-    conditions: []
-    text: You stand in the street in front of your house. It's very calm.
+    RawText: The street is not very busy.
     operations: []
-    choices: []
   randomEvents:
   - probability: 0.3
     operations:
@@ -24,4 +22,11 @@ MonoBehaviour:
       operationType: 6
       value: 
       reference: {fileID: 11400000, guid: 0ceb006fa4261fd40b354ff8ea2b8e0b, type: 2}
+      position: {x: 0, y: 0}
+  - probability: 0.096
+    operations:
+    - key: 
+      operationType: 6
+      value: 
+      reference: {fileID: 11400000, guid: e7a4f3a531206ab42bab105a9fb29c11, type: 2}
       position: {x: 0, y: 0}

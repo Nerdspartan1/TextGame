@@ -16,7 +16,9 @@ public class ItemSelectionOptionPanel : MonoBehaviour
 
 		if (ItemSlot.Item is Consumable c)
 		{
-			AddButton("Use", c.Use);
+			foreach (Character character in GameManager.Instance.PlayerTeam) {
+				AddButton($"Use on {character.Name}", delegate { c.Use(character); });
+			}
 		}
 		AddButton("Discard", delegate { Inventory.Instance.Remove(ItemSlot.Item); });
 	}

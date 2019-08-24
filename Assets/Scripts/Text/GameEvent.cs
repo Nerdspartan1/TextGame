@@ -95,11 +95,14 @@ public struct Operation
 				return;
 			case OperationType.GoToCell:
 				GameManager.Instance.ExitGameEvent();
-				GameManager.Instance.GoToLocation(position.x,position.y);
+				GameManager.Instance.GoToLocation(position);
 				return;
 			case OperationType.InitiateFight:
 				GameManager.Instance.ExitGameEvent();
-				GameManager.Instance.FightManager.BeginFight((Enemy)reference);
+				if(reference is Team)
+					FightManager.Instance.BeginFight((Team)reference);
+				else
+					FightManager.Instance.BeginFight((Enemy)reference);
 				return;
 			case OperationType.PlayGameEvent:
 				GameManager.Instance.ExitGameEvent();
@@ -146,69 +149,17 @@ public struct Choice
 
 }
 
-[System.Serializable]
-public class Paragraph
-{
-	public List<Condition> conditions;
-	[TextArea(5,15)]
-	[SerializeField]
-	private string text;
-	public List<Operation> operations;
-	public List<Choice> choices;
-
-	public string RawText{get{return text;} set{text = value;}}
-
-	public string Text {
-		get
-		{
-			string result = "";
-			int textSize = text.Length;
-			bool readingKey = false;
-			string key = "";
-			for(int i =0; i<textSize; i++)
-			{
-				if (!readingKey)
-				{
-					if(text[i] == '{')
-					{
-						readingKey = true;
-					}
-					else
-					{
-						result += text[i];
-					}
-				}
-				else //readingKey
-				{
-					if (text[i] == '}')
-					{
-						string s;
-						if (!Values.GetValueAsString(key, out s)) Debug.LogWarning($"[GameEvent] {key} key undefined.");
-						result += s;
-						readingKey = false;
-						key = "";
-					}
-					else
-					{
-						key += text[i];
-					}
-				}
-				
-			}
-			return result;
-		}
-	}
-
-	public void ApplyOperations()
-	{
-		Operation.ApplyAll(operations);
-	}
-
-}
-
 [CreateAssetMenu(fileName = "GameEvent",menuName = "ScriptableObjects/GameEvent")]
 public class GameEvent : ScriptableObject
 {
+	[System.Serializable]
+	public class Paragraph : global::Paragraph
+	{
+		public List<Condition> conditions;
+		public List<Choice> choices;
+
+	}
+
 	public List<Paragraph> paragraphs  = new List<Paragraph>();
 	int currentParagraphId;
 

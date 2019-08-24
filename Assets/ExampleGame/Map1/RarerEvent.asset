@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
-  m_Name: RareEvent
+  m_Name: RarerEvent
   m_EditorClassIdentifier: 
   paragraphs:
-  - RawText: A wolf jumps out of the bushes !
+  - RawText: 'An amazingly rare event occurs : a headcrab phases into existence before
+      you !'
     operations: []
     conditions: []
     choices:
     - conditions: []
-      text: Let's fight !
+      text: Great
       operations:
       - key: 
         operationType: 5
         value: 
-        reference: {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
+        reference: {fileID: 11400000, guid: d4ee3f9948f8f3a4da05a480575f75db, type: 2}
         position: {x: 0, y: 0}

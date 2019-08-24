@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-
 public class Values
 {
 	static Dictionary<string, string> values = new Dictionary<string, string>();
@@ -57,22 +56,24 @@ public class Values
 public class GameManager : MonoBehaviour {
 	//Singleton instance
 	public static GameManager Instance;
+	private void Awake()
+	{
+		Instance = this;
+	}
 
-	[HideInInspector]
-	public FightManager FightManager;
-	public Player Player;
+	public Team PlayerTeam;
 
 	[Header("UI References")]
 	public Transform Canvas;
 	public Transform FrontCanvas;
-	public Transform textPanel;
-	public Transform buttonPanel;
+	public Transform ScrollPanel;
+	public Transform RightPanel;
+	public Transform ContentPanel;
+	public Transform TextPanel;
+	public Transform ButtonPanel;
 	public Transform infoPanel;
 	public Transform mapHidingPanel;
-	public Text playerNameInfoText;
-	public Text playerHpInfoText;
-	public Text playerLevelInfoText;
-	public Text playerXpInfoText;
+	public TeamPanel TeamPanel;
 	public Transform mapPanel;
 
 	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
@@ -91,44 +92,37 @@ public class GameManager : MonoBehaviour {
 
 	[Header("Initial values")]
 	public GameEvent StartingGameEvent;
-	private GameEvent CurrentGameEvent;
+	[HideInInspector]
+	public GameEvent CurrentGameEvent;
 	public Map StartingMap;
-	private Map CurrentMap;
+	[HideInInspector]
+	public Map CurrentMap;
 	public Vector2Int StartingLocation;
-	private Vector2Int CurrentLocation;
+	[HideInInspector]
+	public Vector2Int CurrentLocation;
 
 	[Header("Debug")]
 	public Enemy foe;
 
-	private void Awake()
-	{
-		Instance = this;
-	}
-
 	void Start () {
 
-		//Référencement des autres managers
-		FightManager = GetComponent<FightManager>();
+		//we need to instantiate these so that we don't modify the source scriptable object
+		PlayerTeam = Instantiate(PlayerTeam);
+		PlayerTeam.InstantiateUnits();
+
+		TeamPanel.Team = PlayerTeam;
+		TeamPanel.RebuildPanel();
 
 		//starting map
 		GoToMap(StartingMap);
-
-		GoToLocation(StartingLocation.x, StartingLocation.y);
-
-		Player.Init();
-		Player.TakeDamage(15);
+		GoToLocation(StartingLocation);
 
 		PlayGameEvent(StartingGameEvent);
-
-		//FightManager.BeginFight(foe);
-
-		UpdatePlayerInfo();
 
 	}
 
 	private void Update()
 	{
-		UpdatePlayerInfo();
 		if (CurrentGameEvent != null && Input.GetButtonDown("Fire1"))
 		{
 			if (buttonsDisplayed == 0)
@@ -136,6 +130,7 @@ public class GameManager : MonoBehaviour {
 				DisplayNextParagraphInGameEvent();
 			}
 		}
+		TeamPanel.UpdateSlots();
 	}
 
 	#region GameEvent handling
@@ -154,19 +149,32 @@ public class GameManager : MonoBehaviour {
 		DisplayNextParagraphInGameEvent();
 	}
 
-	public void DisplayParagraph(Paragraph paragraph, UnityAction onNext = null)
+	public void DisplayParagraph(Paragraph paragraph)
 	{
 		if (paragraph == null) return;
 
 		//instantiate text
 		CreateText(paragraph.Text);
 
-		//instantiate choices
-		foreach (Choice choice in paragraph.choices)
+		if (paragraph is GameEvent.Paragraph gep)
 		{
-			if (!Condition.AreVerified(choice.conditions)) continue;
+			//instantiate choices
+			foreach (Choice choice in gep.choices)
+			{
+				if (!Condition.AreVerified(choice.conditions)) continue;
 
-			CreateButton(choice.text, delegate{Operation.ApplyAll(choice.operations);}, onNext);
+				CreateButton(choice.text, delegate {
+					Operation.ApplyAll(choice.operations);
+					DisplayNextParagraphInGameEvent();
+				});
+			}
+
+			if(gep.choices.Count == 0)
+			{
+				CreateButton("Continue...", delegate {
+					DisplayNextParagraphInGameEvent();
+				});
+			}
 		}
 
 		//apply operations
@@ -183,11 +191,11 @@ public class GameManager : MonoBehaviour {
 			ExitGameEvent();
 			ClearText();
 			HideMap = false;
-			DisplayParagraph(CurrentMap[CurrentLocation.x, CurrentLocation.y].description);
+			GoToLocation(CurrentLocation, true);
 			return;
 		}
 
-		DisplayParagraph(p, delegate { DisplayNextParagraphInGameEvent(); });
+		DisplayParagraph(p);
 	}
 
 	public void ExitGameEvent()
@@ -212,20 +220,19 @@ public class GameManager : MonoBehaviour {
 		{
 			for(int u = 0; u<map.Width; u++)
 			{
-				if (map[u, v] != null)
+				if (map[new Vector2Int(u,v)] != null)
 				{
 					GameObject go = Instantiate(LocationPrefab, mapPanel);
 					go.transform.localPosition = new Vector3(cellWidth * u, -v * cellHeight, 0);
-					int _u = u;
-					int _v = v;
-					go.GetComponent<Button>().onClick.AddListener(delegate { GoToLocation(_u,_v); });
-					MapCells.Add(new Vector2Int(_u, _v), go.GetComponent<Button>());
+					Vector2Int pos = new Vector2Int(u, v);
+					go.GetComponent<Button>().onClick.AddListener(delegate { GoToLocation(pos); });
+					MapCells.Add(pos, go.GetComponent<Button>());
 				}
 			}
 		}
 	}
 
-	public void GoToLocation(int u, int v)
+	public void GoToLocation(Vector2Int pos, bool ignoreRandomOperations = false)
 	{
 		if(CurrentMap == null)
 		{
@@ -233,21 +240,21 @@ public class GameManager : MonoBehaviour {
 			return;
 		}
 		
-		Location location = CurrentMap[u, v];
+		Location location = CurrentMap[pos];
 		if(location == null)
 		{
-			Debug.LogError($"[GameManager] No location found at ({u},{v})");
+			Debug.LogError($"[GameManager] No location found at {pos}");
 			return;
 		}
 
 		//update position on map
-		MapCursorPrefab.transform.localPosition = new Vector2(u * cellWidth, -v* cellHeight);
+		MapCursorPrefab.transform.localPosition = new Vector2(pos.x * cellWidth, -pos.y* cellHeight);
 
 		foreach(KeyValuePair<Vector2Int,Button> pair in MapCells)
 		{
 			pair.Value.interactable = false;
 		}
-		CurrentLocation = new Vector2Int(u, v);
+		CurrentLocation = pos;
 		Button b;
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.up, out b)) b.interactable = true;
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.right, out b)) b.interactable = true;
@@ -260,7 +267,8 @@ public class GameManager : MonoBehaviour {
 		DisplayParagraph(location.description);
 
 		//apply random operations
-		Operation.ApplyAll(location.GetRandomOperation());
+		if (!ignoreRandomOperations)
+			Operation.ApplyAll(location.GetRandomOperation());
 
 	}
 	#endregion
@@ -269,7 +277,7 @@ public class GameManager : MonoBehaviour {
 
 	public void CreateButton(string content, params UnityAction[] onClick)
 	{
-		GameObject go = Instantiate(ButtonPrefab, buttonPanel);
+		GameObject go = Instantiate(ButtonPrefab, ButtonPanel);
 		go.GetComponentInChildren<Text>().text = content;
 		var button = go.GetComponent<Button>();
 		button.onClick.AddListener(ClearButtons);
@@ -279,27 +287,29 @@ public class GameManager : MonoBehaviour {
 				button.onClick.AddListener(action);
 		} 
 		buttonsDisplayed++;
-		BalanceTextButtonPanels(); //should not be called at every button created but let's put it here anyway for clean code
+		RefreshContent();
 	}
 
 	public void CreateText(string content)
 	{
-		GameObject textBox = Instantiate(TextBoxPrefab, textPanel);
-		Text text = textBox.transform.Find("Panel/Line").GetComponent<Text>();
+		GameObject textBox = Instantiate(TextBoxPrefab, TextPanel);
+		Text text = textBox.GetComponentInChildren<Text>();
 		if (text == null) throw new System.Exception("[GameManager] Cannot find Text component of TextBox prefab ");
 		text.text = content;
+		RefreshContent();
 	}
 
 	public void ClearText()
 	{
-		ClearChilds(textPanel);
+		ClearChilds(TextPanel);
+		RefreshContent();
 	}
 
 	public void ClearButtons()
 	{
-		ClearChilds(buttonPanel);
+		ClearChilds(ButtonPanel);
 		buttonsDisplayed = 0;
-		BalanceTextButtonPanels();
+		RefreshContent();
 	}
 
 	public void ClearMap()
@@ -329,23 +339,32 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void BalanceTextButtonPanels()
+	//This is the only way to force update the layout groups
+
+	bool willRefreshContent = false;
+	public void RefreshContent()
 	{
-		float buttonHeight = buttonsDisplayed > 0 ? Mathf.Pow(0.95f, buttonsDisplayed-1) * 50f : 0f;
-		textPanel.GetComponent<LayoutElement>().minHeight = 768f - buttonsDisplayed*buttonHeight;
-		var grid = buttonPanel.GetComponent<GridLayoutGroup>();
-		grid.cellSize = new Vector2(grid.cellSize.x, buttonHeight);
+		if (!willRefreshContent)
+			StartCoroutine(nameof(RefreshContentCoroutine));
 	}
 
-	public void UpdatePlayerInfo()
+	public IEnumerator RefreshContentCoroutine()
 	{
-		if (Player == null) return;
+		willRefreshContent = true;
 
-		playerNameInfoText.text = Player.Name;
-		playerHpInfoText.text = Player.Hp.ToString() + " / " + Player.MaxHp.ToString();
-		playerLevelInfoText.text = "Lvl. " + Player.Level.ToString();
-		playerXpInfoText.text = "XP : " + Player.Xp.ToString();
+		ContentPanel.localScale = Vector3.zero;
+		yield return null;
+		LayoutRebuilder.ForceRebuildLayoutImmediate(ContentPanel.GetComponent<RectTransform>());
+		LayoutRebuilder.ForceRebuildLayoutImmediate(TextPanel.GetComponent<RectTransform>());
+		LayoutRebuilder.ForceRebuildLayoutImmediate(ButtonPanel.GetComponent<RectTransform>());
+		ContentPanel.localScale = Vector3.one;
 
+		willRefreshContent = false;
+	}
+
+	public void UpdateTeamPanel()
+	{
+		
 	}
 
 	#endregion

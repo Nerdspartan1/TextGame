@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9e73a754d86d544e84f2285f9652c3c, type: 3}
-  m_Name: Enemy
+  m_Name: Wolf
   m_EditorClassIdentifier: 
-  Name: Headcrab
-  Description: A headcrab.
+  Name: Wolf
+  Description: 
   Strength: 2
-  Dexterity: 3
+  Speed: 3
   Perception: 1
-  Skill: 0
-  Endurance: 0
-  Level: 0
-  maxHp: 24
-  hp: 12
-  MoveSpeed: 0
-  DamageMultiplier: 0
+  Skill: 1
+  Endurance: 1
+  Level: 2
+  maxHp: 29
+  hp: 29
+  damage: {x: 3, y: 5}
   xpDrop: 10
-  lootDrops: []
+  lootDrops:
+  - loot: {fileID: 11400000, guid: b1ac506124e61084dacee41c642a5ea9, type: 2}
+    dropChance: 1
