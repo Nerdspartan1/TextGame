@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class Inventory : MonoBehaviour
 	public GameObject ItemSlotInstance;
 	public GameObject InventoryWindow;
 	public GameObject InventoryPanel;
+	public Button InventoryButton;
 
 	private Vector3 InitialWindowPosition;
 
@@ -39,6 +41,17 @@ public class Inventory : MonoBehaviour
 		InventoryWindow.gameObject.SetActive(!InventoryWindow.gameObject.activeInHierarchy);
 		if (InventoryWindow.gameObject.activeInHierarchy)
 			ResetWindowPosition();
+	}
+
+	public void Lock()
+	{
+		InventoryWindow.gameObject.SetActive(false);
+		InventoryButton.interactable = false;
+	}
+
+	public void Unlock()
+	{
+		InventoryButton.interactable = true;
 	}
 
 	public void ResetWindowPosition()

@@ -46,6 +46,7 @@ public class FightManager : MonoBehaviour
 
 		GameManager.Instance.ClearText();
 		GameManager.Instance.HideMap = true;
+		Inventory.Instance.Lock();
 
 		StartCoroutine(CombatLoopCoroutine());
 
@@ -136,6 +137,7 @@ public class FightManager : MonoBehaviour
 			yield return new Prompt(Prompt.PressOKToContinue).Display();
 
 			GameManager.Instance.HideMap = false;
+			Inventory.Instance.Unlock();
 			//TODO: return to a chosen game event
 			GameManager.Instance.GoToLocation(GameManager.Instance.CurrentLocation, true);
 		}

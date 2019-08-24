@@ -2935,6 +2935,7 @@ MonoBehaviour:
   ItemSlotInstance: {fileID: 937801689}
   InventoryWindow: {fileID: 2094890274}
   InventoryPanel: {fileID: 1865027589}
+  InventoryButton: {fileID: 348972825}
   handSlots:
   - {fileID: 1520498365}
   - {fileID: 1476475952}
