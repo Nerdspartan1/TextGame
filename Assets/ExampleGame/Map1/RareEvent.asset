@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: RareEvent
   m_EditorClassIdentifier: 
   paragraphs:
-  - conditions: []
-    text: 'Oh ! A random event is occuring : a random imp attacks !'
+  - text: A stray wolf jumps out of the bushes before you !
     operations: []
+    conditions: []
     choices:
     - conditions: []
-      text: Fight !
+      text: Let's fight !
       operations:
       - key: 
         operationType: 5

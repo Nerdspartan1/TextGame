@@ -149,19 +149,32 @@ public class GameManager : MonoBehaviour {
 		DisplayNextParagraphInGameEvent();
 	}
 
-	public void DisplayParagraph(Paragraph paragraph, UnityAction onNext = null)
+	public void DisplayParagraph(Paragraph paragraph)
 	{
 		if (paragraph == null) return;
 
 		//instantiate text
 		CreateText(paragraph.Text);
 
-		//instantiate choices
-		foreach (Choice choice in paragraph.choices)
+		if (paragraph is GameEvent.Paragraph gep)
 		{
-			if (!Condition.AreVerified(choice.conditions)) continue;
+			//instantiate choices
+			foreach (Choice choice in gep.choices)
+			{
+				if (!Condition.AreVerified(choice.conditions)) continue;
 
-			CreateButton(choice.text, delegate{Operation.ApplyAll(choice.operations);}, onNext);
+				CreateButton(choice.text, delegate {
+					Operation.ApplyAll(choice.operations);
+					DisplayNextParagraphInGameEvent();
+				});
+			}
+
+			if(gep.choices.Count == 0)
+			{
+				CreateButton("Continue...", delegate {
+					DisplayNextParagraphInGameEvent();
+				});
+			}
 		}
 
 		//apply operations
@@ -182,7 +195,7 @@ public class GameManager : MonoBehaviour {
 			return;
 		}
 
-		DisplayParagraph(p, delegate { DisplayNextParagraphInGameEvent(); });
+		DisplayParagraph(p);
 	}
 
 	public void ExitGameEvent()
