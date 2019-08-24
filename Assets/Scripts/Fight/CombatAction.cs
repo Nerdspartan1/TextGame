@@ -15,12 +15,14 @@ public class CombatAction
 	public enum ActionType
 	{
 		Attack,
+		UseItem,
 		Heal,
 	}
 
 	public ActionType Type;
 	public Unit Actor;
 	public Unit Target;
+	public Consumable Item;
 
 	public void Execute(Fight fight)
 	{
@@ -38,6 +40,10 @@ public class CombatAction
 				if (result.Killed) GameManager.Instance.CreateText($"{Target.Name} is K.O. !");
 				fight.XP += result.XP;
 				fight.Loot.AddRange(result.Loot);
+				break;
+			case ActionType.UseItem:
+				Item.Use(Target);
+				GameManager.Instance.CreateText($"{Actor.Name} uses {Item.Name} on {Target.Name}.");
 				break;
 			default: break;
 		}

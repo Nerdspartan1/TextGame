@@ -16,19 +16,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: cac45f45565339949b9163f3aaf0ff76, type: 3}
   Description: It's a medikit
   Value: 10
-  onConsumed:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 5edfa695f7cbd8c4f993f698456f924c, type: 2}
-        m_MethodName: Heal
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 10
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  UseValue: 25
+  Type: 0

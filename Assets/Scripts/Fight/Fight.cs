@@ -48,17 +48,19 @@ public class Fight
 			if (CombatActions[i] == null) continue;
 			string actorName = GameManager.Instance.PlayerTeam[i].Name;
 			var action = CombatActions[i];
-			string actionVerb = "???";
 			switch (action.Type)
 			{
 				case CombatAction.ActionType.Attack:
-					actionVerb = "attack";
+					GameManager.Instance.CreateText($"{actorName} will attack {action.Target.Name}.");
 					break;
 				case CombatAction.ActionType.Heal:
-					actionVerb = "heal";
+					GameManager.Instance.CreateText($"{actorName} will heal {action.Target.Name}.");
+					break;
+				case CombatAction.ActionType.UseItem:
+					GameManager.Instance.CreateText($"{actorName} will use {action.Item.Name} on {action.Target.Name}.");
 					break;
 			}
-			GameManager.Instance.CreateText($"{actorName} will {actionVerb} {action.Target.Name}");
+			
 		}
 	}
 
@@ -101,6 +103,17 @@ public class Fight
 				prompt.Proceed();
 			});
 
+		GameManager.Instance.CreateButton("Use Item",
+			delegate {
+				CombatActions[CurrentTeammateId] = new CombatAction()
+				{
+					Actor = GameManager.Instance.PlayerTeam[CurrentTeammateId],
+					Type = CombatAction.ActionType.UseItem
+				};
+				prompt.Next = new Prompt(ChooseItem);
+				prompt.Proceed();
+			});
+
 		GameManager.Instance.CreateButton("Back",
 			delegate {
 				CurrentTeammateId--; // go to previous team member
@@ -113,16 +126,52 @@ public class Fight
 
 	}
 
+	public void ChooseItem(Prompt prompt)
+	{
+		GameManager.Instance.CreateText($"Which item should {CombatActions[CurrentTeammateId].Actor.Name} use ?");
+
+		for(int i = 0; i < Inventory.Instance.ItemCount; i++)
+		{
+			if(Inventory.Instance[i] is Consumable consumable)
+			{
+				GameManager.Instance.CreateButton($"Use {consumable.Name}",
+				delegate {
+					CombatActions[CurrentTeammateId].Item = consumable;
+					prompt.Next = new Prompt(ChooseTargets);
+					prompt.Proceed();
+				});
+			}
+		}
+
+		GameManager.Instance.CreateButton("Back",
+		delegate {
+			prompt.Next = new Prompt(ChooseAction);
+			prompt.Proceed();
+		});
+
+	}
+
 	public void ChooseTargets(Prompt prompt)
 	{
-		GameManager.Instance.CreateText($"What should {GameManager.Instance.PlayerTeam[CurrentTeammateId].Name} attack ?");
-
-		foreach (Enemy enemy in EnemyTeam)
+		Team parsableTeam;
+		if (CombatActions[CurrentTeammateId].Type == CombatAction.ActionType.UseItem &&
+			CombatActions[CurrentTeammateId].Item.Type == Consumable.ConsumableType.Heal)
 		{
-			GameManager.Instance.CreateButton(enemy.Name,
+			
+			parsableTeam = GameManager.Instance.PlayerTeam;
+		}
+		else
+		{
+			GameManager.Instance.CreateText($"What should {GameManager.Instance.PlayerTeam[CurrentTeammateId].Name} attack ?");
+			parsableTeam = EnemyTeam;
+		}
+
+		foreach (Unit unit in parsableTeam)
+		{
+			GameManager.Instance.CreateButton(unit.Name,
 				delegate
 				{
-					CombatActions[CurrentTeammateId++].Target = enemy; //set target and go to next teammate in team
+					CombatActions[CurrentTeammateId++].Target = unit; //set target and go to next teammate in team
 
 						if (CurrentTeammateId < GameManager.Instance.PlayerTeam.Count) //if there is a next teammate, make him choose action
 							prompt.Next = new Prompt(ChooseAction);
