@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Garden
   m_EditorClassIdentifier: 
   description:
-    conditions: []
-    text: You are just outside of your home, in your little green garden.
+    RawText: A green, quiet, garden.
     operations: []
-    choices: []
   randomEvents: []

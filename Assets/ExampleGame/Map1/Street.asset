@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: Street
   m_EditorClassIdentifier: 
   description:
-    conditions: []
-    text: You stand in the street in front of your house. It's very calm.
+    RawText: The street is not very busy.
     operations: []
-    choices: []
   randomEvents:
   - probability: 0.3
     operations:

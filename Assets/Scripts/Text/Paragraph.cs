@@ -7,35 +7,33 @@ public class Paragraph
 {
 	[TextArea(5, 15)]
 	[SerializeField]
-	private string text;
+	public string RawText;
 	public List<Operation> operations;
-
-	public string RawText { get { return text; } set { text = value; } }
 
 	public string Text
 	{
 		get
 		{
 			string result = "";
-			int textSize = text.Length;
+			int textSize = RawText.Length;
 			bool readingKey = false;
 			string key = "";
 			for (int i = 0; i < textSize; i++)
 			{
 				if (!readingKey)
 				{
-					if (text[i] == '{')
+					if (RawText[i] == '{')
 					{
 						readingKey = true;
 					}
 					else
 					{
-						result += text[i];
+						result += RawText[i];
 					}
 				}
 				else //readingKey
 				{
-					if (text[i] == '}')
+					if (RawText[i] == '}')
 					{
 						string s;
 						if (!Values.GetValueAsString(key, out s)) Debug.LogWarning($"[GameEvent] {key} key undefined.");
@@ -45,7 +43,7 @@ public class Paragraph
 					}
 					else
 					{
-						key += text[i];
+						key += RawText[i];
 					}
 				}
 

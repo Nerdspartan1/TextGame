@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: RarerEvent
   m_EditorClassIdentifier: 
   paragraphs:
-  - text: 'Wow ! A really rare event is occuring : a headcrab just phase into existence
-      before you !'
+  - RawText: 'An amazingly rare event occurs : a headcrab phases into existence before
+      you !'
     operations: []
     conditions: []
     choices:

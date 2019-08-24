@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RareEvent
   m_EditorClassIdentifier: 
   paragraphs:
-  - text: A stray wolf jumps out of the bushes before you !
+  - RawText: A wolf jumps out of the bushes !
     operations: []
     conditions: []
     choices:

@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: GameEvent
   m_EditorClassIdentifier: Assembly-CSharp::NGameEvent
   paragraphs:
-  - text: "Good day ! \nWhat is your name ?"
+  - RawText: 'Good day !
+
+      What is your name ?'
     operations: []
     conditions: []
     choices:
@@ -33,11 +35,11 @@ MonoBehaviour:
         value: Skadae
         reference: {fileID: 0}
         position: {x: 0, y: 0}
-  - text: 'Oh ! So your name is {name} ! '
+  - RawText: Oh ! So your name is {name} !
     operations: []
     conditions: []
     choices: []
-  - text: 'Here, take two medikit and this pencil to write your name on them.
+  - RawText: 'Here, take two medikit and this pencil to write your name on them.
 
       Awesome, now go explore your map !'
     operations:
