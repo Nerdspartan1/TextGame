@@ -5,12 +5,6 @@ using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.Events;
 
-public class ActionResult
-{
-	public bool Missed;
-	public int IntValue;
-}
-
 public class FightManager : MonoBehaviour
 {
 	//Singleton instance
@@ -94,7 +88,7 @@ public class FightManager : MonoBehaviour
 			//Fight plays
 			foreach (var action in orderedCombatActions)
 			{
-				action.Execute();
+				action.Execute(Fight);
 			}
 
 			EnemyTeamPanel.UpdateSlots();
@@ -110,26 +104,42 @@ public class FightManager : MonoBehaviour
 	private IEnumerator EndFight(FightOutcome outcome)
 	{
 		GameManager.Instance.RightPanel.gameObject.SetActive(false);
-		switch (outcome)
+
+		if (outcome == FightOutcome.Defeat)
 		{
-			case FightOutcome.Victory:
-				GameManager.Instance.CreateText("You win !");
-				//rewards
-				break;
-			case FightOutcome.Defeat:
-				GameManager.Instance.CreateText("You lose !");
-				//game over
-				break;
-			case FightOutcome.Escape:
-				GameManager.Instance.CreateText("You escape successfully.");
-				break;
+			GameManager.Instance.CreateText("You lose ! Game over !");
+		}
+		else
+		{
+			if(outcome == FightOutcome.Victory) GameManager.Instance.CreateText("You win !");
+			else GameManager.Instance.CreateText("You escape successfully.");
+
+			if(Fight.XP > 0)
+			{
+				foreach(Character character in GameManager.Instance.PlayerTeam)
+				{
+					character.GainXP(Fight.XP);
+					GameManager.Instance.CreateText($"{character.Name} gained {Fight.XP} XP.");
+				}
+			}
+			if(Fight.Loot.Count > 0)
+			{
+				foreach(Item loot in Fight.Loot)
+				{
+					if (Inventory.Instance.Add(loot))
+						GameManager.Instance.CreateText($"You received {loot.Name}.");
+					else
+						GameManager.Instance.CreateText($"You can't pick up {loot.Name} because your inventory is full.");
+				}
+			}
+
+			yield return new Prompt(Prompt.PressOKToContinue).Display();
+
+			GameManager.Instance.HideMap = false;
+			//TODO: return to a chosen game event
+			GameManager.Instance.GoToLocation(GameManager.Instance.CurrentLocation, true);
 		}
 
-		yield return new Prompt(Prompt.PressOKToContinue).Display();
-
-		GameManager.Instance.HideMap = false;
-		//TODO: return to a chosen game event
-		GameManager.Instance.DisplayParagraph(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation].description);
 	}
 
 }

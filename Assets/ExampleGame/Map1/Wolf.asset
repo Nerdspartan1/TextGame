@@ -19,9 +19,11 @@ MonoBehaviour:
   Perception: 1
   Skill: 1
   Endurance: 1
-  Level: 0
+  Level: 2
   maxHp: 29
   hp: 29
   damage: {x: 3, y: 5}
   xpDrop: 10
-  lootDrops: []
+  lootDrops:
+  - loot: {fileID: 11400000, guid: b1ac506124e61084dacee41c642a5ea9, type: 2}
+    dropChance: 1

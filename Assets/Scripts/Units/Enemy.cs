@@ -26,15 +26,18 @@ public class Enemy : Unit
 		result = new ActionResult();
 		result.IntValue = other.TakeDamage(Random.Range(damage.x, damage.y));
 		result.Missed = false;
+		result.Killed = other.IsDead;
 	}
 
-	protected override void Die()
+	public List<Item> GetLoot()
 	{
-		foreach(var lootDrop in lootDrops)
+		List<Item> loot = new List<Item>();
+		foreach (var lootDrop in lootDrops)
 		{
 			if (Random.value < lootDrop.dropChance)
-				Inventory.Instance.Add(lootDrop.loot);
+				loot.Add(lootDrop.loot);
 		}
+		return loot;
 	}
 
 }

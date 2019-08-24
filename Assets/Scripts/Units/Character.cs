@@ -6,7 +6,7 @@ using UnityEngine;
 public class Character : Unit
 {
 
-	public int Xp;
+	public int XP = 0;
 
 	[Header("Weapon")]
 	public Weapon Weapon;
@@ -14,7 +14,7 @@ public class Character : Unit
 	public override void Init()
 	{
 		base.Init();
-		Xp = 0;
+		XP = 0;
 	}
 
 	public override void Attack(Unit other, out ActionResult result)
@@ -26,10 +26,16 @@ public class Character : Unit
 			result.IntValue = other.TakeDamage(1);
 
 		result.Missed = false;
+		result.Killed = other.IsDead;
+		if (result.Killed) {
+			result.XP = (other as Enemy).xpDrop;
+			result.Loot = (other as Enemy).GetLoot();
+		}
 	}
 
-	protected override void Die()
+	public void GainXP(int xp)
 	{
-		Debug.Log($"{Name} has died !");
+		XP += xp;
+		Level = (int)Mathf.Sqrt(1+(float)XP/4.0f);
 	}
 }

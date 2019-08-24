@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,6 +13,9 @@ public class Fight
 
 	public CombatAction[] CombatActions;
 	public bool Escape = false;
+
+	public int XP = 0;
+	public List<Item> Loot = new List<Item>();
 
 	public void ResetCombatActions()
 	{
@@ -73,6 +77,7 @@ public class Fight
 		GameManager.Instance.CreateButton("Escape",
 			delegate {
 				Escape = true;
+				prompt.Proceed();
 			});
 	}
 

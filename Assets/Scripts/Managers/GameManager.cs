@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour {
 			ExitGameEvent();
 			ClearText();
 			HideMap = false;
-			DisplayParagraph(CurrentMap[CurrentLocation].description);
+			GoToLocation(CurrentLocation, true);
 			return;
 		}
 
@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void GoToLocation(Vector2Int pos)
+	public void GoToLocation(Vector2Int pos, bool ignoreRandomOperations = false)
 	{
 		if(CurrentMap == null)
 		{
@@ -267,7 +267,8 @@ public class GameManager : MonoBehaviour {
 		DisplayParagraph(location.description);
 
 		//apply random operations
-		Operation.ApplyAll(location.GetRandomOperation());
+		if (!ignoreRandomOperations)
+			Operation.ApplyAll(location.GetRandomOperation());
 
 	}
 	#endregion

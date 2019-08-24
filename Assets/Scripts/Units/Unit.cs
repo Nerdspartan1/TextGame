@@ -10,14 +10,14 @@ public abstract class Unit : ScriptableObject
 	public string Description;
 
 	[Header("Attributes")]
-	public ushort Strength;
-	public ushort Speed;
-	public ushort Perception;
-	public ushort Skill;
-	public ushort Endurance;
+	public int Strength;
+	public int Speed;
+	public int Perception;
+	public int Skill;
+	public int Endurance;
 
 	[Header("Stats")]
-	public ushort Level;
+	public int Level = 1;
 	[SerializeField]
 	private int maxHp;
 	public int MaxHp {
@@ -59,10 +59,7 @@ public abstract class Unit : ScriptableObject
 		hp -= dmg;
 
 		if(hp <= 0)
-		{
 			hp = 0;
-			Die();
-		}
 
 		return dmg;
 	}
@@ -76,5 +73,4 @@ public abstract class Unit : ScriptableObject
 		}
 	}
 
-	protected abstract void Die();
 }

@@ -9,18 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdff682ccdd28b3429496e6ba4c9e5db, type: 3}
-  m_Name: Player
+  m_Script: {fileID: 11500000, guid: b01fe53b5a45bf4449fe22d30300ddfb, type: 3}
+  m_Name: Wolf Pelt
   m_EditorClassIdentifier: 
-  Name: Poppy Gloria
+  Name: Wolf Pelt
+  icon: {fileID: 0}
   Description: 
-  Strength: 1
-  Speed: 1
-  Perception: 1
-  Skill: 1
-  Endurance: 1
-  Level: 1
-  maxHp: 27
-  hp: 27
-  XP: 0
-  Weapon: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}
+  Value: 5
