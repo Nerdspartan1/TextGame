@@ -31,16 +31,16 @@ public class Character : Unit
 	public void GainXP(int xp)
 	{
 		XP += xp;
-		if(XP > NextLevelXP())
+		if(XP > XPLevel(Level+1))
 		{
 			Level++;
 			AvailableAttributePoints++;
 		}
 	}
 
-	public int NextLevelXP()
+	public static int XPLevel(int level)
 	{
-		return (int)Mathf.Pow(Level * 4,2);
+		return (int)Mathf.Pow((level-1) * 4,2);
 	}
 
 	public void LevelUpAttribute(Attribute attribute)
@@ -55,5 +55,6 @@ public class Character : Unit
 			case Attribute.Speed: Speed++; break;
 		}
 		AvailableAttributePoints--;
+		CalculateStatsFromAttributes();
 	}
 }

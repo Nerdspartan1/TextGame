@@ -3681,6 +3681,7 @@ MonoBehaviour:
   Character: {fileID: 0}
   NameText: {fileID: 1184315582}
   LevelText: {fileID: 895169125}
+  DescriptionText: {fileID: 1128283605}
   XPBar: {fileID: 1678112034}
   HealthBar: {fileID: 2019213775851572327}
   FocusBar: {fileID: 4954349698262495789}

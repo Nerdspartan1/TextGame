@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Tom
   Description: 
-  Strength: 1
-  Speed: 2
-  Perception: 1
+  Vitality: 1
+  Strength: 2
   Skill: 1
   Endurance: 1
+  Intelligence: 1
+  Speed: 1
   Level: 1
-  maxHp: 27
-  hp: 27
+  maxHp: 25
+  hp: 25
   XP: 0
+  AvailableAttributePoints: 0
   Weapon: {fileID: 0}

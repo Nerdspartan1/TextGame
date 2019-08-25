@@ -14,14 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Wolf
   Description: 
-  Strength: 2
-  Speed: 3
-  Perception: 1
+  Vitality: 1
+  Strength: 1
   Skill: 1
   Endurance: 1
+  Intelligence: 0
+  Speed: 2
   Level: 2
-  maxHp: 29
-  hp: 29
+  maxHp: 25
+  hp: 25
   damage: {x: 3, y: 5}
   xpDrop: 10
   lootDrops:

@@ -10,6 +10,7 @@ public class CharacterPanel : MonoBehaviour
 	[Header("References")]
 	public Text NameText;
 	public Text LevelText;
+	public Text DescriptionText;
 	public StatBar XPBar;
 	public StatBar HealthBar;
 	public StatBar FocusBar;
@@ -34,9 +35,10 @@ public class CharacterPanel : MonoBehaviour
 
 		NameText.text = Character.Name;
 		LevelText.text = $"Level {Character.Level}";
+		DescriptionText.text = Character.Description;
 
-		XPBar.Value = Character.XP;
-		XPBar.MaxValue = Character.NextLevelXP();
+		XPBar.Value = Character.XP - Character.XPLevel(Character.Level);
+		XPBar.MaxValue = Character.XPLevel(Character.Level+1) - Character.XPLevel(Character.Level);
 		XPBar.UpdateBar();
 		HealthBar.Value = Character.Hp;
 		HealthBar.MaxValue = Character.MaxHp;
