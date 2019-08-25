@@ -11,6 +11,7 @@ public class UnitSlot : MonoBehaviour
 	public Text Level;
 	public Text Hp;
 	public StatBar LifeBar;
+	public GameObject LevelUpSymbol;
 
 	public void UpdateSlot()
 	{
@@ -20,6 +21,11 @@ public class UnitSlot : MonoBehaviour
 		LifeBar.Value = (float)Unit.Hp;
 		LifeBar.MaxValue = (float)Unit.MaxHp;
 		LifeBar.UpdateBar();
+
+		if(Unit is Character character)
+		{
+			LevelUpSymbol.SetActive(character.AvailableAttributePoints > 0);
+		}
 	}
 
 	#region Character Panel

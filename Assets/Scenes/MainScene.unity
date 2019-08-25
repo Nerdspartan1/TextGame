@@ -365,6 +365,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: Strength
       objectReference: {fileID: 0}
+    - target: {fileID: 1714078307656230827, guid: 4314f5905798dab44af4a2eb6bd2cc54,
+        type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3205834490557681826, guid: 4314f5905798dab44af4a2eb6bd2cc54,
         type: 3}
       propertyPath: Attribute
@@ -1976,6 +1981,11 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 1714078307656230827, guid: 4314f5905798dab44af4a2eb6bd2cc54,
+        type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3205834490557681826, guid: 4314f5905798dab44af4a2eb6bd2cc54,
         type: 3}
       propertyPath: Attribute
@@ -2105,7 +2115,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 561, y: -392}
+  m_AnchoredPosition: {x: 532, y: -377}
   m_SizeDelta: {x: 429.3, y: 531.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &613062346
@@ -2354,6 +2364,11 @@ PrefabInstance:
       value: 'Speed
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 1714078307656230827, guid: 4314f5905798dab44af4a2eb6bd2cc54,
+        type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3205834490557681826, guid: 4314f5905798dab44af4a2eb6bd2cc54,
         type: 3}
@@ -2741,6 +2756,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: Intelligence
+      objectReference: {fileID: 0}
+    - target: {fileID: 1714078307656230827, guid: 4314f5905798dab44af4a2eb6bd2cc54,
+        type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3205834490557681826, guid: 4314f5905798dab44af4a2eb6bd2cc54,
         type: 3}
@@ -4868,6 +4888,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: Endurance
       objectReference: {fileID: 0}
+    - target: {fileID: 1714078307656230827, guid: 4314f5905798dab44af4a2eb6bd2cc54,
+        type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3205834490557681826, guid: 4314f5905798dab44af4a2eb6bd2cc54,
         type: 3}
       propertyPath: Attribute
@@ -6460,6 +6485,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1714078307656230827, guid: 4314f5905798dab44af4a2eb6bd2cc54,
+        type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6913053378608903632, guid: 4314f5905798dab44af4a2eb6bd2cc54,
         type: 3}
