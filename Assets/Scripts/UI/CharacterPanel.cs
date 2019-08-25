@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class CharacterPanel : MonoBehaviour
 {
-
 	public Character Character;
 	
 	[Header("References")]
@@ -14,6 +13,16 @@ public class CharacterPanel : MonoBehaviour
 	public StatBar XPBar;
 	public StatBar HealthBar;
 	public StatBar FocusBar;
+
+	public List<AttributeBar> AttributeBars;
+
+	public void Start()
+	{
+		foreach(var bar in AttributeBars)
+		{
+			bar.LevelUpButton.onClick.AddListener( delegate { Character.LevelUpAttribute(bar.Attribute); });
+		}
+	}
 
 	public void Update()
 	{
@@ -35,11 +44,24 @@ public class CharacterPanel : MonoBehaviour
 		FocusBar.Value = 0;
 		FocusBar.MaxValue = 0;
 		FocusBar.UpdateBar();
+
+		foreach(var bar in AttributeBars)
+		{
+			bar.Value = Character.GetAttribute(bar.Attribute);
+			bar.MaxValue = 100;
+			bar.UpdateBar();
+			bar.LevelUpButton.interactable = (Character.AvailableAttributePoints > 0);
+		}
+	}
+
+	public void LevelUpCharacter(Attribute attribute)
+	{
+		Character.LevelUpAttribute(attribute);
 	}
 
 	public void CloseCharacterPanel()
 	{
 		GameManager.Instance.CharacterPanel.SetActive(false);
-
 	}
+
 }
