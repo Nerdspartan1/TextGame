@@ -14,6 +14,7 @@ public class CharacterPanel : MonoBehaviour
 	public StatBar XPBar;
 	public StatBar HealthBar;
 	public StatBar FocusBar;
+	public ItemSlot WeaponSlot;
 
 	public List<AttributeBar> AttributeBars;
 
@@ -23,6 +24,7 @@ public class CharacterPanel : MonoBehaviour
 		{
 			bar.LevelUpButton.onClick.AddListener( delegate { Character.LevelUpAttribute(bar.Attribute); });
 		}
+		WeaponSlot.AllowedItemType = typeof(Weapon);
 	}
 
 	public void Update()
@@ -54,11 +56,18 @@ public class CharacterPanel : MonoBehaviour
 			bar.UpdateBar();
 			bar.LevelUpButton.interactable = (Character.AvailableAttributePoints > 0);
 		}
+
+		WeaponSlot.SetItem(Character.Weapon);
 	}
 
 	public void LevelUpCharacter(Attribute attribute)
 	{
 		Character.LevelUpAttribute(attribute);
+	}
+
+	public void UpdateEquipment()
+	{
+		Character.Weapon = (Weapon)WeaponSlot.Item;
 	}
 
 	public void CloseCharacterPanel()
