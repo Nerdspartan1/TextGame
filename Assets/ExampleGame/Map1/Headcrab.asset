@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Headcrab
   Description: A headcrab.
-  Vitality: 2
-  Strength: 2
+  Vitality: 14
+  Strength: 11
   Skill: 0
   Endurance: 0
   Intelligence: 0
-  Speed: 3
-  Level: 0
-  maxHp: 30
-  hp: 30
+  Speed: 16
+  Level: 4
+  maxHp: 135
+  hp: 135
+  StrengthMultiplier: 1.0178937
+  DamageResistance: 0
   damage: {x: 8, y: 12}
-  xpDrop: 10
+  xpDrop: 23
   lootDrops: []

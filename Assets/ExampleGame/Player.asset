@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Poppy Gloria
   Description: 
-  Vitality: 2
-  Strength: 1
-  Skill: 1
-  Endurance: 1
-  Intelligence: 1
-  Speed: 1
+  Vitality: 10
+  Strength: 10
+  Skill: 10
+  Endurance: 10
+  Intelligence: 10
+  Speed: 10
   Level: 1
-  maxHp: 30
-  hp: 30
+  maxHp: 100
+  hp: 100
+  StrengthMultiplier: 0.9946517
+  DamageResistance: 0
   XP: 0
   AvailableAttributePoints: 0
   Weapon: {fileID: 0}

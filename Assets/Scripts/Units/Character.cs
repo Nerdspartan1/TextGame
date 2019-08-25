@@ -16,9 +16,9 @@ public class Character : Unit
 	{
 		result = new ActionResult();
 		if (Weapon != null)
-			result.IntValue = other.TakeDamage(Weapon.GetDamage());
+			result.IntValue = other.TakeDamage((int)(StrengthMultiplier * (float)Weapon.GetDamage()));
 		else
-			result.IntValue = other.TakeDamage(1);
+			result.IntValue = other.TakeDamage(Strength);
 
 		result.Missed = false;
 		result.Killed = other.IsDead;

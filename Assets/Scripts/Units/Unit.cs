@@ -20,12 +20,12 @@ public abstract class Unit : ScriptableObject
 	public string Description;
 
 	[Header("Attributes")]
-	public int Vitality;
-	public int Strength;
-	public int Skill;
-	public int Endurance;
-	public int Intelligence;
-	public int Speed;
+	public int Vitality = 10;
+	public int Strength = 10;
+	public int Skill = 10;
+	public int Endurance = 10;
+	public int Intelligence = 10;
+	public int Speed = 10;
 
 	[Header("Stats")]
 	public int Level = 1;
@@ -50,9 +50,13 @@ public abstract class Unit : ScriptableObject
 		}
 	}
 
+	public float StrengthMultiplier;
+	public float DamageResistance;
+
 	public void CalculateStatsFromAttributes()
 	{
-		MaxHp = (int)(20 + Vitality * 5);
+		MaxHp = Vitality < 40 ? (int)(8 + 300 * Mathf.Sin(Mathf.PI * Vitality / 100)) : 3 * Vitality + 173;
+		StrengthMultiplier = 0.76f + 1.5f * Mathf.Sin((float)Strength * Mathf.PI / 200f);
 	}
 
 	public bool IsDead{ get => Hp <= 0; }
