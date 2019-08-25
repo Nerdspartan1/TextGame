@@ -5,15 +5,17 @@ using UnityEngine;
 public class TeamPanel : MonoBehaviour
 {
 	public Team Team;
+
+	[Header("Prefabs")]
 	public GameObject CharacterSlotPrefab;
 
 	private UnitSlot[] unitSlots;
 	
 	public void UpdateSlots()
 	{
-		foreach(var cs in unitSlots)
+		foreach(var slot in unitSlots)
 		{
-			cs.UpdateSlot();
+			slot.UpdateSlot();
 		}
 	}
 
@@ -34,4 +36,5 @@ public class TeamPanel : MonoBehaviour
 		unitSlots = uslist.ToArray();
 		UpdateSlots();
 	}
+
 }

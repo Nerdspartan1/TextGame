@@ -38,4 +38,9 @@ public class Character : Unit
 		XP += xp;
 		Level = (int)Mathf.Sqrt(1+(float)XP/4.0f);
 	}
+
+	public int NextLevelXP()
+	{
+		return (int)Mathf.Pow(Level * 4,2);
+	}
 }
