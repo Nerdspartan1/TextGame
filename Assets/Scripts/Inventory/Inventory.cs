@@ -27,7 +27,11 @@ public class Inventory : MonoBehaviour
 
 	public int Size = 20; //max size of the inventory
 
-	public int ItemCount { get => items.Count; }
+	public int TotalItemCount { get => items.Count; }
+	public int ItemInInventoryCount()
+	{
+		return inventorySlots.FindAll((slot) => (slot.Item != null)).Count;
+	}
 
 	#region Window
 	public void ToggleWindow()
@@ -78,18 +82,17 @@ public class Inventory : MonoBehaviour
 
 		for (int i = 0; i < Size; i++)
 		{
-			if (i < items.Count) inventorySlots[i].SetItem(items[i]);
+			if (i < TotalItemCount) inventorySlots[i].SetItem(items[i]);
 			else inventorySlots[i].SetItem(null);
 			inventorySlots[i].AllowedItemType = typeof(Item);
 		}
-
 	}
 
 	public bool Add(Item item)
 	{
 		if (item == null) return true;
 
-		if (ItemCount >= Size) return false;
+		if (ItemInInventoryCount() >= Size) return false;
 
 		var newItem = Item.Instantiate(item);
 		
@@ -105,7 +108,7 @@ public class Inventory : MonoBehaviour
 	{
 		if (item == null) return true;
 
-		if (ItemCount == 0) return false;
+		if (TotalItemCount == 0) return false;
 
 		FindInSlots(item, out ItemSlot slot);
 
@@ -119,18 +122,6 @@ public class Inventory : MonoBehaviour
 	{
 		if (!to.CanSet(from.Item))
 			return false;
-
-		bool fromInInventory = (inventorySlots.Find((slot) => (slot == from)));
-		bool toInInventory = (inventorySlots.Find((slot) => (slot == to)));
-
-		if (fromInInventory && !toInInventory)
-		{
-
-		}
-		else if (!fromInInventory && toInInventory)
-		{
-
-		}
 
 		var it = from.Item;
 		from.SetItem(to.Item);

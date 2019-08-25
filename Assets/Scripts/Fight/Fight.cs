@@ -130,7 +130,7 @@ public class Fight
 	{
 		GameManager.Instance.CreateText($"Which item should {CombatActions[CurrentTeammateId].Actor.Name} use ?");
 
-		for(int i = 0; i < Inventory.Instance.ItemCount; i++)
+		for(int i = 0; i < Inventory.Instance.TotalItemCount; i++)
 		{
 			if(Inventory.Instance[i] is Consumable consumable)
 			{
