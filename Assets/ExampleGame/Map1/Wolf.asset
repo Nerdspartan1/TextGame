@@ -14,16 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Wolf
   Description: 
-  Strength: 2
-  Speed: 3
-  Perception: 1
-  Skill: 1
+  Vitality: 9
+  Strength: 13
+  Skill: 10
   Endurance: 1
+  Intelligence: 0
+  Speed: 15
   Level: 2
-  maxHp: 29
-  hp: 29
+  maxHp: 91
+  hp: 91
+  StrengthMultiplier: 1.064181
+  DamageResistance: 0
   damage: {x: 3, y: 5}
-  xpDrop: 10
+  xpDrop: 11
   lootDrops:
   - loot: {fileID: 11400000, guid: b1ac506124e61084dacee41c642a5ea9, type: 2}
     dropChance: 1

@@ -10,15 +10,29 @@ public class UnitSlot : MonoBehaviour
 	public Text Name;
 	public Text Level;
 	public Text Hp;
-	public RectTransform LifeBar;
+	public StatBar LifeBar;
+	public GameObject LevelUpSymbol;
 
 	public void UpdateSlot()
 	{
 		Name.text = Unit.Name;
 		Level.text = $"Lvl. {Unit.Level}";
-		Hp.text = $"{Unit.Hp}/{Unit.MaxHp}";
 
-		float hpRatio = (float)Unit.Hp / (float)Unit.MaxHp;
-		LifeBar.localScale = new Vector3(hpRatio > 0 ? hpRatio : 0, 1, 1);
+		LifeBar.Value = (float)Unit.Hp;
+		LifeBar.MaxValue = (float)Unit.MaxHp;
+		LifeBar.UpdateBar();
+
+		if(Unit is Character character)
+		{
+			LevelUpSymbol.SetActive(character.AvailableAttributePoints > 0);
+		}
 	}
+
+	#region Character Panel
+	public void OpenCharacterPanel()
+	{
+		GameManager.Instance.CharacterPanel.SetActive(true);
+		GameManager.Instance.CharacterPanel.GetComponentInChildren<CharacterPanel>().SetUnit(Unit);
+	}
+	#endregion
 }

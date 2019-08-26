@@ -19,23 +19,21 @@ public class Inventory : MonoBehaviour
 
 	public static DescriptionPanel DescriptionPanel;
 
-
-	private ItemSlot[] inventorySlots;
-	public ItemSlot[] handSlots = new ItemSlot[2];
-	public ItemSlot armorSlot;
+	private List<ItemSlot> inventorySlots;
 
 	[Header("Inventory")]
 	[SerializeField]
 	private List<Item> items = new List<Item>();
-	[SerializeField]
-	private Weapon[] hands = new Weapon[2];
-	[SerializeField]
-	private Armor armor = null;
 
 	public int Size = 20; //max size of the inventory
 
-	public int ItemCount { get => items.Count; }
+	public int TotalItemCount { get => items.Count; }
+	public int ItemInInventoryCount()
+	{
+		return inventorySlots.FindAll((slot) => (slot.Item != null)).Count;
+	}
 
+	#region Window
 	public void ToggleWindow()
 	{
 		InventoryWindow.gameObject.SetActive(!InventoryWindow.gameObject.activeInHierarchy);
@@ -58,6 +56,7 @@ public class Inventory : MonoBehaviour
 	{
 		InventoryWindow.transform.position = InitialWindowPosition;
 	}
+	#endregion
 
 	public Item this[int i]
 	{
@@ -79,28 +78,21 @@ public class Inventory : MonoBehaviour
 		for (int i = 1; i < Size; i++)
 			Instantiate(ItemSlotInstance, InventoryPanel.transform);
 
-		inventorySlots = InventoryPanel.GetComponentsInChildren<ItemSlot>();
+		inventorySlots = new List<ItemSlot>(InventoryPanel.GetComponentsInChildren<ItemSlot>());
 
 		for (int i = 0; i < Size; i++)
 		{
-			if (i < items.Count) inventorySlots[i].SetItem(items[i]);
+			if (i < TotalItemCount) inventorySlots[i].SetItem(items[i]);
 			else inventorySlots[i].SetItem(null);
 			inventorySlots[i].AllowedItemType = typeof(Item);
 		}
-		handSlots[0].SetItem(hands[0]);
-		handSlots[0].AllowedItemType = typeof(Weapon);
-		handSlots[1].SetItem(hands[1]);
-		handSlots[1].AllowedItemType = typeof(Weapon);
-		armorSlot.SetItem(armor);
-		armorSlot.AllowedItemType = typeof(Armor);
-
 	}
 
 	public bool Add(Item item)
 	{
 		if (item == null) return true;
 
-		if (ItemCount >= Size) return false;
+		if (ItemInInventoryCount() >= Size) return false;
 
 		var newItem = Item.Instantiate(item);
 		
@@ -116,7 +108,7 @@ public class Inventory : MonoBehaviour
 	{
 		if (item == null) return true;
 
-		if (ItemCount == 0) return false;
+		if (TotalItemCount == 0) return false;
 
 		FindInSlots(item, out ItemSlot slot);
 
@@ -135,15 +127,7 @@ public class Inventory : MonoBehaviour
 		from.SetItem(to.Item);
 		to.SetItem(it);
 
-		UpdateEquipment();
 		return true;
-	}
-
-	public void UpdateEquipment()
-	{
-		hands[0] = (Weapon)handSlots[0].Item;
-		hands[1] = (Weapon)handSlots[1].Item;
-		armor = (Armor)armorSlot.Item;
 	}
 
 	public bool FindInSlots(Item item, out ItemSlot slot)
@@ -156,30 +140,10 @@ public class Inventory : MonoBehaviour
 				return true;
 			}
 		}
-		if(item == handSlots[0].Item)
-		{
-			slot = handSlots[0];
-			return true;
-		}
-		else if (item == handSlots[1].Item)
-		{
-			slot = handSlots[1];
-			return true;
-		}else if (item == armorSlot.Item)
-		{
-			slot = armorSlot;
-			return true;
-		}
 
 		slot = null;
 
 		return false;
 	}
 
-	public void EquipHand(Weapon weapon, int hand)
-	{
-		Remove(weapon);
-		Add(hands[hand]);
-		hands[hand] = weapon;
-	}
 }

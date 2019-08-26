@@ -2,6 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Attribute
+{
+	Vitality,
+	Strength,
+	Skill,
+	Endurance,
+	Intelligence,
+	Speed,
+}
+
 public abstract class Unit : ScriptableObject
 {
 	[Header("Identity")]
@@ -10,11 +20,12 @@ public abstract class Unit : ScriptableObject
 	public string Description;
 
 	[Header("Attributes")]
-	public int Strength;
-	public int Speed;
-	public int Perception;
-	public int Skill;
-	public int Endurance;
+	public int Vitality = 10;
+	public int Strength = 10;
+	public int Skill = 10;
+	public int Endurance = 10;
+	public int Intelligence = 10;
+	public int Speed = 10;
 
 	[Header("Stats")]
 	public int Level = 1;
@@ -39,15 +50,13 @@ public abstract class Unit : ScriptableObject
 		}
 	}
 
-	public virtual void Init()
-	{
-		hp = MaxHp;
-		Debug.Log($"{Name} initialized.");
-	}
+	public float StrengthMultiplier;
+	public float DamageResistance;
 
 	public void CalculateStatsFromAttributes()
 	{
-		MaxHp = (int)(20 + Endurance * 5 + Strength * 2);
+		MaxHp = Vitality < 40 ? (int)(8 + 300 * Mathf.Sin(Mathf.PI * Vitality / 100)) : 3 * Vitality + 173;
+		StrengthMultiplier = 0.76f + 1.5f * Mathf.Sin((float)Strength * Mathf.PI / 200f);
 	}
 
 	public bool IsDead{ get => Hp <= 0; }
@@ -71,6 +80,20 @@ public abstract class Unit : ScriptableObject
 		{
 			hp = MaxHp;
 		}
+	}
+
+	public int GetAttribute(Attribute attribute)
+	{
+		switch (attribute)
+		{
+			case Attribute.Vitality: return Vitality;
+			case Attribute.Strength: return Strength;
+			case Attribute.Skill: return Skill;
+			case Attribute.Endurance: return Endurance;
+			case Attribute.Intelligence: return Intelligence;
+			case Attribute.Speed: return Speed;
+		}
+		throw new System.Exception("Unknown attribute");
 	}
 
 }

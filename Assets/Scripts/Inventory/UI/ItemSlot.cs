@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class ItemSlot : MonoBehaviour
 {
@@ -15,8 +16,11 @@ public class ItemSlot : MonoBehaviour
 
 	public Item Item;
 
+	public UnityEvent OnItemChanged;
+
 	public void SetItem(Item newItem)
 	{
+		bool itemChanged = (newItem != Item);
 		if(newItem == null)
 		{
 			Item = null;
@@ -34,6 +38,8 @@ public class ItemSlot : MonoBehaviour
 			Icon.sprite = Item.icon;
 			Icon.color = Color.white;
 		}
+
+		if(itemChanged) OnItemChanged.Invoke();
 
 		OptionPanel.UpdateUI();
 	}
