@@ -5,10 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class Paragraph
 {
+	public List<Condition> conditions;
 	[TextArea(5, 15)]
 	[SerializeField]
 	public string RawText;
 	public List<Operation> operations;
+	public List<Choice> choices;
 
 	public string Text
 	{
@@ -50,11 +52,6 @@ public class Paragraph
 			}
 			return result;
 		}
-	}
-
-	public void ApplyOperations()
-	{
-		Operation.ApplyAll(operations);
 	}
 
 }

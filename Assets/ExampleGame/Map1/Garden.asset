@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
   m_Name: Garden
   m_EditorClassIdentifier: 
-  description:
-    RawText: A green, quiet, garden.
+  paragraphs:
+  - conditions: []
+    RawText: Your garden is buzzing with life.
     operations: []
-  randomEvents: []
+    choices: []
+  - conditions: []
+    RawText: You can hear dogs barking from across the street
+    operations: []
+    choices: []

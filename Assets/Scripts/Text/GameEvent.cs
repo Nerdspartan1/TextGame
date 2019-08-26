@@ -90,22 +90,18 @@ public struct Operation
 		switch (operationType)
 		{
 			case OperationType.GoToMap:
-				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.GoToMap((Map)reference);
 				return;
 			case OperationType.GoToCell:
-				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.GoToLocation(position);
 				return;
 			case OperationType.InitiateFight:
-				GameManager.Instance.ExitGameEvent();
 				if(reference is Team)
 					FightManager.Instance.BeginFight((Team)reference);
 				else
 					FightManager.Instance.BeginFight((Enemy)reference);
 				return;
 			case OperationType.PlayGameEvent:
-				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.PlayGameEvent((GameEvent)reference);
 				return;
 			case OperationType.Set:
@@ -152,21 +148,8 @@ public struct Choice
 [CreateAssetMenu(fileName = "GameEvent",menuName = "ScriptableObjects/GameEvent")]
 public class GameEvent : ScriptableObject
 {
-	[System.Serializable]
-	public class Paragraph : global::Paragraph
-	{
-		public List<Condition> conditions;
-		public List<Choice> choices;
-
-	}
-
 	public List<Paragraph> paragraphs  = new List<Paragraph>();
-	int currentParagraphId;
-
-	public void Init()
-	{
-		currentParagraphId = -1;
-	}
+	int currentParagraphId = -1;
 
 	public Paragraph GetNextParagraph()
 	{
@@ -184,5 +167,7 @@ public class GameEvent : ScriptableObject
 		}
 		return null;
 	}
+
+	public bool HasNextParagraph { get => currentParagraphId < paragraphs.Count - 1; }
 
 }

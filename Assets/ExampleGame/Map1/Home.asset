@@ -12,7 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
   m_Name: Home
   m_EditorClassIdentifier: 
-  description:
-    RawText: This is your home. Nothing really out of the ordinary.
-    operations: []
-  randomEvents: []
+  paragraphs:
+  - conditions: []
+    RawText: Your home is very large.
+    operations:
+    - key: visits
+      operationType: 2
+      value: 1
+      reference: {fileID: 0}
+      position: {x: 0, y: 0}
+    choices: []
+  - conditions:
+    - key: visit
+      conditionType: 2
+      value: 5
+    RawText: 'There is a M16 on the table that you didn''t see before !
+
+      You decide to take it.'
+    operations:
+    - key: 
+      operationType: 7
+      value: 
+      reference: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}
+      position: {x: 0, y: 0}
+    choices: []

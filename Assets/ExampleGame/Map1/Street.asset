@@ -12,21 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
   m_Name: Street
   m_EditorClassIdentifier: 
-  description:
-    RawText: The street is not very busy.
+  paragraphs:
+  - conditions: []
+    RawText: An empty street
     operations: []
-  randomEvents:
-  - probability: 0.3
-    operations:
-    - key: 
-      operationType: 6
-      value: 
-      reference: {fileID: 11400000, guid: 0ceb006fa4261fd40b354ff8ea2b8e0b, type: 2}
-      position: {x: 0, y: 0}
-  - probability: 0.096
-    operations:
-    - key: 
-      operationType: 6
-      value: 
-      reference: {fileID: 11400000, guid: e7a4f3a531206ab42bab105a9fb29c11, type: 2}
-      position: {x: 0, y: 0}
+    choices: []
+  - conditions: []
+    RawText: Nothing is going on here.
+    operations: []
+    choices: []

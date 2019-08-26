@@ -217,15 +217,15 @@ public class ChoiceDrawer : PropertyDrawer
 	}
 }
 
-[CustomPropertyDrawer(typeof(GameEvent.Paragraph))]
+[CustomPropertyDrawer(typeof(Paragraph))]
 public class GameEventParagraphDrawer : PropertyDrawer
 {
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
 
-		SerializedProperty conditions = property.FindPropertyRelative(nameof(GameEvent.Paragraph.conditions));
-		SerializedProperty operations = property.FindPropertyRelative(nameof(GameEvent.Paragraph.operations));
-		SerializedProperty choices = property.FindPropertyRelative(nameof(GameEvent.Paragraph.choices));
+		SerializedProperty conditions = property.FindPropertyRelative(nameof(Paragraph.conditions));
+		SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
+		SerializedProperty choices = property.FindPropertyRelative(nameof(Paragraph.choices));
 
 		if (!property.isExpanded) return K.defaultPropHeight;
 		return
@@ -257,13 +257,13 @@ public class GameEventParagraphDrawer : PropertyDrawer
 		Rect paragraphFoldoutRect = new Rect(position.x, position.y, 20, K.defaultPropHeight);
 		property.isExpanded = EditorGUI.Foldout(paragraphFoldoutRect, property.isExpanded, GUIContent.none);
 		Rect titleRect = new Rect(position.x, position.y, position.width, K.defaultPropHeight);
-		EditorGUI.LabelField(titleRect, new GUIContent(property.FindPropertyRelative(nameof(GameEvent.Paragraph.RawText)).stringValue), EditorStyles.boldLabel);
+		EditorGUI.LabelField(titleRect, new GUIContent(property.FindPropertyRelative(nameof(Paragraph.RawText)).stringValue), EditorStyles.boldLabel);
 		position.y += 20;
 
 		if (property.isExpanded)
 		{
 
-			SerializedProperty conditions = property.FindPropertyRelative(nameof(GameEvent.Paragraph.conditions));
+			SerializedProperty conditions = property.FindPropertyRelative(nameof(Paragraph.conditions));
 			//conditions.isExpanded = EditorGUILayout.Foldout(conditions.isExpanded, new GUIContent("Conditions"));
 			Rect foldoutRect = new Rect(position.x, position.y, position.width, 20);
 			conditions.isExpanded = EditorGUI.Foldout(foldoutRect, conditions.isExpanded, new GUIContent($"Conditions ({conditions.arraySize})"));
@@ -275,10 +275,10 @@ public class GameEventParagraphDrawer : PropertyDrawer
 			}
 
 
-			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 100), property.FindPropertyRelative(nameof(GameEvent.Paragraph.RawText)));
+			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 100), property.FindPropertyRelative(nameof(Paragraph.RawText)));
 			position.y += 100;
 
-			SerializedProperty operations = property.FindPropertyRelative(nameof(GameEvent.Paragraph.operations));
+			SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
 			foldoutRect = new Rect(position.x, position.y, position.width, 20);
 			operations.isExpanded = EditorGUI.Foldout(foldoutRect, operations.isExpanded, new GUIContent($"Operations ({operations.arraySize})"));
 			position.y += 20;
@@ -286,71 +286,13 @@ public class GameEventParagraphDrawer : PropertyDrawer
 			{
 				position.y += EditorUtils.PropertyList(position, operations).height;
 			}
-			SerializedProperty choices = property.FindPropertyRelative(nameof(GameEvent.Paragraph.choices));
+			SerializedProperty choices = property.FindPropertyRelative(nameof(Paragraph.choices));
 			foldoutRect = new Rect(position.x, position.y, position.width, 20);
 			choices.isExpanded = EditorGUI.Foldout(foldoutRect, choices.isExpanded, new GUIContent($"Choices ({choices.arraySize})"));
 			position.y += 20;
 			if (choices.isExpanded)
 			{
 				position.y += EditorUtils.PropertyList(position, choices).height;
-			}
-
-		}
-		Color defaultColor = GUI.color;
-		GUI.color = new Color(1.0f, 1.0f, 0.9f, 0.3f);
-		GUI.Box(new Rect(position.x, top, position.width, position.y - top), GUIContent.none);
-		GUI.color = defaultColor;
-
-		EditorGUI.EndProperty();
-	}
-}
-
-[CustomPropertyDrawer(typeof(Paragraph))]
-public class ParagraphDrawer : PropertyDrawer
-{
-	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-	{
-
-		SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
-
-		if (!property.isExpanded) return K.defaultPropHeight;
-		return
-			20 + //title
-			100 + //text
-			20 + //foldout
-			(operations.isExpanded ?
-				EditorUtils.GetPropertyListHeight(operations) :
-				0);
-
-	}
-
-	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-	{
-		EditorGUI.BeginProperty(position, label, property);
-
-		position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), GUIContent.none);
-
-		float top = position.y;
-
-		Rect paragraphFoldoutRect = new Rect(position.x, position.y, 20, K.defaultPropHeight);
-		property.isExpanded = EditorGUI.Foldout(paragraphFoldoutRect, property.isExpanded, GUIContent.none);
-		Rect titleRect = new Rect(position.x, position.y, position.width, K.defaultPropHeight);
-		EditorGUI.LabelField(titleRect, new GUIContent(property.FindPropertyRelative(nameof(Paragraph.RawText)).stringValue), EditorStyles.boldLabel);
-		position.y += 20;
-
-		if (property.isExpanded)
-		{
-
-			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 100), property.FindPropertyRelative(nameof(Paragraph.RawText)));
-			position.y += 100;
-
-			SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
-			Rect foldoutRect = new Rect(position.x, position.y, position.width, 20);
-			operations.isExpanded = EditorGUI.Foldout(foldoutRect, operations.isExpanded, new GUIContent($"Operations ({operations.arraySize})"));
-			position.y += 20;
-			if (operations.isExpanded)
-			{
-				position.y += EditorUtils.PropertyList(position, operations).height;
 			}
 
 		}
