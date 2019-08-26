@@ -23,12 +23,12 @@ MonoBehaviour:
       position: {x: 0, y: 0}
     choices: []
   - conditions:
-    - key: visit
+    - key: visits
       conditionType: 2
       value: 5
     RawText: 'There is a M16 on the table that you didn''t see before !
 
-      You decide to take it.'
+      You take it.'
     operations:
     - key: 
       operationType: 7

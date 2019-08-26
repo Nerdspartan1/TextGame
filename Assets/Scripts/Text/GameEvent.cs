@@ -27,25 +27,26 @@ public struct Condition{
 		//key must be contained in Values
 		if (!keyExists)
 		{
-			Debug.LogError("[GameEvent]" + key + " key is unknown");
+			Debug.LogError($"'{key}' is unknown");
 			return false;
 		}
 
-		float value1;
-		if(!Values.GetValueAsFloat(key, out value1))
+		//key must be a key to a float
+		float v1;
+		if(!Values.GetValueAsFloat(key, out v1))
 		{
-			Debug.LogError("[GameEvent]" + key + " key is not float");
+			Debug.LogError($"'{key}' is not a float");
 			return false;
 		}
 
-		//value must have a numeric value or be a key to a value
-		float value2;
-		if (!Values.GetValueAsFloat(value, out value2)) // is it a float ?
+		//value must be a float or be a key to a float
+		float v2;
+		if (!float.TryParse(value, out v2)) // is it a float ?
 		{
-			if (!Values.ContainsKey(value)) //is it a key to a value ?
+			if (!Values.GetValueAsFloat(value, out v2)) //is it a key to a float ?
 			{
 				//if both checks failed, error
-				Debug.LogError("[GameEvent]" + value + " key is unknown");
+				Debug.LogError($"'{value}' is unknown");
 				return false;
 			}
 		}
@@ -54,11 +55,11 @@ public struct Condition{
 		switch (conditionType)
 		{
 			case ConditionType.IsEqualTo:
-				return (value1 == value2);
+				return (v1 == v2);
 			case ConditionType.IsNotEqualTo:
-				return (value1 != value2);
+				return (v1 != v2);
 			case ConditionType.IsGreaterThan:
-				return (value1 > value2);
+				return (v1 > v2);
 			default:
 				Debug.LogError("[Operation] Condition type not supported");
 				return false;
@@ -109,8 +110,8 @@ public struct Operation
 				return;
 			case OperationType.Add:
 				float v1, v2;
-				if (!Values.GetValueAsFloat(key, out v1)) throw new System.Exception($"[Operation] Cannot add : key {key} is not a float");
-				if (!float.TryParse(value, out v2)) throw new System.Exception($"[Operation] Cannot add : value {value} is not a float");
+				Values.GetValueAsFloat(key, out v1); //0 if key does not exist
+				if (!float.TryParse(value, out v2)) throw new System.Exception($"[Operation] Cannot add : '{value}' is not a float");
 				Values.SetValueAsFloat(key, v1 + v2);
 				return;
 			case OperationType.AddItem:
