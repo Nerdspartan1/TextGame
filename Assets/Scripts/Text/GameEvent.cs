@@ -4,7 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public enum ConditionType { Exists, DoesNotExist, IsEqualTo, IsNotEqualTo, IsGreaterThan }
+public enum ConditionType {
+	Exists,
+	DoesNotExist,
+	IsEqualTo,
+	IsNotEqualTo,
+	IsGreaterThan,
+	IsLessThan,
+	RandomChance //random chance between 0 (never) and 1 (always)
+}
 public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem}
 
 [System.Serializable]
@@ -21,22 +29,28 @@ public struct Condition{
 
 		bool keyExists = Values.ContainsKey(key);
 
-		if		(conditionType == ConditionType.Exists)		  return keyExists;
-		else if (conditionType == ConditionType.DoesNotExist) return !keyExists;
-
-		//key must be contained in Values
-		if (!keyExists)
+		switch (conditionType)
 		{
-			Debug.LogError($"'{key}' is unknown");
-			return false;
+			case ConditionType.Exists: return keyExists;
+			case ConditionType.DoesNotExist: return !keyExists;
 		}
 
-		//key must be a key to a float
-		float v1;
-		if(!Values.GetValueAsFloat(key, out v1))
+		float v1 = 0;
+		if (conditionType != ConditionType.RandomChance)
 		{
-			Debug.LogError($"'{key}' is not a float");
-			return false;
+			//key must be contained in Values
+			if (!keyExists)
+			{
+				Debug.LogError($"'{key}' is unknown");
+				return false;
+			}
+
+			//key must be a key to a float
+			if (!Values.GetValueAsFloat(key, out v1))
+			{
+				Debug.LogError($"'{key}' is not a float");
+				return false;
+			}
 		}
 
 		//value must be a float or be a key to a float
@@ -51,7 +65,6 @@ public struct Condition{
 			}
 		}
 
-
 		switch (conditionType)
 		{
 			case ConditionType.IsEqualTo:
@@ -60,6 +73,10 @@ public struct Condition{
 				return (v1 != v2);
 			case ConditionType.IsGreaterThan:
 				return (v1 > v2);
+			case ConditionType.IsLessThan:
+				return (v1 < v2);
+			case ConditionType.RandomChance:
+				return (Random.value < v2);
 			default:
 				Debug.LogError("[Operation] Condition type not supported");
 				return false;
@@ -97,10 +114,7 @@ public struct Operation
 				GameManager.Instance.GoToLocation(position);
 				return;
 			case OperationType.InitiateFight:
-				if(reference is Team)
-					FightManager.Instance.BeginFight((Team)reference);
-				else
-					FightManager.Instance.BeginFight((Enemy)reference);
+				GameManager.Instance.InitiateFight(reference);
 				return;
 			case OperationType.PlayGameEvent:
 				GameManager.Instance.PlayGameEvent((GameEvent)reference);

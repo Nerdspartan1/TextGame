@@ -156,8 +156,17 @@ public class ConditionDrawer : PropertyDrawer
 
 		SerializedProperty conditionType = property.FindPropertyRelative(nameof(Condition.conditionType));
 
-		EditorGUI.PropertyField(keyRect, property.FindPropertyRelative(nameof(Condition.key)), GUIContent.none);
+		switch ((ConditionType)conditionType.intValue)
+		{
+			case ConditionType.RandomChance:
+				break;
+			default:
+				EditorGUI.PropertyField(keyRect, property.FindPropertyRelative(nameof(Condition.key)), GUIContent.none);
+				break;
+		}
+		
 		EditorGUI.PropertyField(conditionRect, conditionType, GUIContent.none);
+
 		switch ((ConditionType)conditionType.intValue)
 		{
 			case ConditionType.Exists:

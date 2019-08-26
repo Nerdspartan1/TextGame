@@ -17,7 +17,19 @@ MonoBehaviour:
     RawText: An empty street
     operations: []
     choices: []
+  - conditions:
+    - key: 0,2
+      conditionType: 6
+      value: 0,2
+    RawText: You get attacked by a stray wolf !
+    operations:
+    - key: 
+      operationType: 5
+      value: 
+      reference: {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
+      position: {x: 0, y: 0}
+    choices: []
   - conditions: []
-    RawText: Nothing is going on here.
+    RawText: Can you see me ?
     operations: []
     choices: []

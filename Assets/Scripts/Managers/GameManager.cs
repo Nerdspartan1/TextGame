@@ -143,6 +143,7 @@ public class GameManager : MonoBehaviour {
 
 	public void DisplayNextParagraph()
 	{
+		if (!CurrentGameEvent) return;
 
 		Paragraph paragraph = CurrentGameEvent.GetNextParagraph();
 		if (paragraph == null) //end of game event
@@ -168,6 +169,8 @@ public class GameManager : MonoBehaviour {
 		//apply operations
 		Operation.ApplyAll(paragraph.operations);
 
+		if (!CurrentGameEvent) return;
+
 		if (paragraph.choices.Count == 0)
 		{
 			if(CurrentGameEvent.HasNextParagraph) //immediately display the next paragraphs
@@ -181,6 +184,15 @@ public class GameManager : MonoBehaviour {
 					});
 			}
 		}
+	}
+
+	public void InitiateFight(object enemies)
+	{
+		CurrentGameEvent = null;
+
+		if(enemies is Enemy enemy) FightManager.Instance.BeginFight(enemy);
+		else if (enemies is Team team) FightManager.Instance.BeginFight(team);
+		else throw new System.Exception("Bad type");
 	}
 	#endregion
 
