@@ -31,11 +31,8 @@ public class UnitSlot : MonoBehaviour
 	#region Character Panel
 	public void OpenCharacterPanel()
 	{
-		if (Unit is Character character)
-		{
-			GameManager.Instance.CharacterPanel.SetActive(true);
-			GameManager.Instance.CharacterPanel.GetComponentInChildren<CharacterPanel>().Character = character;
-		}
+		GameManager.Instance.CharacterPanel.SetActive(true);
+		GameManager.Instance.CharacterPanel.GetComponentInChildren<CharacterPanel>().SetUnit(Unit);
 	}
 	#endregion
 }
