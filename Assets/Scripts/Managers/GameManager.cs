@@ -138,53 +138,16 @@ public class GameManager : MonoBehaviour {
 		ClearButtons();
 		HideMap = !(gameEvent is Location);
 
-		DisplayNextParagraph();
+		StartCoroutine(DisplayParagraphs());
 	}
 
-	public void DisplayNextParagraph()
+	private IEnumerator DisplayParagraphs()
 	{
-		if (!CurrentGameEvent) return;
+		yield return new Prompt(CurrentGameEvent.DisplayParagraph).Display();
 
-		Paragraph paragraph = CurrentGameEvent.GetNextParagraph();
-		if (paragraph == null) //end of game event
-		{
-			if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
-			return;
-		}
-
-		//instantiate text
-		CreateText(paragraph.Text);
-
-		//instantiate choices
-		foreach (Choice choice in paragraph.choices)
-		{
-			if (!Condition.AreVerified(choice.conditions)) continue;
-
-			CreateButton(choice.text, delegate {
-				Operation.ApplyAll(choice.operations);
-				DisplayNextParagraph();
-			});
-		}
-
-		//apply operations
-		Operation.ApplyAll(paragraph.operations);
-
-		if (!CurrentGameEvent) return;
-
-		if (paragraph.choices.Count == 0)
-		{
-			if(CurrentGameEvent.HasNextParagraph) //immediately display the next paragraphs
-				DisplayNextParagraph();
-			else if (!(CurrentGameEvent is Location))// if last paragraph of non location game event, display a button
-			{
-				CreateButton("Continue...",
-					delegate
-					{
-						DisplayNextParagraph(); // this will exit the game event at the beginning of the function
-					});
-			}
-		}
+		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
 	}
+
 
 	public void InitiateFight(object enemies)
 	{

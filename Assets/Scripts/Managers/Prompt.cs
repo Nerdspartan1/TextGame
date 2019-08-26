@@ -17,7 +17,6 @@ public class Prompt
 
 	IEnumerator WaitForInput()
 	{
-		waitForInput = true;
 		while (waitForInput) yield return null;
 	}
 
@@ -28,6 +27,8 @@ public class Prompt
 
 	public IEnumerator Display()
 	{
+		waitForInput = true;
+
 		//do thing
 		Method.Invoke(this);
 

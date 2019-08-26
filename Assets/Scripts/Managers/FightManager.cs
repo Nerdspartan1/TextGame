@@ -112,20 +112,20 @@ public class FightManager : MonoBehaviour
 		}
 		else
 		{
-			if(outcome == FightOutcome.Victory) GameManager.Instance.CreateText("You win !");
+			if (outcome == FightOutcome.Victory) GameManager.Instance.CreateText("You win !");
 			else GameManager.Instance.CreateText("You escape successfully.");
 
-			if(Fight.XP > 0)
+			if (Fight.XP > 0)
 			{
-				foreach(Character character in GameManager.Instance.PlayerTeam)
+				foreach (Character character in GameManager.Instance.PlayerTeam)
 				{
 					character.GainXP(Fight.XP);
 					GameManager.Instance.CreateText($"{character.Name} gained {Fight.XP} XP.");
 				}
 			}
-			if(Fight.Loot.Count > 0)
+			if (Fight.Loot.Count > 0)
 			{
-				foreach(Item loot in Fight.Loot)
+				foreach (Item loot in Fight.Loot)
 				{
 					if (Inventory.Instance.Add(loot))
 						GameManager.Instance.CreateText($"You received {loot.Name}.");
@@ -139,7 +139,7 @@ public class FightManager : MonoBehaviour
 			GameManager.Instance.HideMap = false;
 			Inventory.Instance.Unlock();
 			//TODO: return to a chosen game event
-			GameManager.Instance.GoToLocation(GameManager.Instance.CurrentLocation, true);
+			GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);
 		}
 
 	}

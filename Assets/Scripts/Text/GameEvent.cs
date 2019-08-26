@@ -164,25 +164,52 @@ public struct Choice
 public class GameEvent : ScriptableObject
 {
 	public List<Paragraph> paragraphs  = new List<Paragraph>();
-	int currentParagraphId = -1;
-
-	public Paragraph GetNextParagraph()
-	{
-		while (currentParagraphId < paragraphs.Count-1)
-		{
-			currentParagraphId++;
-			Paragraph paragraph = paragraphs[currentParagraphId];
-			
-
-			if (Condition.AreVerified(paragraph.conditions))
-			{
-				return paragraph;
-			}
-			
-		}
-		return null;
-	}
+	int currentParagraphId = 0;
 
 	public bool HasNextParagraph { get => currentParagraphId < paragraphs.Count - 1; }
+
+	public void DisplayParagraph(Prompt prompt)
+	{
+		Paragraph paragraph = paragraphs[currentParagraphId];
+
+		if (Condition.AreVerified(paragraph.conditions))
+		{
+			//instantiate text
+			GameManager.Instance.CreateText(paragraph.Text);
+
+			//instantiate choices
+			foreach (Choice choice in paragraph.choices)
+			{
+				if (!Condition.AreVerified(choice.conditions)) continue;
+
+				GameManager.Instance.CreateButton(choice.text, delegate
+				{
+					Operation.ApplyAll(choice.operations);
+					prompt.Proceed();
+				});
+			}
+
+			//apply operations
+			Operation.ApplyAll(paragraph.operations);
+		}
+
+		if (HasNextParagraph) prompt.Next = new Prompt(DisplayParagraph);
+
+		if (paragraph.choices.Count == 0)
+		{
+			if (HasNextParagraph) //immediately display the next paragraphs
+				prompt.Proceed();
+			else if (!(this is Location))// if last paragraph of non location game event, display a button
+			{
+				GameManager.Instance.CreateButton("Continue...",
+					delegate
+					{
+						prompt.Proceed();
+					});
+			}
+		}
+
+		currentParagraphId++;
+	}
 
 }
