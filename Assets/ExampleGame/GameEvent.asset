@@ -25,16 +25,20 @@ MonoBehaviour:
       - key: name
         operationType: 1
         value: Skidoo
-        reference: {fileID: 0}
+        gameEvent: {fileID: 0}
         position: {x: 0, y: 0}
+        item: {fileID: 0}
+        other: {fileID: 0}
     - conditions: []
       text: Skadae
       operations:
       - key: name
         operationType: 1
         value: Skadae
-        reference: {fileID: 0}
+        gameEvent: {fileID: 0}
         position: {x: 0, y: 0}
+        item: {fileID: 0}
+        other: {fileID: 0}
   - conditions: []
     RawText: Oh ! So your name is {name} !
     operations: []
@@ -47,24 +51,30 @@ MonoBehaviour:
     - key: 
       operationType: 7
       value: 
-      reference: {fileID: 11400000, guid: 680bc4937d96b5348be7273d31fdd9fd, type: 2}
+      gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: 680bc4937d96b5348be7273d31fdd9fd, type: 2}
+      other: {fileID: 0}
     - key: 
       operationType: 7
       value: 
-      reference: {fileID: 11400000, guid: 680bc4937d96b5348be7273d31fdd9fd, type: 2}
+      gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: 680bc4937d96b5348be7273d31fdd9fd, type: 2}
+      other: {fileID: 0}
     - key: 
       operationType: 7
       value: 
-      reference: {fileID: 11400000, guid: 9b66151cff22cef468325fb68c430d75, type: 2}
+      gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: 9b66151cff22cef468325fb68c430d75, type: 2}
+      other: {fileID: 0}
     - key: 
       operationType: 7
       value: 
-      reference: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}
+      gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
-    choices:
-    - conditions: []
-      text: OK
-      operations: []
+      item: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}
+      other: {fileID: 0}
+    choices: []
+  Interrupt: 0

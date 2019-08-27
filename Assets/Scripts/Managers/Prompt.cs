@@ -34,8 +34,6 @@ public class Prompt
 
 		yield return WaitForInput();
 
-		GameManager.Instance.ClearButtons();
-
 		if (Next == null) //end of prompt chain
 			yield break;
 		else

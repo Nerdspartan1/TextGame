@@ -99,35 +99,44 @@ public class OperationDrawer : PropertyDrawer
 		int indent = EditorGUI.indentLevel;
 		EditorGUI.indentLevel = 0;
 
-		Rect keyRect = new Rect(position.x, position.y, 100, K.defaultPropHeight);
-		Rect operationRect = new Rect(position.x + 110, position.y, 100, K.defaultPropHeight);
-		Rect valueRect = new Rect(position.x + 220, position.y, 100, K.defaultPropHeight);
+		Rect rect1 = new Rect(position.x, position.y, 100, K.defaultPropHeight);
+		Rect rect2 = new Rect(position.x + 110, position.y, 100, K.defaultPropHeight);
+		Rect rect3 = new Rect(position.x + 220, position.y, 100, K.defaultPropHeight);
 
 		SerializedProperty operationType = property.FindPropertyRelative(nameof(Operation.operationType));
 
 		switch ((OperationType)operationType.intValue)
 		{
+			case OperationType.None:
+				EditorGUI.PropertyField(rect1, operationType, GUIContent.none);
+				break;
 			case OperationType.Set:
 			case OperationType.Add:
-				EditorGUI.PropertyField(keyRect, property.FindPropertyRelative(nameof(Operation.key)), GUIContent.none);
+				EditorGUI.PropertyField(rect1, property.FindPropertyRelative(nameof(Operation.key)), GUIContent.none);
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.value)), GUIContent.none);
 				break;
-		}
-		EditorGUI.PropertyField(operationRect, operationType, GUIContent.none);
-		switch ((OperationType)operationType.intValue)
-		{
-			case OperationType.Set:
-			case OperationType.Add:
-				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative(nameof(Operation.value)), GUIContent.none);
-				break;
-			case OperationType.GoToMap:
-			case OperationType.InitiateFight:
 			case OperationType.PlayGameEvent:
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.gameEvent)), GUIContent.none);
+				break;
 			case OperationType.AddItem:
 			case OperationType.RemoveItem:
-				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative(nameof(Operation.reference)), GUIContent.none);
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.item)), GUIContent.none);
+				break;
+			case OperationType.GoToMap:
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.other)), GUIContent.none);
 				break;
 			case OperationType.GoToCell:
-				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative(nameof(Operation.position)), GUIContent.none);
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.position)), GUIContent.none);
+				break;
+			case OperationType.InitiateFight:
+				EditorGUI.PropertyField(rect1, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect2, property.FindPropertyRelative(nameof(Operation.other)), GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.gameEvent)), GUIContent.none);
 				break;
 		}
 		
@@ -227,7 +236,7 @@ public class ChoiceDrawer : PropertyDrawer
 }
 
 [CustomPropertyDrawer(typeof(Paragraph))]
-public class GameEventParagraphDrawer : PropertyDrawer
+public class ParagraphDrawer : PropertyDrawer
 {
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{

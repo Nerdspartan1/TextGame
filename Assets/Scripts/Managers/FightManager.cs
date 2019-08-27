@@ -26,19 +26,22 @@ public class FightManager : MonoBehaviour
 	public TeamPanel EnemyTeamPanel;
 
 	public Fight Fight;
+	public GameEvent NextEvent;
 
-	public void BeginFight(Enemy enemy)
+	public void BeginFight(Enemy enemy, GameEvent NextEvent = null)
 	{
 		var enemyTeam = Team.CreateInstance<Team>();
 		enemyTeam.Add(enemy);
-		BeginFight(enemyTeam);
+		BeginFight(enemyTeam, NextEvent);
 	}
 
-	public void BeginFight(Team enemyTeam)
+	public void BeginFight(Team enemyTeam, GameEvent NextEvent = null)
 	{
 		Fight = new Fight();
 		Fight.EnemyTeam = Instantiate(enemyTeam);
 		Fight.EnemyTeam.InstantiateUnits();
+
+		this.NextEvent = NextEvent;
 
 		GameManager.Instance.RightPanel.gameObject.SetActive(true);
 		EnemyTeamPanel.Team = Fight.EnemyTeam;
@@ -138,8 +141,9 @@ public class FightManager : MonoBehaviour
 
 			GameManager.Instance.HideMap = false;
 			Inventory.Instance.Unlock();
-			//TODO: return to a chosen game event
-			GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);
+
+			if (NextEvent) GameManager.Instance.PlayGameEvent(NextEvent);
+			else GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);
 		}
 
 	}

@@ -19,8 +19,10 @@ MonoBehaviour:
     - key: visits
       operationType: 2
       value: 1
-      reference: {fileID: 0}
+      gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
+      item: {fileID: 0}
+      other: {fileID: 0}
     choices: []
   - conditions:
     - key: visits
@@ -33,6 +35,9 @@ MonoBehaviour:
     - key: 
       operationType: 7
       value: 
-      reference: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}
+      gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}
+      other: {fileID: 0}
     choices: []
+  Interrupt: 0

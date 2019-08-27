@@ -26,10 +26,13 @@ MonoBehaviour:
     - key: 
       operationType: 5
       value: 
-      reference: {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
+      gameEvent: {fileID: 11400000, guid: e1ca0874bc7af37498f233e50f8d3256, type: 2}
       position: {x: 0, y: 0}
+      item: {fileID: 0}
+      other: {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
     choices: []
   - conditions: []
     RawText: Can you see me ?
     operations: []
     choices: []
+  Interrupt: 0

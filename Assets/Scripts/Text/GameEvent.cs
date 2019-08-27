@@ -100,24 +100,26 @@ public struct Operation
 	public string key;
 	public OperationType operationType;
 	public string value;
-	public Object reference;
+	public GameEvent gameEvent;
 	public Vector2Int position;
+	public Item item;
+	public Object other;
 
 	public void Apply()
 	{
 		switch (operationType)
 		{
 			case OperationType.GoToMap:
-				GameManager.Instance.GoToMap((Map)reference);
+				GameManager.Instance.GoToMap((Map)other);
 				return;
 			case OperationType.GoToCell:
 				GameManager.Instance.GoToLocation(position);
 				return;
 			case OperationType.InitiateFight:
-				GameManager.Instance.InitiateFight(reference);
+				GameManager.Instance.InitiateFight(other, gameEvent);
 				return;
 			case OperationType.PlayGameEvent:
-				GameManager.Instance.PlayGameEvent((GameEvent)reference);
+				GameManager.Instance.PlayGameEvent(gameEvent);
 				return;
 			case OperationType.Set:
 				Values.SetValueAsString(key, value.ToString());
@@ -129,26 +131,15 @@ public struct Operation
 				Values.SetValueAsFloat(key, v1 + v2);
 				return;
 			case OperationType.AddItem:
-				Inventory.Instance.Add((Item)reference);
+				Inventory.Instance.Add(item);
 				return;
 			case OperationType.RemoveItem:
-				Inventory.Instance.Remove((Item)reference);
+				Inventory.Instance.Remove(item);
 				return;
 			default:
 				throw new System.Exception("[Operation] Operation type not supported");
 		}
-
-
 	}
-
-	public static void ApplyAll(IEnumerable<Operation> operations)
-	{
-		foreach(Operation operation in operations)
-		{
-			operation.Apply();
-		}
-	}
-
 }
 
 [System.Serializable]
@@ -166,50 +157,63 @@ public class GameEvent : ScriptableObject
 	public List<Paragraph> paragraphs  = new List<Paragraph>();
 	int currentParagraphId = 0;
 
-	public bool HasNextParagraph { get => currentParagraphId < paragraphs.Count - 1; }
+	private List<Operation> operationsToApply;
 
-	public void DisplayParagraph(Prompt prompt)
+	public IEnumerator DisplayParagraph()
 	{
 		Paragraph paragraph = paragraphs[currentParagraphId];
+
+		operationsToApply = new List<Operation>();
 
 		if (Condition.AreVerified(paragraph.conditions))
 		{
 			//instantiate text
 			GameManager.Instance.CreateText(paragraph.Text);
 
-			//instantiate choices
-			foreach (Choice choice in paragraph.choices)
-			{
-				if (!Condition.AreVerified(choice.conditions)) continue;
+			yield return new Prompt(DisplayChoices).Display();
 
-				GameManager.Instance.CreateButton(choice.text, delegate
-				{
-					Operation.ApplyAll(choice.operations);
-					prompt.Proceed();
-				});
-			}
-
-			//apply operations
-			Operation.ApplyAll(paragraph.operations);
+			operationsToApply.AddRange(paragraph.operations);
+				
 		}
 
-		if (HasNextParagraph) prompt.Next = new Prompt(DisplayParagraph);
-
-		if (paragraph.choices.Count == 0)
+		foreach(var operation in operationsToApply)
 		{
-			if (HasNextParagraph) //immediately display the next paragraphs
-				prompt.Proceed();
-			else if (!(this is Location))// if last paragraph of non location game event, display a button
+			operation.Apply();
+			switch (operation.operationType)
 			{
-				GameManager.Instance.CreateButton("Continue...",
-					delegate
-					{
-						prompt.Proceed();
-					});
+				case OperationType.InitiateFight:
+				case OperationType.PlayGameEvent:
+					yield break;
 			}
 		}
 
-		currentParagraphId++;
+		if (++currentParagraphId < paragraphs.Count) // display the next paragraph if there is one
+			yield return DisplayParagraph();
+		
+	}
+
+	public void DisplayChoices(Prompt prompt)
+	{
+		bool noChoice = true;
+		//instantiate choices
+		foreach (Choice choice in paragraphs[currentParagraphId].choices)
+		{
+			if (!Condition.AreVerified(choice.conditions)) continue;
+
+			GameManager.Instance.CreateButton(choice.text, delegate
+			{
+				operationsToApply.AddRange(choice.operations);
+				prompt.Proceed();
+			});
+			noChoice = false;
+		}
+		if(noChoice)
+		{
+			//if not location and last paragraph, prompt button before returning to map
+			if (!(this is Location) && currentParagraphId == paragraphs.Count - 1)
+				prompt.Next = new Prompt(Prompt.PressOKToContinue); 
+			prompt.Proceed();
+		}
 	}
 
 }

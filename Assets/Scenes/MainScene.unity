@@ -4945,6 +4945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyTeamPanel: {fileID: 545817102}
+  NextEvent: {fileID: 0}
 --- !u!114 &1700758566
 MonoBehaviour:
   m_ObjectHideFlags: 0

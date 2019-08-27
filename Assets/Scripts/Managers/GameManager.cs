@@ -143,18 +143,16 @@ public class GameManager : MonoBehaviour {
 
 	private IEnumerator DisplayParagraphs()
 	{
-		yield return new Prompt(CurrentGameEvent.DisplayParagraph).Display();
+		yield return CurrentGameEvent.DisplayParagraph();
 
 		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
 	}
 
 
-	public void InitiateFight(object enemies)
+	public void InitiateFight(object enemies, GameEvent nextEvent)
 	{
-		CurrentGameEvent = null;
-
-		if(enemies is Enemy enemy) FightManager.Instance.BeginFight(enemy);
-		else if (enemies is Team team) FightManager.Instance.BeginFight(team);
+		if(enemies is Enemy enemy) FightManager.Instance.BeginFight(enemy, nextEvent);
+		else if (enemies is Team team) FightManager.Instance.BeginFight(team, nextEvent);
 		else throw new System.Exception("Bad type");
 	}
 	#endregion
