@@ -141,6 +141,14 @@ public class GameManager : MonoBehaviour {
 		StartCoroutine(DisplayParagraphs());
 	}
 
+	public void PlayLocation(Location location)
+	{
+		Team enemyTeam = location.EncounterTable?.GetEncounter();
+
+		if (enemyTeam) FightManager.Instance.BeginFight(enemyTeam);
+		else PlayGameEvent(location);
+	}
+
 	private IEnumerator DisplayParagraphs()
 	{
 		yield return CurrentGameEvent.DisplayParagraph();
@@ -148,13 +156,6 @@ public class GameManager : MonoBehaviour {
 		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
 	}
 
-
-	public void InitiateFight(object enemies, GameEvent nextEvent)
-	{
-		if(enemies is Enemy enemy) FightManager.Instance.BeginFight(enemy, nextEvent);
-		else if (enemies is Team team) FightManager.Instance.BeginFight(team, nextEvent);
-		else throw new System.Exception("Bad type");
-	}
 	#endregion
 
 	#region Map handling
@@ -181,7 +182,7 @@ public class GameManager : MonoBehaviour {
 					go.GetComponent<Button>().onClick.AddListener(
 						delegate {
 							GoToLocation(pos);
-							PlayGameEvent(CurrentMap[pos]);
+							PlayLocation(CurrentMap[pos]);
 						});
 					MapCells.Add(pos, go.GetComponent<Button>());
 				}

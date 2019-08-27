@@ -328,8 +328,9 @@ public class GameEventEditor : Editor
 {
 	SerializedProperty paragraphs;
 	public Vector2 scrollPosition = Vector2.zero;
+	protected Rect position;
 
-	private void OnEnable()
+	public virtual void OnEnable()
 	{
 		paragraphs = serializedObject.FindProperty(nameof(GameEvent.paragraphs));
 	}
@@ -340,8 +341,8 @@ public class GameEventEditor : Editor
 
 		float totalHeight = EditorUtils.GetPropertyListHeight(paragraphs)+20;
 		
-		Rect position   = new Rect(0, 0, EditorGUIUtility.currentViewWidth-20, totalHeight);
-		Rect scrollRect = new Rect(0, 0, EditorGUIUtility.currentViewWidth, 600);
+		position   = new Rect(0, 0, EditorGUIUtility.currentViewWidth-20, totalHeight);
+		Rect scrollRect = new Rect(0, 0, EditorGUIUtility.currentViewWidth, 620);
 		Rect scrollView = new Rect(0, 0, EditorGUIUtility.currentViewWidth-20, totalHeight);
 
 		scrollPosition = GUI.BeginScrollView(scrollRect, scrollPosition, scrollView);

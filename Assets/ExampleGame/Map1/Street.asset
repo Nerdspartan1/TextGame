@@ -17,22 +17,4 @@ MonoBehaviour:
     RawText: An empty street
     operations: []
     choices: []
-  - conditions:
-    - key: 0,2
-      conditionType: 6
-      value: 0,2
-    RawText: You get attacked by a stray wolf !
-    operations:
-    - key: 
-      operationType: 5
-      value: 
-      gameEvent: {fileID: 11400000, guid: e1ca0874bc7af37498f233e50f8d3256, type: 2}
-      position: {x: 0, y: 0}
-      item: {fileID: 0}
-      other: {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
-    choices: []
-  - conditions: []
-    RawText: Can you see me ?
-    operations: []
-    choices: []
-  Interrupt: 0
+  EncounterTable: {fileID: 11400000, guid: 7837080536f9893459ed4d09ded9eea7, type: 2}

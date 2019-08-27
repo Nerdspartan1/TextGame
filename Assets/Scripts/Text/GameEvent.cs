@@ -116,7 +116,9 @@ public struct Operation
 				GameManager.Instance.GoToLocation(position);
 				return;
 			case OperationType.InitiateFight:
-				GameManager.Instance.InitiateFight(other, gameEvent);
+				if (other is Enemy enemy) FightManager.Instance.BeginFight(enemy, gameEvent);
+				else if (other is Team team) FightManager.Instance.BeginFight(team, gameEvent);
+				else throw new System.Exception("Bad type");
 				return;
 			case OperationType.PlayGameEvent:
 				GameManager.Instance.PlayGameEvent(gameEvent);
