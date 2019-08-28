@@ -2,28 +2,32 @@
 using UnityEngine;
 using System.Linq;
 
-public class ActionResult
-{
-	public bool Missed = false;
-	public int IntValue = 0;
-	public bool Killed = false;
-	public List<Item> Loot = new List<Item>();
-	public int XP = 0;
-}
 
 public class CombatAction
 {
+	public class Result
+	{
+		public bool Missed = false;
+		public int IntValue = 0;
+		public List<Item> Loot = new List<Item>();
+		public int XP = 0;
+	}
+
 	public enum ActionType
 	{
 		Attack,
 		UseItem,
-		Heal,
+		Ability,
 	}
 
-	public ActionType Type;
 	public Unit Actor;
-	public Unit Target;
+	public ActionType Type;
+
 	public Consumable Item;
+	public Ability Ability;
+
+	public Unit Target;
+
 
 	public void Execute(Fight fight)
 	{
@@ -46,14 +50,28 @@ public class CombatAction
 			if (!Target) return;
 			
 		}
-			
+
+		Result result;
 
 		switch (Type)
 		{
 			case ActionType.Attack:
-				Actor.Attack(Target, out ActionResult result);
+				Actor.Attack(Target, out result);
 				GameManager.Instance.CreateText($"{Actor.Name} attacks {Target.Name} for {result.IntValue} damage !");
-				if (result.Killed) GameManager.Instance.CreateText($"{Target.Name} is K.O. !");
+				break;
+			case ActionType.Ability:
+				Actor.UseAbility(Target, Ability, out result);
+				GameManager.Instance.CreateText($"{Actor.Name} uses {Ability.Name} on {Target.Name}.");
+				switch (Ability.Type)
+				{
+					case Ability.AbilityType.Heal:
+						GameManager.Instance.CreateText($"{Target.Name} restores {result.IntValue} HP!");
+						break;
+					case Ability.AbilityType.Damage:
+						GameManager.Instance.CreateText($"{Target.Name} takes {result.IntValue} damage!");
+						break;
+				}
+				if (Target.IsDead) GameManager.Instance.CreateText($"{Target.Name} is K.O. !");
 				fight.XP += result.XP;
 				fight.Loot.AddRange(result.Loot);
 				break;
@@ -61,6 +79,8 @@ public class CombatAction
 				Item.Use(Target);
 				GameManager.Instance.CreateText($"{Actor.Name} uses {Item.Name} on {Target.Name}.");
 				break;
+
+
 			default: break;
 		}
 	}

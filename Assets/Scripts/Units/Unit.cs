@@ -27,6 +27,9 @@ public abstract class Unit : ScriptableObject
 	public int Intelligence = 10;
 	public int Speed = 10;
 
+	[Header("Abilities")]
+	public List<Ability> Abilities;
+
 	[Header("Stats")]
 	public int Level = 1;
 	[SerializeField]
@@ -61,7 +64,29 @@ public abstract class Unit : ScriptableObject
 
 	public bool IsDead{ get => Hp <= 0; }
 
-	public abstract void Attack(Unit other, out ActionResult result);
+	public abstract void Attack(Unit target, out CombatAction.Result result);
+
+	public void UseAbility(Unit target, Ability ability, out CombatAction.Result result)
+	{
+		result = new CombatAction.Result();
+		switch (ability.Type)
+		{
+			case Ability.AbilityType.Heal:
+				target.Heal(ability.Value);
+				result.IntValue = ability.Value;
+				break;
+			case Ability.AbilityType.Damage:
+				target.TakeDamage(ability.Value);
+				result.IntValue = ability.Value;
+				break;
+		}
+		result.Missed = false;
+		if (target is Enemy enemy && enemy.IsDead)
+		{
+			result.XP = enemy.xpDrop;
+			result.Loot = enemy.GetLoot();
+		}
+	}
 
 	public int TakeDamage(int dmg)
 	{

@@ -72,25 +72,22 @@ public class FightManager : MonoBehaviour
 		return combatActions.OrderByDescending(action => action.Actor.Speed);
 	}
 
-	private void Describe(IEnumerable<CombatAction> actions)
-	{
-		foreach (var action in actions)
-		{
-			switch (action.Type)
-			{
-				case CombatAction.ActionType.Attack:
-					GameManager.Instance.CreateText($"{action.Actor.Name} will attack {action.Target.Name}.");
-					break;
-				case CombatAction.ActionType.Heal:
-					GameManager.Instance.CreateText($"{action.Actor.Name} will heal {action.Target.Name}.");
-					break;
-				case CombatAction.ActionType.UseItem:
-					GameManager.Instance.CreateText($"{action.Actor.Name} will use {action.Item.Name} on {action.Target.Name}.");
-					break;
-			}
-
-		}
-	}
+//	private void Describe(IEnumerable<CombatAction> actions)
+//	{
+//		foreach (var action in actions)
+//		{
+//			switch (action.Type)
+//			{
+//				case CombatAction.ActionType.Attack:
+//					GameManager.Instance.CreateText($"{action.Actor.Name} will attack {action.Target.Name}.");
+//					break;
+//				case CombatAction.ActionType.UseItem:
+//					GameManager.Instance.CreateText($"{action.Actor.Name} will use {action.Item.Name} on {action.Target.Name}.");
+//					break;
+//			}
+//
+//		}
+//	}
 
 	IEnumerator CombatLoopCoroutine()
 	{

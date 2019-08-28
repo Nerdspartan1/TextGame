@@ -73,6 +73,18 @@ public class Fight
 				prompt.Proceed();
 			});
 
+		GameManager.Instance.CreateButton("Use ability",
+			delegate
+			{
+				CurrentCombatAction = new CombatAction()
+				{
+					Actor = CurrentActor,
+					Type = CombatAction.ActionType.Ability,
+				};
+				prompt.Next = new Prompt(ChooseAbility);
+				prompt.Proceed();
+			});
+
 		GameManager.Instance.CreateButton("Use Item",
 			delegate {
 				CurrentCombatAction = new CombatAction()
@@ -91,6 +103,27 @@ public class Fight
 
 	}
 
+	public void ChooseAbility(Prompt prompt)
+	{
+		GameManager.Instance.CreateText($"Which ability should {CurrentActor.Name} use ?");
+
+		foreach (Ability ability in CurrentActor.Abilities)
+		{
+			GameManager.Instance.CreateButton(ability.Name,
+			delegate {
+				CurrentCombatAction.Ability = ability;
+				prompt.Next = new Prompt(ChooseTargets);
+				prompt.Proceed();
+			});
+		}
+
+		GameManager.Instance.CreateButton("Back",
+		delegate {
+			prompt.Next = new Prompt(ChooseAction);
+			prompt.Proceed();
+		});
+	}
+
 	public void ChooseItem(Prompt prompt)
 	{
 		GameManager.Instance.CreateText($"Which item should {CurrentActor.Name} use ?");
@@ -99,7 +132,7 @@ public class Fight
 		{
 			if (!(item is Consumable consumable)) continue;
 			if (CombatActions.Any(ca => (ca != null && ca.Item == consumable))) continue;
-			GameManager.Instance.CreateButton($"Use {consumable.Name}",
+			GameManager.Instance.CreateButton(consumable.Name,
 			delegate {
 				CurrentCombatAction.Item = consumable;
 				prompt.Next = new Prompt(ChooseTargets);
@@ -118,17 +151,20 @@ public class Fight
 	public void ChooseTargets(Prompt prompt)
 	{
 		Team parsableTeam;
-		if (CurrentCombatAction.Type == CombatAction.ActionType.UseItem &&
-			CurrentCombatAction.Item.Type == Consumable.ConsumableType.Heal)
+		if ((CurrentCombatAction.Item != null && 
+			CurrentCombatAction.Item.Type == Consumable.ConsumableType.Heal) ||
+			(CurrentCombatAction.Ability != null &&
+			CurrentCombatAction.Ability.Type == Ability.AbilityType.Heal))
 		{
 			
 			parsableTeam = GameManager.Instance.PlayerTeam;
 		}
 		else
 		{
-			GameManager.Instance.CreateText($"What should {CurrentActor.Name} attack ?");
 			parsableTeam = EnemyTeam;
 		}
+
+		GameManager.Instance.CreateText($"Who should {CurrentActor.Name} target ?");
 
 		foreach (Unit unit in parsableTeam.Where(unit => !unit.IsDead))
 		{

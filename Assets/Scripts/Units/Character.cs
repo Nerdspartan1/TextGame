@@ -12,20 +12,13 @@ public class Character : Unit
 	[Header("Weapon")]
 	public Weapon Weapon;
 
-	public override void Attack(Unit other, out ActionResult result)
+	public override void Attack(Unit target, out CombatAction.Result result)
 	{
-		result = new ActionResult();
+		result = new CombatAction.Result();
 		if (Weapon != null)
-			result.IntValue = other.TakeDamage((int)(StrengthMultiplier * (float)Weapon.GetDamage()));
+			result.IntValue = target.TakeDamage((int)(StrengthMultiplier * (float)Weapon.GetDamage()));
 		else
-			result.IntValue = other.TakeDamage(Strength);
-
-		result.Missed = false;
-		result.Killed = other.IsDead;
-		if (result.Killed) {
-			result.XP = (other as Enemy).xpDrop;
-			result.Loot = (other as Enemy).GetLoot();
-		}
+			result.IntValue = target.TakeDamage(Strength);
 	}
 
 	public void GainXP(int xp)
