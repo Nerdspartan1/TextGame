@@ -39,8 +39,6 @@ public class Fight
 	//Prompts
 	public void ChooseFightOrEscape(Prompt prompt)
 	{
-		GameManager.Instance.ClearText();
-
 		GameManager.Instance.CreateText("Should you fight, or escape ?");
 
 		GameManager.Instance.CreateButton("Fight",

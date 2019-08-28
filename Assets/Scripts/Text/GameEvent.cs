@@ -157,13 +157,17 @@ public struct Choice
 public class GameEvent : ScriptableObject
 {
 	public List<Paragraph> paragraphs  = new List<Paragraph>();
-	int currentParagraphId = 0;
 
 	private List<Operation> operationsToApply;
+	private int currentParagraphId;
 
-	public IEnumerator DisplayParagraph()
+	public IEnumerator DisplayParagraph(int paragraphId = 0)
 	{
-		Paragraph paragraph = paragraphs[currentParagraphId];
+		if (paragraphId >= paragraphs.Count) yield break; // break if current paragraph doesn't exist
+
+		currentParagraphId = paragraphId;
+
+		Paragraph paragraph = paragraphs[paragraphId];
 
 		operationsToApply = new List<Operation>();
 
@@ -188,9 +192,8 @@ public class GameEvent : ScriptableObject
 					yield break;
 			}
 		}
-
-		if (++currentParagraphId < paragraphs.Count) // display the next paragraph if there is one
-			yield return DisplayParagraph();
+		
+		yield return DisplayParagraph(++paragraphId);
 		
 	}
 

@@ -143,9 +143,12 @@ public class GameManager : MonoBehaviour {
 
 	public void PlayLocation(Location location)
 	{
-		Team enemyTeam = location.EncounterTable?.GetEncounter();
+		Encounter encounter = location.EncounterTable?.GetEncounter();
 
-		if (enemyTeam) FightManager.Instance.BeginFight(enemyTeam);
+		if (encounter != null)
+		{
+			FightManager.Instance.BeginFight(encounter.EnemyTeam, null, encounter.Introduction);
+		}
 		else PlayGameEvent(location);
 	}
 

@@ -40,4 +40,4 @@ MonoBehaviour:
       item: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}
       other: {fileID: 0}
     choices: []
-  Interrupt: 0
+  EncounterTable: {fileID: 0}

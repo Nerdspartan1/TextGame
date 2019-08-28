@@ -35,7 +35,7 @@ public class FightManager : MonoBehaviour
 		BeginFight(enemyTeam, NextEvent);
 	}
 
-	public void BeginFight(Team enemyTeam, GameEvent NextEvent = null)
+	public void BeginFight(Team enemyTeam, GameEvent NextEvent = null, string introduction = "")
 	{
 		Fight = new Fight();
 		Fight.EnemyTeam = Instantiate(enemyTeam);
@@ -51,9 +51,11 @@ public class FightManager : MonoBehaviour
 		GameManager.Instance.HideMap = true;
 		Inventory.Instance.Lock();
 
-		StartCoroutine(CombatLoopCoroutine());
+		GameManager.Instance.CreateText(introduction);
 
+		StartCoroutine(CombatLoopCoroutine());
 	}
+
 
 	private FightOutcome CheckFightOutcome()
 	{
@@ -101,6 +103,12 @@ public class FightManager : MonoBehaviour
 			int teammateId = 0;
 			while (teammateId < alivePlayers.Count()) // Fight or escape
 			{
+				yield return new Prompt(Fight.ChooseFightOrEscape).Display();
+				if (Fight.Escape)
+				{
+					outcome = FightOutcome.Escape;
+					goto FightEnd;
+				}
 				while (teammateId < alivePlayers.Count()) // Choose actions
 				{
 
@@ -115,15 +123,6 @@ public class FightManager : MonoBehaviour
 					{
 						if (teammateId == 0) break;
 						Fight.CombatActions[--teammateId] = null;
-					}
-				}
-				if(teammateId == 0) //went back all the way
-				{
-					yield return new Prompt(Fight.ChooseFightOrEscape).Display();
-					if (Fight.Escape)
-					{
-						outcome = FightOutcome.Escape;
-						goto FightEnd;
 					}
 				}
 			}

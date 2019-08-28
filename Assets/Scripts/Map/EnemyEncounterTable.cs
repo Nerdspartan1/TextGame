@@ -2,21 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class Encounter
+{
+	public Team EnemyTeam;
+	public string Introduction;
+}
+
 [CreateAssetMenu(fileName = "EncounterTable", menuName = "ScriptableObjects/EncounterTable")]
 public class EnemyEncounterTable : ScriptableObject
 {
 	[System.Serializable]
-	public class Encounter{
+	public class RandomEncounter{
 		[Range(0,1)]
 		public float occurenceProbability;
 		[Range(0,1)]
 		public float groupPresenceProbability;
+		[TextArea(2,4)]
+		public string introduction;
 		public List<Enemy> enemies;
 	}
 
-	public List<Encounter> Encounters;
+	public List<RandomEncounter> Encounters;
 
-	public Team GetEncounter()
+	public Encounter GetEncounter()
 	{
 		foreach(var enc in Encounters)
 		{
@@ -25,7 +33,7 @@ public class EnemyEncounterTable : ScriptableObject
 
 		float r = Random.Range(0f, Encounters.Count);
 		float probabilityOffset = 0f;
-		Encounter occuringEncounter = null;
+		RandomEncounter occuringEncounter = null;
 		foreach (var encounter in Encounters)
 		{
 			if (r < probabilityOffset + encounter.occurenceProbability)
@@ -46,7 +54,7 @@ public class EnemyEncounterTable : ScriptableObject
 			if (enemyTeam.Count == 0) //no empty team allowed
 				enemyTeam.Add(occuringEncounter.enemies[0]);
 
-			return enemyTeam;
+			return new Encounter() { EnemyTeam = enemyTeam, Introduction = occuringEncounter.introduction };
 		}
 	}
 }

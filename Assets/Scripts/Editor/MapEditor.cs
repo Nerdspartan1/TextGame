@@ -20,7 +20,7 @@ public class LocationEditor : GameEventEditor
 
 		base.OnInspectorGUI();
 
-		Rect rect = new Rect(0, position.y, EditorGUIUtility.currentViewWidth -40, 20);
+		Rect rect = new Rect(0, position.y, EditorGUIUtility.currentViewWidth -40, 18);
 
 		EditorGUI.BeginChangeCheck();
 
