@@ -9,6 +9,7 @@ public class Fight
 	// in
 	public Team EnemyTeam;
 	public Unit CurrentActor;
+	public List<CombatAction> CombatActions;
 
 	//out
 	public CombatAction CurrentCombatAction;
@@ -38,6 +39,8 @@ public class Fight
 	//Prompts
 	public void ChooseFightOrEscape(Prompt prompt)
 	{
+		GameManager.Instance.ClearText();
+
 		GameManager.Instance.CreateText("Should you fight, or escape ?");
 
 		GameManager.Instance.CreateButton("Fight",
@@ -56,6 +59,8 @@ public class Fight
 	public void ChooseAction(Prompt prompt)
 	{
 		CurrentCombatAction = null;
+
+		GameManager.Instance.ClearText();
 
 		GameManager.Instance.CreateText($"What should {CurrentActor.Name} do ?");
 
@@ -92,17 +97,16 @@ public class Fight
 	{
 		GameManager.Instance.CreateText($"Which item should {CurrentActor.Name} use ?");
 
-		for(int i = 0; i < Inventory.Instance.TotalItemCount; i++)
+		foreach(Item item in Inventory.Instance.Items)
 		{
-			if(Inventory.Instance[i] is Consumable consumable)
-			{
-				GameManager.Instance.CreateButton($"Use {consumable.Name}",
-				delegate {
-					CurrentCombatAction.Item = consumable;
-					prompt.Next = new Prompt(ChooseTargets);
-					prompt.Proceed();
-				});
-			}
+			if (!(item is Consumable consumable)) continue;
+			if (CombatActions.Any(ca => (ca != null && ca.Item == consumable))) continue;
+			GameManager.Instance.CreateButton($"Use {consumable.Name}",
+			delegate {
+				CurrentCombatAction.Item = consumable;
+				prompt.Next = new Prompt(ChooseTargets);
+				prompt.Proceed();
+			});
 		}
 
 		GameManager.Instance.CreateButton("Back",

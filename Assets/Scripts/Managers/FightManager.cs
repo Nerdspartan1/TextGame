@@ -97,25 +97,24 @@ public class FightManager : MonoBehaviour
 		{
 			//Player Strategy
 			var alivePlayers = GameManager.Instance.PlayerTeam.Where(unit => !unit.IsDead);
-			var combatActions = new List<CombatAction>(new CombatAction[alivePlayers.Count()]);
+			Fight.CombatActions = new List<CombatAction>(new CombatAction[alivePlayers.Count()]);
 			int teammateId = 0;
 			while (teammateId < alivePlayers.Count()) // Fight or escape
 			{
 				while (teammateId < alivePlayers.Count()) // Choose actions
 				{
-					GameManager.Instance.ClearText();
 
 					Fight.CurrentActor = alivePlayers.ElementAt(teammateId);
 					yield return new Prompt(Fight.ChooseAction).Display();
 
 					if (Fight.CurrentCombatAction != null)
 					{
-						combatActions[teammateId++] = Fight.CurrentCombatAction;
+						Fight.CombatActions[teammateId++] = Fight.CurrentCombatAction;
 					}
 					else
 					{
 						if (teammateId == 0) break;
-						combatActions[--teammateId] = null;
+						Fight.CombatActions[--teammateId] = null;
 					}
 				}
 				if(teammateId == 0) //went back all the way
@@ -132,10 +131,10 @@ public class FightManager : MonoBehaviour
 			GameManager.Instance.ClearText();
 
 			//Enemy AI strategy
-			combatActions.AddRange(Fight.MakeEnemyActions());
+			Fight.CombatActions.AddRange(Fight.MakeEnemyActions());
 
 			//Build order by speed
-			var orderedCombatActions = GetOrderedActions(combatActions);
+			var orderedCombatActions = GetOrderedActions(Fight.CombatActions);
 
 			//Fight plays
 			foreach (var action in orderedCombatActions)

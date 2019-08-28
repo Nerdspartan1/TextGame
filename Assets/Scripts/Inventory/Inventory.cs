@@ -25,6 +25,8 @@ public class Inventory : MonoBehaviour
 	[SerializeField]
 	private List<Item> items = new List<Item>();
 
+	public List<Item> Items { get => items; }
+
 	public int Size = 20; //max size of the inventory
 
 	public int TotalItemCount { get => items.Count; }
