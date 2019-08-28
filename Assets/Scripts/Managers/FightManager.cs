@@ -94,6 +94,7 @@ public class FightManager : MonoBehaviour
 		
 		yield return new Prompt(Fight.ChooseFightOrEscape).Display();
 		FightOutcome outcome = Fight.Escape ? FightOutcome.Escape : FightOutcome.NotFinished;
+		if (outcome == FightOutcome.Escape) goto FightEnd;
 
 		do
 		{

@@ -28,7 +28,7 @@ public class Fight
 			{
 				Actor = EnemyTeam[i],
 				Type = CombatAction.ActionType.Attack,
-				Target = aliveTargets.ElementAt(Random.Range(0, aliveTargets.Count()))
+				Targets = new List<Unit>() { aliveTargets.ElementAt(Random.Range(0, aliveTargets.Count())) }
 			});
 		}
 		return enemiesActions;
@@ -152,9 +152,8 @@ public class Fight
 		if ((CurrentCombatAction.Item != null && 
 			CurrentCombatAction.Item.Type == Consumable.ConsumableType.Heal) ||
 			(CurrentCombatAction.Ability != null &&
-			CurrentCombatAction.Ability.Type == Ability.AbilityType.Heal))
+			CurrentCombatAction.Ability.AbilityType == AbilityType.Heal))
 		{
-			
 			parsableTeam = GameManager.Instance.PlayerTeam;
 		}
 		else
@@ -164,16 +163,31 @@ public class Fight
 
 		GameManager.Instance.CreateText($"Who should {CurrentActor.Name} target ?");
 
-		foreach (Unit unit in parsableTeam.Where(unit => !unit.IsDead))
+		if (CurrentCombatAction.Ability != null &&
+			CurrentCombatAction.Ability.TargettingType == TargettingType.All)
 		{
-			GameManager.Instance.CreateButton(unit.Name,
+			GameManager.Instance.CreateButton("All",
 				delegate
 				{
-					//set target and go to next teammate in team
-					CurrentCombatAction.Target = unit; 
+					CurrentCombatAction.Targets = parsableTeam.Units;
 					//end the chain
 					prompt.Proceed();
 				});
+		}
+		else
+		{
+			foreach (Unit unit in parsableTeam.Where(unit => !unit.IsDead))
+			{
+				GameManager.Instance.CreateButton(unit.Name,
+					delegate
+					{
+						//set target
+						CurrentCombatAction.Targets = new List<Unit>() { unit };
+
+					//end the chain
+					prompt.Proceed();
+					});
+			}
 		}
 		GameManager.Instance.CreateButton("Back",
 			delegate {

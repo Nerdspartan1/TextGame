@@ -26,7 +26,7 @@ public class CombatAction
 	public Consumable Item;
 	public Ability Ability;
 
-	public Unit Target;
+	public List<Unit> Targets;
 
 
 	public void Execute(Fight fight)
@@ -36,52 +36,63 @@ public class CombatAction
 			Debug.LogWarning($"Cannot do action because actor '{Actor.Name}' is dead");
 			return;
 		}
-		if (Target.IsDead)
+		if (Targets.All(unit => unit.IsDead))
 		{
-			if(Target is Character)
+			if (Targets.Count == 1)
 			{
-				Target = GameManager.Instance.PlayerTeam.FirstOrDefault(unit => !unit.IsDead);
-			}
-			else if (Target is Enemy)
-			{
-				Target = fight.EnemyTeam.FirstOrDefault(unit => !unit.IsDead);
-			}
+				if (Targets[0] is Character)
+				{
+					Targets = new List<Unit>() { GameManager.Instance.PlayerTeam.FirstOrDefault(unit => !unit.IsDead) };
+				}
+				else if (Targets[0] is Enemy)
+				{
+					Targets = new List<Unit>() { fight.EnemyTeam.FirstOrDefault(unit => !unit.IsDead) };
+				}
 
-			if (!Target) return;
-			
+				if (Targets[0] == null) return;
+
+			}
+			else if (Targets.Count > 1)
+				return;
 		}
 
-		Result result;
+		Result result = new Result();
 
 		switch (Type)
 		{
 			case ActionType.Attack:
-				Actor.Attack(Target, out result);
-				GameManager.Instance.CreateText($"{Actor.Name} attacks {Target.Name} for {result.IntValue} damage !");
+				Actor.Attack(Targets[0], out result);
+				GameManager.Instance.CreateText($"{Actor.Name} attacks {Targets[0].Name} for {result.IntValue} damage !");
 				break;
 			case ActionType.Ability:
-				Actor.UseAbility(Target, Ability, out result);
-				GameManager.Instance.CreateText($"{Actor.Name} uses {Ability.Name} on {Target.Name}.");
-				switch (Ability.Type)
+				Actor.UseAbility(Targets, Ability, out result);
+				if (Targets.Count == 1)
+					GameManager.Instance.CreateText($"{Actor.Name} uses {Ability.Name} on {Targets[0].Name}.");
+				else
+					GameManager.Instance.CreateText($"{Actor.Name} uses {Ability.Name}.");
+
+				foreach(var target in Targets)
 				{
-					case Ability.AbilityType.Heal:
-						GameManager.Instance.CreateText($"{Target.Name} restores {result.IntValue} HP!");
-						break;
-					case Ability.AbilityType.Damage:
-						GameManager.Instance.CreateText($"{Target.Name} takes {result.IntValue} damage!");
-						break;
+					switch (Ability.AbilityType)
+					{
+						case AbilityType.Heal:
+							GameManager.Instance.CreateText($"{target.Name} restores {result.IntValue} HP!");
+							break;
+						case AbilityType.Damage:
+							GameManager.Instance.CreateText($"{target.Name} takes {result.IntValue} damage!");
+							break;
+					}
+					if (target.IsDead) GameManager.Instance.CreateText($"{target.Name} is K.O. !");
 				}
-				if (Target.IsDead) GameManager.Instance.CreateText($"{Target.Name} is K.O. !");
-				fight.XP += result.XP;
-				fight.Loot.AddRange(result.Loot);
 				break;
 			case ActionType.UseItem:
-				Item.Use(Target);
-				GameManager.Instance.CreateText($"{Actor.Name} uses {Item.Name} on {Target.Name}.");
+				Item.Use(Targets[0]);
+				GameManager.Instance.CreateText($"{Actor.Name} uses {Item.Name} on {Targets[0].Name}.");
 				break;
-
-
 			default: break;
 		}
+
+		fight.XP += result.XP;
+		fight.Loot.AddRange(result.Loot);
 	}
 }

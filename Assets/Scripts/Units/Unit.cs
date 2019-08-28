@@ -66,25 +66,33 @@ public abstract class Unit : ScriptableObject
 
 	public abstract void Attack(Unit target, out CombatAction.Result result);
 
-	public void UseAbility(Unit target, Ability ability, out CombatAction.Result result)
+	public void UseAbility(IEnumerable<Unit> targets, Ability ability, out CombatAction.Result result)
 	{
 		result = new CombatAction.Result();
-		switch (ability.Type)
+		result.XP = 0;
+		result.Loot = new List<Item>();
+		foreach (var target in targets)
 		{
-			case Ability.AbilityType.Heal:
-				target.Heal(ability.Value);
-				result.IntValue = ability.Value;
-				break;
-			case Ability.AbilityType.Damage:
-				target.TakeDamage(ability.Value);
-				result.IntValue = ability.Value;
-				break;
-		}
-		result.Missed = false;
-		if (target is Enemy enemy && enemy.IsDead)
-		{
-			result.XP = enemy.xpDrop;
-			result.Loot = enemy.GetLoot();
+			switch (ability.AbilityType)
+			{
+				case AbilityType.Heal:
+					target.Heal(ability.Value);
+					result.IntValue = ability.Value;
+					break;
+				case AbilityType.Damage:
+					target.TakeDamage(ability.Value);
+					result.IntValue = ability.Value;
+					break;
+			}
+			
+			result.Missed = false;
+			if (target is Enemy enemy && enemy.IsDead)
+			{
+				result.XP = enemy.xpDrop;
+				result.Loot = enemy.GetLoot();
+			}
+
+			if (ability.TargettingType == TargettingType.Single) break;
 		}
 	}
 
@@ -94,6 +102,7 @@ public abstract class Unit : ScriptableObject
 
 		if(hp <= 0)
 			hp = 0;
+
 
 		return dmg;
 	}
