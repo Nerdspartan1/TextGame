@@ -91,7 +91,10 @@ public class FightManager : MonoBehaviour
 
 	IEnumerator CombatLoopCoroutine()
 	{
-		FightOutcome outcome = FightOutcome.NotFinished;
+		
+		yield return new Prompt(Fight.ChooseFightOrEscape).Display();
+		FightOutcome outcome = Fight.Escape ? FightOutcome.Escape : FightOutcome.NotFinished;
+
 		do
 		{
 			//Player Strategy
@@ -100,14 +103,9 @@ public class FightManager : MonoBehaviour
 			int teammateId = 0;
 			while (teammateId < alivePlayers.Count()) // Fight or escape
 			{
-				yield return new Prompt(Fight.ChooseFightOrEscape).Display();
-				if (Fight.Escape)
-				{
-					outcome = FightOutcome.Escape;
-					goto FightEnd;
-				}
 				while (teammateId < alivePlayers.Count()) // Choose actions
 				{
+					GameManager.Instance.ClearText();
 
 					Fight.CurrentActor = alivePlayers.ElementAt(teammateId);
 					yield return new Prompt(Fight.ChooseAction).Display();
@@ -120,6 +118,17 @@ public class FightManager : MonoBehaviour
 					{
 						if (teammateId == 0) break;
 						Fight.CombatActions[--teammateId] = null;
+					}
+				}
+				if (teammateId == 0)
+				{
+					GameManager.Instance.ClearText();
+
+					yield return new Prompt(Fight.ChooseFightOrEscape).Display();
+					if (Fight.Escape)
+					{
+						outcome = FightOutcome.Escape;
+						goto FightEnd;
 					}
 				}
 			}

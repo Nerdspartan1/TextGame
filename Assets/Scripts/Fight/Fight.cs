@@ -58,8 +58,6 @@ public class Fight
 	{
 		CurrentCombatAction = null;
 
-		GameManager.Instance.ClearText();
-
 		GameManager.Instance.CreateText($"What should {CurrentActor.Name} do ?");
 
 		GameManager.Instance.CreateButton("Attack",
