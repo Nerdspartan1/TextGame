@@ -99,35 +99,44 @@ public class OperationDrawer : PropertyDrawer
 		int indent = EditorGUI.indentLevel;
 		EditorGUI.indentLevel = 0;
 
-		Rect keyRect = new Rect(position.x, position.y, 100, K.defaultPropHeight);
-		Rect operationRect = new Rect(position.x + 110, position.y, 100, K.defaultPropHeight);
-		Rect valueRect = new Rect(position.x + 220, position.y, 100, K.defaultPropHeight);
+		Rect rect1 = new Rect(position.x, position.y, 100, K.defaultPropHeight);
+		Rect rect2 = new Rect(position.x + 110, position.y, 100, K.defaultPropHeight);
+		Rect rect3 = new Rect(position.x + 220, position.y, 100, K.defaultPropHeight);
 
 		SerializedProperty operationType = property.FindPropertyRelative(nameof(Operation.operationType));
 
 		switch ((OperationType)operationType.intValue)
 		{
+			case OperationType.None:
+				EditorGUI.PropertyField(rect1, operationType, GUIContent.none);
+				break;
 			case OperationType.Set:
 			case OperationType.Add:
-				EditorGUI.PropertyField(keyRect, property.FindPropertyRelative(nameof(Operation.key)), GUIContent.none);
+				EditorGUI.PropertyField(rect1, property.FindPropertyRelative(nameof(Operation.key)), GUIContent.none);
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.value)), GUIContent.none);
 				break;
-		}
-		EditorGUI.PropertyField(operationRect, operationType, GUIContent.none);
-		switch ((OperationType)operationType.intValue)
-		{
-			case OperationType.Set:
-			case OperationType.Add:
-				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative(nameof(Operation.value)), GUIContent.none);
-				break;
-			case OperationType.GoToMap:
-			case OperationType.InitiateFight:
 			case OperationType.PlayGameEvent:
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.gameEvent)), GUIContent.none);
+				break;
 			case OperationType.AddItem:
 			case OperationType.RemoveItem:
-				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative(nameof(Operation.reference)), GUIContent.none);
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.item)), GUIContent.none);
+				break;
+			case OperationType.GoToMap:
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.other)), GUIContent.none);
 				break;
 			case OperationType.GoToCell:
-				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative(nameof(Operation.position)), GUIContent.none);
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.position)), GUIContent.none);
+				break;
+			case OperationType.InitiateFight:
+				EditorGUI.PropertyField(rect1, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect2, property.FindPropertyRelative(nameof(Operation.other)), GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.gameEvent)), GUIContent.none);
 				break;
 		}
 		
@@ -156,8 +165,17 @@ public class ConditionDrawer : PropertyDrawer
 
 		SerializedProperty conditionType = property.FindPropertyRelative(nameof(Condition.conditionType));
 
-		EditorGUI.PropertyField(keyRect, property.FindPropertyRelative(nameof(Condition.key)), GUIContent.none);
+		switch ((ConditionType)conditionType.intValue)
+		{
+			case ConditionType.RandomChance:
+				break;
+			default:
+				EditorGUI.PropertyField(keyRect, property.FindPropertyRelative(nameof(Condition.key)), GUIContent.none);
+				break;
+		}
+		
 		EditorGUI.PropertyField(conditionRect, conditionType, GUIContent.none);
+
 		switch ((ConditionType)conditionType.intValue)
 		{
 			case ConditionType.Exists:
@@ -217,15 +235,15 @@ public class ChoiceDrawer : PropertyDrawer
 	}
 }
 
-[CustomPropertyDrawer(typeof(GameEvent.Paragraph))]
-public class GameEventParagraphDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(Paragraph))]
+public class ParagraphDrawer : PropertyDrawer
 {
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
 
-		SerializedProperty conditions = property.FindPropertyRelative(nameof(GameEvent.Paragraph.conditions));
-		SerializedProperty operations = property.FindPropertyRelative(nameof(GameEvent.Paragraph.operations));
-		SerializedProperty choices = property.FindPropertyRelative(nameof(GameEvent.Paragraph.choices));
+		SerializedProperty conditions = property.FindPropertyRelative(nameof(Paragraph.conditions));
+		SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
+		SerializedProperty choices = property.FindPropertyRelative(nameof(Paragraph.choices));
 
 		if (!property.isExpanded) return K.defaultPropHeight;
 		return
@@ -257,13 +275,13 @@ public class GameEventParagraphDrawer : PropertyDrawer
 		Rect paragraphFoldoutRect = new Rect(position.x, position.y, 20, K.defaultPropHeight);
 		property.isExpanded = EditorGUI.Foldout(paragraphFoldoutRect, property.isExpanded, GUIContent.none);
 		Rect titleRect = new Rect(position.x, position.y, position.width, K.defaultPropHeight);
-		EditorGUI.LabelField(titleRect, new GUIContent(property.FindPropertyRelative(nameof(GameEvent.Paragraph.RawText)).stringValue), EditorStyles.boldLabel);
+		EditorGUI.LabelField(titleRect, new GUIContent(property.FindPropertyRelative(nameof(Paragraph.RawText)).stringValue), EditorStyles.boldLabel);
 		position.y += 20;
 
 		if (property.isExpanded)
 		{
 
-			SerializedProperty conditions = property.FindPropertyRelative(nameof(GameEvent.Paragraph.conditions));
+			SerializedProperty conditions = property.FindPropertyRelative(nameof(Paragraph.conditions));
 			//conditions.isExpanded = EditorGUILayout.Foldout(conditions.isExpanded, new GUIContent("Conditions"));
 			Rect foldoutRect = new Rect(position.x, position.y, position.width, 20);
 			conditions.isExpanded = EditorGUI.Foldout(foldoutRect, conditions.isExpanded, new GUIContent($"Conditions ({conditions.arraySize})"));
@@ -275,10 +293,10 @@ public class GameEventParagraphDrawer : PropertyDrawer
 			}
 
 
-			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 100), property.FindPropertyRelative(nameof(GameEvent.Paragraph.RawText)));
+			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 100), property.FindPropertyRelative(nameof(Paragraph.RawText)));
 			position.y += 100;
 
-			SerializedProperty operations = property.FindPropertyRelative(nameof(GameEvent.Paragraph.operations));
+			SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
 			foldoutRect = new Rect(position.x, position.y, position.width, 20);
 			operations.isExpanded = EditorGUI.Foldout(foldoutRect, operations.isExpanded, new GUIContent($"Operations ({operations.arraySize})"));
 			position.y += 20;
@@ -286,7 +304,7 @@ public class GameEventParagraphDrawer : PropertyDrawer
 			{
 				position.y += EditorUtils.PropertyList(position, operations).height;
 			}
-			SerializedProperty choices = property.FindPropertyRelative(nameof(GameEvent.Paragraph.choices));
+			SerializedProperty choices = property.FindPropertyRelative(nameof(Paragraph.choices));
 			foldoutRect = new Rect(position.x, position.y, position.width, 20);
 			choices.isExpanded = EditorGUI.Foldout(foldoutRect, choices.isExpanded, new GUIContent($"Choices ({choices.arraySize})"));
 			position.y += 20;
@@ -305,71 +323,14 @@ public class GameEventParagraphDrawer : PropertyDrawer
 	}
 }
 
-[CustomPropertyDrawer(typeof(Paragraph))]
-public class ParagraphDrawer : PropertyDrawer
-{
-	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-	{
-
-		SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
-
-		if (!property.isExpanded) return K.defaultPropHeight;
-		return
-			20 + //title
-			100 + //text
-			20 + //foldout
-			(operations.isExpanded ?
-				EditorUtils.GetPropertyListHeight(operations) :
-				0);
-
-	}
-
-	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-	{
-		EditorGUI.BeginProperty(position, label, property);
-
-		position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), GUIContent.none);
-
-		float top = position.y;
-
-		Rect paragraphFoldoutRect = new Rect(position.x, position.y, 20, K.defaultPropHeight);
-		property.isExpanded = EditorGUI.Foldout(paragraphFoldoutRect, property.isExpanded, GUIContent.none);
-		Rect titleRect = new Rect(position.x, position.y, position.width, K.defaultPropHeight);
-		EditorGUI.LabelField(titleRect, new GUIContent(property.FindPropertyRelative(nameof(Paragraph.RawText)).stringValue), EditorStyles.boldLabel);
-		position.y += 20;
-
-		if (property.isExpanded)
-		{
-
-			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 100), property.FindPropertyRelative(nameof(Paragraph.RawText)));
-			position.y += 100;
-
-			SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
-			Rect foldoutRect = new Rect(position.x, position.y, position.width, 20);
-			operations.isExpanded = EditorGUI.Foldout(foldoutRect, operations.isExpanded, new GUIContent($"Operations ({operations.arraySize})"));
-			position.y += 20;
-			if (operations.isExpanded)
-			{
-				position.y += EditorUtils.PropertyList(position, operations).height;
-			}
-
-		}
-		Color defaultColor = GUI.color;
-		GUI.color = new Color(1.0f, 1.0f, 0.9f, 0.3f);
-		GUI.Box(new Rect(position.x, top, position.width, position.y - top), GUIContent.none);
-		GUI.color = defaultColor;
-
-		EditorGUI.EndProperty();
-	}
-}
-
 [CustomEditor(typeof(GameEvent))]
 public class GameEventEditor : Editor
 {
 	SerializedProperty paragraphs;
 	public Vector2 scrollPosition = Vector2.zero;
+	protected Rect position;
 
-	private void OnEnable()
+	public virtual void OnEnable()
 	{
 		paragraphs = serializedObject.FindProperty(nameof(GameEvent.paragraphs));
 	}
@@ -380,8 +341,8 @@ public class GameEventEditor : Editor
 
 		float totalHeight = EditorUtils.GetPropertyListHeight(paragraphs)+20;
 		
-		Rect position   = new Rect(0, 0, EditorGUIUtility.currentViewWidth-20, totalHeight);
-		Rect scrollRect = new Rect(0, 0, EditorGUIUtility.currentViewWidth, 600);
+		position   = new Rect(0, 0, EditorGUIUtility.currentViewWidth-20, totalHeight);
+		Rect scrollRect = new Rect(0, 0, EditorGUIUtility.currentViewWidth, 620);
 		Rect scrollView = new Rect(0, 0, EditorGUIUtility.currentViewWidth-20, totalHeight);
 
 		scrollPosition = GUI.BeginScrollView(scrollRect, scrollPosition, scrollView);

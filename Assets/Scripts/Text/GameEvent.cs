@@ -4,7 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public enum ConditionType { Exists, DoesNotExist, IsEqualTo, IsNotEqualTo, IsGreaterThan }
+public enum ConditionType {
+	Exists,
+	DoesNotExist,
+	IsEqualTo,
+	IsNotEqualTo,
+	IsGreaterThan,
+	IsLessThan,
+	RandomChance //random chance between 0 (never) and 1 (always)
+}
 public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem}
 
 [System.Serializable]
@@ -21,44 +29,54 @@ public struct Condition{
 
 		bool keyExists = Values.ContainsKey(key);
 
-		if		(conditionType == ConditionType.Exists)		  return keyExists;
-		else if (conditionType == ConditionType.DoesNotExist) return !keyExists;
-
-		//key must be contained in Values
-		if (!keyExists)
+		switch (conditionType)
 		{
-			Debug.LogError("[GameEvent]" + key + " key is unknown");
-			return false;
+			case ConditionType.Exists: return keyExists;
+			case ConditionType.DoesNotExist: return !keyExists;
 		}
 
-		float value1;
-		if(!Values.GetValueAsFloat(key, out value1))
+		float v1 = 0;
+		if (conditionType != ConditionType.RandomChance)
 		{
-			Debug.LogError("[GameEvent]" + key + " key is not float");
-			return false;
-		}
-
-		//value must have a numeric value or be a key to a value
-		float value2;
-		if (!Values.GetValueAsFloat(value, out value2)) // is it a float ?
-		{
-			if (!Values.ContainsKey(value)) //is it a key to a value ?
+			//key must be contained in Values
+			if (!keyExists)
 			{
-				//if both checks failed, error
-				Debug.LogError("[GameEvent]" + value + " key is unknown");
+				Debug.LogError($"'{key}' is unknown");
+				return false;
+			}
+
+			//key must be a key to a float
+			if (!Values.GetValueAsFloat(key, out v1))
+			{
+				Debug.LogError($"'{key}' is not a float");
 				return false;
 			}
 		}
 
+		//value must be a float or be a key to a float
+		float v2;
+		if (!float.TryParse(value, out v2)) // is it a float ?
+		{
+			if (!Values.GetValueAsFloat(value, out v2)) //is it a key to a float ?
+			{
+				//if both checks failed, error
+				Debug.LogError($"'{value}' is unknown");
+				return false;
+			}
+		}
 
 		switch (conditionType)
 		{
 			case ConditionType.IsEqualTo:
-				return (value1 == value2);
+				return (v1 == v2);
 			case ConditionType.IsNotEqualTo:
-				return (value1 != value2);
+				return (v1 != v2);
 			case ConditionType.IsGreaterThan:
-				return (value1 > value2);
+				return (v1 > v2);
+			case ConditionType.IsLessThan:
+				return (v1 < v2);
+			case ConditionType.RandomChance:
+				return (Random.value < v2);
 			default:
 				Debug.LogError("[Operation] Condition type not supported");
 				return false;
@@ -82,62 +100,48 @@ public struct Operation
 	public string key;
 	public OperationType operationType;
 	public string value;
-	public Object reference;
+	public GameEvent gameEvent;
 	public Vector2Int position;
+	public Item item;
+	public Object other;
 
 	public void Apply()
 	{
 		switch (operationType)
 		{
 			case OperationType.GoToMap:
-				GameManager.Instance.ExitGameEvent();
-				GameManager.Instance.GoToMap((Map)reference);
+				GameManager.Instance.GoToMap((Map)other);
 				return;
 			case OperationType.GoToCell:
-				GameManager.Instance.ExitGameEvent();
 				GameManager.Instance.GoToLocation(position);
 				return;
 			case OperationType.InitiateFight:
-				GameManager.Instance.ExitGameEvent();
-				if(reference is Team)
-					FightManager.Instance.BeginFight((Team)reference);
-				else
-					FightManager.Instance.BeginFight((Enemy)reference);
+				if (other is Enemy enemy) FightManager.Instance.BeginFight(enemy, gameEvent);
+				else if (other is Team team) FightManager.Instance.BeginFight(team, gameEvent);
+				else throw new System.Exception("Bad type");
 				return;
 			case OperationType.PlayGameEvent:
-				GameManager.Instance.ExitGameEvent();
-				GameManager.Instance.PlayGameEvent((GameEvent)reference);
+				GameManager.Instance.PlayGameEvent(gameEvent);
 				return;
 			case OperationType.Set:
 				Values.SetValueAsString(key, value.ToString());
 				return;
 			case OperationType.Add:
 				float v1, v2;
-				if (!Values.GetValueAsFloat(key, out v1)) throw new System.Exception($"[Operation] Cannot add : key {key} is not a float");
-				if (!float.TryParse(value, out v2)) throw new System.Exception($"[Operation] Cannot add : value {value} is not a float");
+				Values.GetValueAsFloat(key, out v1); //0 if key does not exist
+				if (!float.TryParse(value, out v2)) throw new System.Exception($"[Operation] Cannot add : '{value}' is not a float");
 				Values.SetValueAsFloat(key, v1 + v2);
 				return;
 			case OperationType.AddItem:
-				Inventory.Instance.Add((Item)reference);
+				Inventory.Instance.Add(item);
 				return;
 			case OperationType.RemoveItem:
-				Inventory.Instance.Remove((Item)reference);
+				Inventory.Instance.Remove(item);
 				return;
 			default:
 				throw new System.Exception("[Operation] Operation type not supported");
 		}
-
-
 	}
-
-	public static void ApplyAll(IEnumerable<Operation> operations)
-	{
-		foreach(Operation operation in operations)
-		{
-			operation.Apply();
-		}
-	}
-
 }
 
 [System.Serializable]
@@ -152,37 +156,69 @@ public struct Choice
 [CreateAssetMenu(fileName = "GameEvent",menuName = "ScriptableObjects/GameEvent")]
 public class GameEvent : ScriptableObject
 {
-	[System.Serializable]
-	public class Paragraph : global::Paragraph
-	{
-		public List<Condition> conditions;
-		public List<Choice> choices;
-
-	}
-
 	public List<Paragraph> paragraphs  = new List<Paragraph>();
-	int currentParagraphId;
 
-	public void Init()
+	private List<Operation> operationsToApply;
+	private int currentParagraphId;
+
+	public IEnumerator DisplayParagraph(int paragraphId = 0)
 	{
-		currentParagraphId = -1;
+		if (paragraphId >= paragraphs.Count) yield break; // break if current paragraph doesn't exist
+
+		currentParagraphId = paragraphId;
+
+		Paragraph paragraph = paragraphs[paragraphId];
+
+		operationsToApply = new List<Operation>();
+
+		if (Condition.AreVerified(paragraph.conditions))
+		{
+			//instantiate text
+			GameManager.Instance.CreateText(paragraph.Text);
+
+			yield return new Prompt(DisplayChoices).Display();
+
+			operationsToApply.AddRange(paragraph.operations);
+				
+		}
+
+		foreach(var operation in operationsToApply)
+		{
+			operation.Apply();
+			switch (operation.operationType)
+			{
+				case OperationType.InitiateFight:
+				case OperationType.PlayGameEvent:
+					yield break;
+			}
+		}
+		
+		yield return DisplayParagraph(++paragraphId);
+		
 	}
 
-	public Paragraph GetNextParagraph()
+	public void DisplayChoices(Prompt prompt)
 	{
-		while (currentParagraphId < paragraphs.Count-1)
+		bool noChoice = true;
+		//instantiate choices
+		foreach (Choice choice in paragraphs[currentParagraphId].choices)
 		{
-			currentParagraphId++;
-			Paragraph paragraph = paragraphs[currentParagraphId];
-			
+			if (!Condition.AreVerified(choice.conditions)) continue;
 
-			if (Condition.AreVerified(paragraph.conditions))
+			GameManager.Instance.CreateButton(choice.text, delegate
 			{
-				return paragraph;
-			}
-			
+				operationsToApply.AddRange(choice.operations);
+				prompt.Proceed();
+			});
+			noChoice = false;
 		}
-		return null;
+		if(noChoice)
+		{
+			//if not location and last paragraph, prompt button before returning to map
+			if (!(this is Location) && currentParagraphId == paragraphs.Count - 1)
+				prompt.Next = new Prompt(Prompt.PressOKToContinue); 
+			prompt.Proceed();
+		}
 	}
 
 }

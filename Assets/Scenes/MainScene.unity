@@ -1305,7 +1305,7 @@ MonoBehaviour:
   m_Spacing: 24
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -1760,7 +1760,7 @@ PrefabInstance:
     - target: {fileID: 224273885776570538, guid: 13a4866a2979b75448b15b9733b51689,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 359.15
+      value: 364.54547
       objectReference: {fileID: 0}
     - target: {fileID: 224273885776570538, guid: 13a4866a2979b75448b15b9733b51689,
         type: 3}
@@ -1770,7 +1770,7 @@ PrefabInstance:
     - target: {fileID: 224273885776570538, guid: 13a4866a2979b75448b15b9733b51689,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 718.3
+      value: 729.09094
       objectReference: {fileID: 0}
     - target: {fileID: 224273885776570538, guid: 13a4866a2979b75448b15b9733b51689,
         type: 3}
@@ -4945,6 +4945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyTeamPanel: {fileID: 545817102}
+  NextEvent: {fileID: 0}
 --- !u!114 &1700758566
 MonoBehaviour:
   m_ObjectHideFlags: 0

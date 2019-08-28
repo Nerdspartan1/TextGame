@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: RareEvent
   m_EditorClassIdentifier: 
   paragraphs:
-  - RawText: A wolf jumps out of the bushes !
+  - conditions: []
+    RawText: A wolf jumps out of the bushes !
     operations: []
-    conditions: []
     choices:
     - conditions: []
       text: Let's fight !
@@ -23,5 +23,8 @@ MonoBehaviour:
       - key: 
         operationType: 5
         value: 
-        reference: {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
+        gameEvent: {fileID: 0}
         position: {x: 0, y: 0}
+        item: {fileID: 0}
+        other: {fileID: 0}
+  Interrupt: 0

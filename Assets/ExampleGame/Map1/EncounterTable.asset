@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023d7c1b3cd018d4da25a7cd925ddabc, type: 3}
+  m_Name: EncounterTable
+  m_EditorClassIdentifier: 
+  Encounters:
+  - occurenceProbability: 0.299
+    groupPresenceProbability: 0.514
+    introduction: A pack of rabid creatures advances threateningly towards you.
+    enemies:
+    - {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
+    - {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}
+    - {fileID: 11400000, guid: d4ee3f9948f8f3a4da05a480575f75db, type: 2}
+    - {fileID: 11400000, guid: d4ee3f9948f8f3a4da05a480575f75db, type: 2}

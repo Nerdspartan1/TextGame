@@ -17,7 +17,6 @@ public class Prompt
 
 	IEnumerator WaitForInput()
 	{
-		waitForInput = true;
 		while (waitForInput) yield return null;
 	}
 
@@ -28,12 +27,12 @@ public class Prompt
 
 	public IEnumerator Display()
 	{
+		waitForInput = true;
+
 		//do thing
 		Method.Invoke(this);
 
 		yield return WaitForInput();
-
-		GameManager.Instance.ClearButtons();
 
 		if (Next == null) //end of prompt chain
 			yield break;

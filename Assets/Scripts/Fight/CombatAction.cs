@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ActionResult
 {
@@ -26,12 +27,27 @@ public class CombatAction
 
 	public void Execute(Fight fight)
 	{
-		if (Actor.IsDead || Target.IsDead)
+		if (Actor.IsDead)
 		{
-			if (Actor.IsDead) Debug.Log($"{Actor.Name} is dead");
-			if (Target.IsDead) Debug.Log($"{Target.Name} is dead");
+			Debug.LogWarning($"Cannot do action because actor '{Actor.Name}' is dead");
 			return;
 		}
+		if (Target.IsDead)
+		{
+			if(Target is Character)
+			{
+				Target = GameManager.Instance.PlayerTeam.FirstOrDefault(unit => !unit.IsDead);
+			}
+			else if (Target is Enemy)
+			{
+				Target = fight.EnemyTeam.FirstOrDefault(unit => !unit.IsDead);
+			}
+
+			if (!Target) return;
+			
+		}
+			
+
 		switch (Type)
 		{
 			case ActionType.Attack:

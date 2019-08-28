@@ -95,6 +95,8 @@ public class GameManager : MonoBehaviour {
 	public GameEvent StartingGameEvent;
 	[HideInInspector]
 	public GameEvent CurrentGameEvent;
+	[HideInInspector]
+	private bool onMap;
 	public Map StartingMap;
 	[HideInInspector]
 	public Map CurrentMap;
@@ -124,85 +126,39 @@ public class GameManager : MonoBehaviour {
 
 	private void Update()
 	{
-		if (CurrentGameEvent != null && Input.GetButtonDown("Fire1"))
-		{
-			if (buttonsDisplayed == 0)
-			{
-				DisplayNextParagraphInGameEvent();
-			}
-		}
 		TeamPanel.UpdateSlots();
 	}
 
 	#region GameEvent handling
-	public void PlayGameEvent(GameEvent ge)
+	public void PlayGameEvent(GameEvent gameEvent)
 	{
-		if (ge == null) { Debug.LogWarning("(PlayGameEvent) GameEvent provided is null"); return; }
-		if (CurrentGameEvent != null) Debug.LogWarning("(PlayGameEvent) Playing a GameEvent while already playing one");
-
-		CurrentGameEvent = ge;
-		CurrentGameEvent.Init();
+		CurrentGameEvent = Instantiate(gameEvent);
 
 		ClearText();
 		ClearButtons();
-		HideMap = true;
+		HideMap = !(gameEvent is Location);
 
-		DisplayNextParagraphInGameEvent();
+		StartCoroutine(DisplayParagraphs());
 	}
 
-	public void DisplayParagraph(Paragraph paragraph)
+	public void PlayLocation(Location location)
 	{
-		if (paragraph == null) return;
+		Encounter encounter = location.EncounterTable?.GetEncounter();
 
-		//instantiate text
-		CreateText(paragraph.Text);
-
-		if (paragraph is GameEvent.Paragraph gep)
+		if (encounter != null)
 		{
-			//instantiate choices
-			foreach (Choice choice in gep.choices)
-			{
-				if (!Condition.AreVerified(choice.conditions)) continue;
-
-				CreateButton(choice.text, delegate {
-					Operation.ApplyAll(choice.operations);
-					DisplayNextParagraphInGameEvent();
-				});
-			}
-
-			if(gep.choices.Count == 0)
-			{
-				CreateButton("Continue...", delegate {
-					DisplayNextParagraphInGameEvent();
-				});
-			}
+			FightManager.Instance.BeginFight(encounter.EnemyTeam, null, encounter.Introduction);
 		}
-
-		//apply operations
-		paragraph.ApplyOperations();
+		else PlayGameEvent(location);
 	}
 
-	public void DisplayNextParagraphInGameEvent()
+	private IEnumerator DisplayParagraphs()
 	{
-		if (CurrentGameEvent == null) return;
+		yield return CurrentGameEvent.DisplayParagraph();
 
-		Paragraph p = CurrentGameEvent.GetNextParagraph();
-		if (p == null) //end of game event, back to map
-		{
-			ExitGameEvent();
-			ClearText();
-			HideMap = false;
-			GoToLocation(CurrentLocation, true);
-			return;
-		}
-
-		DisplayParagraph(p);
+		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
 	}
 
-	public void ExitGameEvent()
-	{
-		CurrentGameEvent = null;
-	}
 	#endregion
 
 	#region Map handling
@@ -226,7 +182,11 @@ public class GameManager : MonoBehaviour {
 					GameObject go = Instantiate(LocationPrefab, mapPanel);
 					go.transform.localPosition = new Vector3(cellWidth * u, -v * cellHeight, 0);
 					Vector2Int pos = new Vector2Int(u, v);
-					go.GetComponent<Button>().onClick.AddListener(delegate { GoToLocation(pos); });
+					go.GetComponent<Button>().onClick.AddListener(
+						delegate {
+							GoToLocation(pos);
+							PlayLocation(CurrentMap[pos]);
+						});
 					MapCells.Add(pos, go.GetComponent<Button>());
 				}
 			}
@@ -261,15 +221,6 @@ public class GameManager : MonoBehaviour {
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.right, out b)) b.interactable = true;
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.down, out b)) b.interactable = true;
 		if (MapCells.TryGetValue(CurrentLocation + Vector2Int.left, out b)) b.interactable = true;
-
-
-		//update text
-		ClearText();
-		DisplayParagraph(location.description);
-
-		//apply random operations
-		if (!ignoreRandomOperations)
-			Operation.ApplyAll(location.GetRandomOperation());
 
 	}
 	#endregion
@@ -361,11 +312,6 @@ public class GameManager : MonoBehaviour {
 		ContentPanel.localScale = Vector3.one;
 
 		willRefreshContent = false;
-	}
-
-	public void UpdateTeamPanel()
-	{
-		
 	}
 
 	#endregion

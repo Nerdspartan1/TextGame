@@ -3,29 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomPropertyDrawer(typeof(Location.RandomOperation))]
-public class RandomOperationDrawer : PropertyDrawer
+[CustomEditor(typeof(Location))]
+public class LocationEditor : GameEventEditor
 {
-	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+
+	SerializedProperty encounterTable;
+
+	public override void OnEnable()
 	{
-		return 18 + EditorUtils.GetPropertyListHeight(property.FindPropertyRelative(nameof(Location.RandomOperation.operations)));
+		base.OnEnable();
+		encounterTable = serializedObject.FindProperty(nameof(Location.EncounterTable));
 	}
 
-	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+	public override void OnInspectorGUI()
 	{
-		EditorGUI.BeginProperty(position, label, property);
 
-		position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), GUIContent.none);
+		base.OnInspectorGUI();
 
-		SerializedProperty operations = property.FindPropertyRelative(nameof(Location.RandomOperation.operations));
-		SerializedProperty probability = property.FindPropertyRelative(nameof(Location.RandomOperation.probability));
+		Rect rect = new Rect(0, position.y, EditorGUIUtility.currentViewWidth -40, 18);
 
-		probability.floatValue = EditorGUI.Slider(new Rect(position.x, position.y, position.width, 16), "Probability", probability.floatValue, 0, 1);
-		position.y += 18;
+		EditorGUI.BeginChangeCheck();
 
-		position.y += EditorUtils.PropertyList(position, operations).height;
+		EditorGUI.PropertyField(rect, encounterTable);
 
-		EditorGUI.EndProperty();
+		if (EditorGUI.EndChangeCheck())
+		{
+			serializedObject.ApplyModifiedProperties();
+		}
 	}
 }
 
