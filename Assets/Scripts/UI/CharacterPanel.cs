@@ -59,8 +59,8 @@ public class CharacterPanel : MonoBehaviour
 		HealthBar.MaxValue = Unit.MaxHp;
 		HealthBar.UpdateBar();
 
-		FocusBar.Value = 0;
-		FocusBar.MaxValue = 0;
+		FocusBar.Value = Unit.Focus;
+		FocusBar.MaxValue = Unit.MaxFocus;
 		FocusBar.UpdateBar();
 
 		if (character)

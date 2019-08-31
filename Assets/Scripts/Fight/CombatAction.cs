@@ -7,8 +7,10 @@ public class CombatAction
 {
 	public class Result
 	{
+		//action
 		public bool Missed = false;
 		public int IntValue = 0;
+		//rewards
 		public List<Item> Loot = new List<Item>();
 		public int XP = 0;
 	}
@@ -82,7 +84,6 @@ public class CombatAction
 							GameManager.Instance.CreateText($"{target.Name} takes {result.IntValue} damage!");
 							break;
 					}
-					if (target.IsDead) GameManager.Instance.CreateText($"{target.Name} is K.O. !");
 				}
 				break;
 			case ActionType.UseItem:
@@ -90,6 +91,19 @@ public class CombatAction
 				GameManager.Instance.CreateText($"{Actor.Name} uses {Item.Name} on {Targets[0].Name}.");
 				break;
 			default: break;
+		}
+
+		foreach (var target in Targets)
+		{
+			if (target.IsDead)
+			{
+				GameManager.Instance.CreateText($"{target.Name} is K.O. !");
+				if (target is Enemy enemy)
+				{
+					result.XP += enemy.xpDrop;
+					result.Loot.AddRange(enemy.GetLoot());
+				}
+			}
 		}
 
 		fight.XP += result.XP;

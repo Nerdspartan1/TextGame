@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a6894d683403d54aa9af302e10c40d8, type: 3}
-  m_Name: Grenage
+  m_Name: Grenade
   m_EditorClassIdentifier: 
   Name: Grenade
   Value: 60
+  FocusCost: 20
   AbilityType: 1
   TargettingType: 1

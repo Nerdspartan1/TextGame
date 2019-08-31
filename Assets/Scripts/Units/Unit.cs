@@ -52,14 +52,37 @@ public abstract class Unit : ScriptableObject
 			if (hp > maxHp) Debug.LogWarning("Hp is over MaxHp");
 		}
 	}
+	[SerializeField]
+	private int maxFocus;
+	public int MaxFocus
+	{
+		get => maxFocus;
+		set
+		{
+			maxFocus = value;
+			if (focus > maxFocus) focus = maxFocus;
+		}
+	}
+	[SerializeField]
+	private int focus;
+	public int Focus
+	{
+		get => focus;
+		set
+		{
+			focus = value;
+			if (focus > maxFocus) Debug.LogWarning("Focus is over MaxFocus");
+		}
+	}
 
 	public float StrengthMultiplier;
 	public float DamageResistance;
 
 	public void CalculateStatsFromAttributes()
 	{
-		MaxHp = Vitality < 40 ? (int)(8 + 300 * Mathf.Sin(Mathf.PI * Vitality / 100)) : 3 * Vitality + 173;
-		StrengthMultiplier = 0.76f + 1.5f * Mathf.Sin((float)Strength * Mathf.PI / 200f);
+		MaxHp = Vitality > 9 ? (int)(2000 * Mathf.Atan(Mathf.PI * Vitality / 200) -211) : 1 + 10 * Vitality;
+		StrengthMultiplier = 0.76f + 2f * Mathf.Sin((float)Strength * Mathf.PI / 200f);
+		MaxFocus = Intelligence < 40 ? (int)(8 + 300 * Mathf.Sin(Mathf.PI * Intelligence / 100)) : 3 * Intelligence + 173;
 	}
 
 	public bool IsDead{ get => Hp <= 0; }
@@ -68,9 +91,11 @@ public abstract class Unit : ScriptableObject
 
 	public void UseAbility(IEnumerable<Unit> targets, Ability ability, out CombatAction.Result result)
 	{
+		if (ability.FocusCost > Focus) Debug.LogError("Cannot use ability : too low focus");
+
+		Focus -= ability.FocusCost;
+
 		result = new CombatAction.Result();
-		result.XP = 0;
-		result.Loot = new List<Item>();
 		foreach (var target in targets)
 		{
 			switch (ability.AbilityType)
@@ -86,11 +111,6 @@ public abstract class Unit : ScriptableObject
 			}
 			
 			result.Missed = false;
-			if (target is Enemy enemy && enemy.IsDead)
-			{
-				result.XP = enemy.xpDrop;
-				result.Loot = enemy.GetLoot();
-			}
 
 			if (ability.TargettingType == TargettingType.Single) break;
 		}

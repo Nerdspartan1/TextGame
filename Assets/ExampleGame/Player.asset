@@ -25,7 +25,9 @@ MonoBehaviour:
   Level: 1
   maxHp: 100
   hp: 100
-  StrengthMultiplier: 0.9946517
+  maxFocus: 100
+  focus: 100
+  StrengthMultiplier: 1.072869
   DamageResistance: 0
   XP: 0
   AvailableAttributePoints: 0

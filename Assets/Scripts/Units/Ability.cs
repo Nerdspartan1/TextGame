@@ -19,6 +19,7 @@ public class Ability : ScriptableObject
 {
 	public string Name;
 	public int Value;
+	public int FocusCost;
 	public AbilityType AbilityType;
 	public TargettingType TargettingType;
 
