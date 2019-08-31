@@ -11,6 +11,8 @@ public class UnitSlot : MonoBehaviour
 	public Text Level;
 	public Text Hp;
 	public StatBar LifeBar;
+	public Text Focus;
+	public StatBar FocusBar;
 	public GameObject LevelUpSymbol;
 
 	public void UpdateSlot()
@@ -22,7 +24,11 @@ public class UnitSlot : MonoBehaviour
 		LifeBar.MaxValue = (float)Unit.MaxHp;
 		LifeBar.UpdateBar();
 
-		if(Unit is Character character)
+		FocusBar.Value = (float)Unit.Focus;
+		FocusBar.MaxValue = (float)Unit.MaxFocus;
+		FocusBar.UpdateBar();
+
+		if (Unit is Character character)
 		{
 			LevelUpSymbol.SetActive(character.AvailableAttributePoints > 0);
 		}
