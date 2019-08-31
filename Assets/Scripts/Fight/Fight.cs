@@ -71,7 +71,7 @@ public class Fight
 				prompt.Proceed();
 			});
 
-		GameManager.Instance.CreateButton("Use ability",
+		var abilityButton = GameManager.Instance.CreateButton("Use ability",
 			delegate
 			{
 				CurrentCombatAction = new CombatAction()
@@ -82,8 +82,9 @@ public class Fight
 				prompt.Next = new Prompt(ChooseAbility);
 				prompt.Proceed();
 			});
+		abilityButton.interactable = (CurrentActor.Abilities.Count > 0);
 
-		GameManager.Instance.CreateButton("Use Item",
+		var itemButton = GameManager.Instance.CreateButton("Use Item",
 			delegate {
 				CurrentCombatAction = new CombatAction()
 				{
@@ -93,6 +94,7 @@ public class Fight
 				prompt.Next = new Prompt(ChooseItem);
 				prompt.Proceed();
 			});
+		itemButton.interactable = (Inventory.Instance.Items.Any(item => item is Consumable));
 
 		GameManager.Instance.CreateButton("Back",
 			delegate {
@@ -107,12 +109,13 @@ public class Fight
 
 		foreach (Ability ability in CurrentActor.Abilities)
 		{
-			GameManager.Instance.CreateButton(ability.Name,
+			var button = GameManager.Instance.CreateButton($"{ability.Name} ({ability.FocusCost} focus)",
 			delegate {
 				CurrentCombatAction.Ability = ability;
 				prompt.Next = new Prompt(ChooseTargets);
 				prompt.Proceed();
 			});
+			button.interactable = (CurrentActor.Focus >= ability.FocusCost);
 		}
 
 		GameManager.Instance.CreateButton("Back",
@@ -129,13 +132,13 @@ public class Fight
 		foreach(Item item in Inventory.Instance.Items)
 		{
 			if (!(item is Consumable consumable)) continue;
-			if (CombatActions.Any(ca => (ca != null && ca.Item == consumable))) continue;
-			GameManager.Instance.CreateButton(consumable.Name,
+			var button = GameManager.Instance.CreateButton(consumable.Name,
 			delegate {
 				CurrentCombatAction.Item = consumable;
 				prompt.Next = new Prompt(ChooseTargets);
 				prompt.Proceed();
 			});
+			button.interactable = !(CombatActions.Any(ca => (ca != null && ca.Item == consumable)));
 		}
 
 		GameManager.Instance.CreateButton("Back",

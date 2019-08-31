@@ -227,7 +227,7 @@ public class GameManager : MonoBehaviour {
 
 	#region Panels layout
 
-	public void CreateButton(string content, params UnityAction[] onClick)
+	public Button CreateButton(string content, params UnityAction[] onClick)
 	{
 		GameObject go = Instantiate(ButtonPrefab, ButtonPanel);
 		go.GetComponentInChildren<Text>().text = content;
@@ -240,6 +240,7 @@ public class GameManager : MonoBehaviour {
 		} 
 		buttonsDisplayed++;
 		RefreshContent();
+		return button;
 	}
 
 	public void CreateText(string content)
