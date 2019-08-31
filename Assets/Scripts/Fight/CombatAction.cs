@@ -38,23 +38,25 @@ public class CombatAction
 			Debug.LogWarning($"Cannot do action because actor '{Actor.Name}' is dead");
 			return;
 		}
-		if (Targets.All(unit => unit.IsDead))
+
+		var aliveTargets = Targets.FindAll(unit => !unit.IsDead);
+		if (aliveTargets.Count() == 0)
 		{
-			if (Targets.Count == 1)
+			if (Targets.Count == 1) //select another alive target if available
 			{
 				if (Targets[0] is Character)
 				{
-					Targets = new List<Unit>() { GameManager.Instance.PlayerTeam.FirstOrDefault(unit => !unit.IsDead) };
+					aliveTargets = new List<Unit>() { GameManager.Instance.PlayerTeam.FirstOrDefault(unit => !unit.IsDead) };
 				}
 				else if (Targets[0] is Enemy)
 				{
-					Targets = new List<Unit>() { fight.EnemyTeam.FirstOrDefault(unit => !unit.IsDead) };
+					aliveTargets = new List<Unit>() { fight.EnemyTeam.FirstOrDefault(unit => !unit.IsDead) };
 				}
 
-				if (Targets[0] == null) return;
+				if (aliveTargets.First() == null) return;
 
 			}
-			else if (Targets.Count > 1)
+			else
 				return;
 		}
 
@@ -63,17 +65,17 @@ public class CombatAction
 		switch (Type)
 		{
 			case ActionType.Attack:
-				Actor.Attack(Targets[0], out result);
-				GameManager.Instance.CreateText($"{Actor.Name} attacks {Targets[0].Name} for {result.IntValue} damage !");
+				Actor.Attack(aliveTargets.First(), out result);
+				GameManager.Instance.CreateText($"{Actor.Name} attacks {aliveTargets.First().Name} for {result.IntValue} damage !");
 				break;
 			case ActionType.Ability:
-				Actor.UseAbility(Targets, Ability, out result);
-				if (Targets.Count == 1)
-					GameManager.Instance.CreateText($"{Actor.Name} uses {Ability.Name} on {Targets[0].Name}.");
+				Actor.UseAbility(aliveTargets, Ability, out result);
+				if (aliveTargets.Count() == 1)
+					GameManager.Instance.CreateText($"{Actor.Name} uses {Ability.Name} on {aliveTargets.First().Name}.");
 				else
 					GameManager.Instance.CreateText($"{Actor.Name} uses {Ability.Name}.");
 
-				foreach(var target in Targets)
+				foreach(var target in aliveTargets)
 				{
 					switch (Ability.AbilityType)
 					{
@@ -87,13 +89,13 @@ public class CombatAction
 				}
 				break;
 			case ActionType.UseItem:
-				Item.Use(Targets[0]);
-				GameManager.Instance.CreateText($"{Actor.Name} uses {Item.Name} on {Targets[0].Name}.");
+				Item.Use(aliveTargets.First());
+				GameManager.Instance.CreateText($"{Actor.Name} uses {Item.Name} on {aliveTargets.First().Name}.");
 				break;
 			default: break;
 		}
 
-		foreach (var target in Targets)
+		foreach (var target in aliveTargets)
 		{
 			if (target.IsDead)
 			{

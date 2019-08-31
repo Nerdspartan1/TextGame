@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Encounters:
   - occurenceProbability: 0.299
-    groupPresenceProbability: 0.514
+    groupPresenceProbability: 0.899
     introduction: A pack of rabid creatures advances threateningly towards you.
     enemies:
     - {fileID: 11400000, guid: 096fa692db3634341a912ee1248db82b, type: 2}

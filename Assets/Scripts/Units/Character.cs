@@ -24,7 +24,7 @@ public class Character : Unit
 	public void GainXP(int xp)
 	{
 		XP += xp;
-		if(XP > XPLevel(Level+1))
+		while(XP > XPLevel(Level+1))
 		{
 			Level++;
 			AvailableAttributePoints++;
