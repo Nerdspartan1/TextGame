@@ -16,6 +16,9 @@ public class CharacterPanel : MonoBehaviour
 	public StatBar FocusBar;
 	public Transform AttributePanel;
 	public ItemSlot WeaponSlot;
+	public Transform AbilityPanel;
+	public GameObject AbilitySlotPrefab;
+	public GameObject AbilityMaskingPanel;
 
 	private AttributeBar[] AttributeBars;
 
@@ -24,31 +27,32 @@ public class CharacterPanel : MonoBehaviour
 		AttributeBars = AttributePanel.GetComponentsInChildren<AttributeBar>();
 		foreach(var bar in AttributeBars)
 		{
-			bar.LevelUpButton.onClick.AddListener( delegate { (Unit as Character).LevelUpAttribute(bar.Attribute); });
+			bar.LevelUpButton.onClick.AddListener( delegate {
+				(Unit as Character).LevelUpAttribute(bar.Attribute);
+				UpdateUI();
+			});
 		}
 		WeaponSlot.AllowedItemType = typeof(Weapon);
-	}
-
-	public void Update()
-	{
-		UpdateUI();
+		CloseCharacterPanel();
 	}
 
 	public void SetUnit(Unit unit)
 	{
-		if (unit == Unit) return;
 		Unit = unit;
 		UpdateUI();
 	}
 
+	public bool FightMode
+	{
+		get => FightMode;
+		set
+		{
+			AbilityMaskingPanel.SetActive(value);
+		}
+	}
+
 	public void UpdateUI()
 	{
-		if (!Unit)
-		{
-			CloseCharacterPanel();
-			return;
-		}
-
 		Character character = Unit as Character;
 
 		NameText.text = Unit.Name;
@@ -59,8 +63,8 @@ public class CharacterPanel : MonoBehaviour
 		HealthBar.MaxValue = Unit.MaxHp;
 		HealthBar.UpdateBar();
 
-		FocusBar.Value = 0;
-		FocusBar.MaxValue = 0;
+		FocusBar.Value = Unit.Focus;
+		FocusBar.MaxValue = Unit.MaxFocus;
 		FocusBar.UpdateBar();
 
 		if (character)
@@ -83,6 +87,18 @@ public class CharacterPanel : MonoBehaviour
 
 			WeaponSlot.gameObject.SetActive(true);
 			WeaponSlot.SetItem(character.Weapon);
+
+			AbilityPanel.gameObject.SetActive(true);
+			foreach (Transform child in AbilityPanel)
+			{
+				Destroy(child.gameObject);
+			}
+			foreach(Ability ability in Unit.Abilities)
+			{
+				var abilitySlot = Instantiate(AbilitySlotPrefab, AbilityPanel).GetComponent<AbilitySlot>();
+				abilitySlot.SetAbility(ability, character);
+				abilitySlot.CloseOptions();
+			}
 		}
 		else
 		{
@@ -98,22 +114,19 @@ public class CharacterPanel : MonoBehaviour
 			}
 
 			WeaponSlot.gameObject.SetActive(false);
+			AbilityPanel.gameObject.SetActive(false);
 		}
-	}
-
-	public void LevelUpCharacter(Attribute attribute)
-	{
-		(Unit as Character).LevelUpAttribute(attribute);
 	}
 
 	public void UpdateEquipment()
 	{
 		(Unit as Character).Weapon = (Weapon)WeaponSlot.Item;
+		UpdateUI();
 	}
 
 	public void CloseCharacterPanel()
 	{
-		GameManager.Instance.CharacterPanel.SetActive(false);
+		GameManager.Instance.CharacterWindow.SetActive(false);
 	}
 
 }

@@ -50,6 +50,7 @@ public class FightManager : MonoBehaviour
 		GameManager.Instance.ClearText();
 		GameManager.Instance.HideMap = true;
 		Inventory.Instance.Lock();
+		GameManager.Instance.CharacterPanel.FightMode = true;
 
 		GameManager.Instance.CreateText(introduction);
 
@@ -72,29 +73,30 @@ public class FightManager : MonoBehaviour
 		return combatActions.OrderByDescending(action => action.Actor.Speed);
 	}
 
-	private void Describe(IEnumerable<CombatAction> actions)
-	{
-		foreach (var action in actions)
-		{
-			switch (action.Type)
-			{
-				case CombatAction.ActionType.Attack:
-					GameManager.Instance.CreateText($"{action.Actor.Name} will attack {action.Target.Name}.");
-					break;
-				case CombatAction.ActionType.Heal:
-					GameManager.Instance.CreateText($"{action.Actor.Name} will heal {action.Target.Name}.");
-					break;
-				case CombatAction.ActionType.UseItem:
-					GameManager.Instance.CreateText($"{action.Actor.Name} will use {action.Item.Name} on {action.Target.Name}.");
-					break;
-			}
-
-		}
-	}
+//	private void Describe(IEnumerable<CombatAction> actions)
+//	{
+//		foreach (var action in actions)
+//		{
+//			switch (action.Type)
+//			{
+//				case CombatAction.ActionType.Attack:
+//					GameManager.Instance.CreateText($"{action.Actor.Name} will attack {action.Target.Name}.");
+//					break;
+//				case CombatAction.ActionType.UseItem:
+//					GameManager.Instance.CreateText($"{action.Actor.Name} will use {action.Item.Name} on {action.Target.Name}.");
+//					break;
+//			}
+//
+//		}
+//	}
 
 	IEnumerator CombatLoopCoroutine()
 	{
-		FightOutcome outcome = FightOutcome.NotFinished;
+		
+		yield return new Prompt(Fight.ChooseFightOrEscape).Display();
+		FightOutcome outcome = Fight.Escape ? FightOutcome.Escape : FightOutcome.NotFinished;
+		if (outcome == FightOutcome.Escape) goto FightEnd;
+
 		do
 		{
 			//Player Strategy
@@ -103,14 +105,9 @@ public class FightManager : MonoBehaviour
 			int teammateId = 0;
 			while (teammateId < alivePlayers.Count()) // Fight or escape
 			{
-				yield return new Prompt(Fight.ChooseFightOrEscape).Display();
-				if (Fight.Escape)
-				{
-					outcome = FightOutcome.Escape;
-					goto FightEnd;
-				}
 				while (teammateId < alivePlayers.Count()) // Choose actions
 				{
+					GameManager.Instance.ClearText();
 
 					Fight.CurrentActor = alivePlayers.ElementAt(teammateId);
 					yield return new Prompt(Fight.ChooseAction).Display();
@@ -123,6 +120,17 @@ public class FightManager : MonoBehaviour
 					{
 						if (teammateId == 0) break;
 						Fight.CombatActions[--teammateId] = null;
+					}
+				}
+				if (teammateId == 0)
+				{
+					GameManager.Instance.ClearText();
+
+					yield return new Prompt(Fight.ChooseFightOrEscape).Display();
+					if (Fight.Escape)
+					{
+						outcome = FightOutcome.Escape;
+						goto FightEnd;
 					}
 				}
 			}
@@ -187,6 +195,7 @@ public class FightManager : MonoBehaviour
 
 			GameManager.Instance.HideMap = false;
 			Inventory.Instance.Unlock();
+			GameManager.Instance.CharacterPanel.FightMode = false;
 
 			if (NextEvent) GameManager.Instance.PlayGameEvent(NextEvent);
 			else GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);

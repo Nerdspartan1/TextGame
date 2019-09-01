@@ -28,7 +28,7 @@ public class Fight
 			{
 				Actor = EnemyTeam[i],
 				Type = CombatAction.ActionType.Attack,
-				Target = aliveTargets.ElementAt(Random.Range(0, aliveTargets.Count()))
+				Targets = new List<Unit>() { aliveTargets.ElementAt(Random.Range(0, aliveTargets.Count())) }
 			});
 		}
 		return enemiesActions;
@@ -58,8 +58,6 @@ public class Fight
 	{
 		CurrentCombatAction = null;
 
-		GameManager.Instance.ClearText();
-
 		GameManager.Instance.CreateText($"What should {CurrentActor.Name} do ?");
 
 		GameManager.Instance.CreateButton("Attack",
@@ -73,7 +71,20 @@ public class Fight
 				prompt.Proceed();
 			});
 
-		GameManager.Instance.CreateButton("Use Item",
+		var abilityButton = GameManager.Instance.CreateButton("Use ability",
+			delegate
+			{
+				CurrentCombatAction = new CombatAction()
+				{
+					Actor = CurrentActor,
+					Type = CombatAction.ActionType.Ability,
+				};
+				prompt.Next = new Prompt(ChooseAbility);
+				prompt.Proceed();
+			});
+		abilityButton.interactable = (CurrentActor.Abilities.Count > 0);
+
+		var itemButton = GameManager.Instance.CreateButton("Use Item",
 			delegate {
 				CurrentCombatAction = new CombatAction()
 				{
@@ -83,12 +94,35 @@ public class Fight
 				prompt.Next = new Prompt(ChooseItem);
 				prompt.Proceed();
 			});
+		itemButton.interactable = (Inventory.Instance.Items.Any(item => item is Consumable));
 
 		GameManager.Instance.CreateButton("Back",
 			delegate {
 				prompt.Proceed();
 			});
 
+	}
+
+	public void ChooseAbility(Prompt prompt)
+	{
+		GameManager.Instance.CreateText($"Which ability should {CurrentActor.Name} use ?");
+
+		foreach (Ability ability in CurrentActor.Abilities)
+		{
+			var button = GameManager.Instance.CreateButton($"{ability.Name} ({ability.FocusCost} focus)",
+			delegate {
+				CurrentCombatAction.Ability = ability;
+				prompt.Next = new Prompt(ChooseTargets);
+				prompt.Proceed();
+			});
+			button.interactable = (CurrentActor.Focus >= ability.FocusCost);
+		}
+
+		GameManager.Instance.CreateButton("Back",
+		delegate {
+			prompt.Next = new Prompt(ChooseAction);
+			prompt.Proceed();
+		});
 	}
 
 	public void ChooseItem(Prompt prompt)
@@ -98,13 +132,13 @@ public class Fight
 		foreach(Item item in Inventory.Instance.Items)
 		{
 			if (!(item is Consumable consumable)) continue;
-			if (CombatActions.Any(ca => (ca != null && ca.Item == consumable))) continue;
-			GameManager.Instance.CreateButton($"Use {consumable.Name}",
+			var button = GameManager.Instance.CreateButton(consumable.Name,
 			delegate {
 				CurrentCombatAction.Item = consumable;
 				prompt.Next = new Prompt(ChooseTargets);
 				prompt.Proceed();
 			});
+			button.interactable = !(CombatActions.Any(ca => (ca != null && ca.Item == consumable)));
 		}
 
 		GameManager.Instance.CreateButton("Back",
@@ -118,28 +152,45 @@ public class Fight
 	public void ChooseTargets(Prompt prompt)
 	{
 		Team parsableTeam;
-		if (CurrentCombatAction.Type == CombatAction.ActionType.UseItem &&
-			CurrentCombatAction.Item.Type == Consumable.ConsumableType.Heal)
+		if ((CurrentCombatAction.Item != null && 
+			CurrentCombatAction.Item.Type == Consumable.ConsumableType.Heal) ||
+			(CurrentCombatAction.Ability != null &&
+			CurrentCombatAction.Ability.AbilityType == AbilityType.Heal))
 		{
-			
 			parsableTeam = GameManager.Instance.PlayerTeam;
 		}
 		else
 		{
-			GameManager.Instance.CreateText($"What should {CurrentActor.Name} attack ?");
 			parsableTeam = EnemyTeam;
 		}
 
-		foreach (Unit unit in parsableTeam.Where(unit => !unit.IsDead))
+		GameManager.Instance.CreateText($"Who should {CurrentActor.Name} target ?");
+
+		if (CurrentCombatAction.Ability != null &&
+			CurrentCombatAction.Ability.TargettingType == TargettingType.All)
 		{
-			GameManager.Instance.CreateButton(unit.Name,
+			GameManager.Instance.CreateButton("All",
 				delegate
 				{
-					//set target and go to next teammate in team
-					CurrentCombatAction.Target = unit; 
+					CurrentCombatAction.Targets = parsableTeam.Units;
 					//end the chain
 					prompt.Proceed();
 				});
+		}
+		else
+		{
+			foreach (Unit unit in parsableTeam.Where(unit => !unit.IsDead))
+			{
+				GameManager.Instance.CreateButton(unit.Name,
+					delegate
+					{
+						//set target
+						CurrentCombatAction.Targets = new List<Unit>() { unit };
+
+					//end the chain
+					prompt.Proceed();
+					});
+			}
 		}
 		GameManager.Instance.CreateButton("Back",
 			delegate {

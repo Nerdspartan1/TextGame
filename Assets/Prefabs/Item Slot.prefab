@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac5904f09d6116f449eebb2e6633f098, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPrefab: {fileID: 1428905264233788, guid: 7068395d58ac8df429d9b0d7618baf29,
+  ButtonPrefab: {fileID: 1428905264233788, guid: 7068395d58ac8df429d9b0d7618baf29,
     type: 3}
   ItemSlot: {fileID: 3445653614421520459}
 --- !u!1 &3445653613323481346
@@ -344,8 +344,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Icon: {fileID: 3445653614971846027}
+  IconEmpty: {fileID: 0}
   OptionPanel: {fileID: 3445653613237278021}
   Item: {fileID: 0}
+  OnItemChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &3445653614421520458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,7 +370,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 3445653614421520459}
-          m_MethodName: OnPointerEnter
+          m_MethodName: OpenOptions
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -381,7 +387,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 3445653614421520459}
-          m_MethodName: OnPointerExit
+          m_MethodName: CloseOptions
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -483,6 +489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasRect: {fileID: 0}
+  CenterOnMouse: 1
 --- !u!114 &1344207589
 MonoBehaviour:
   m_ObjectHideFlags: 0

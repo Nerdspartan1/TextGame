@@ -20,10 +20,15 @@ MonoBehaviour:
   Endurance: 10
   Intelligence: 10
   Speed: 10
+  Abilities:
+  - {fileID: 11400000, guid: 2a2057aa120b30f439aa72e1616faf8a, type: 2}
+  - {fileID: 11400000, guid: ae458c5e8ff453a46a32bcf493e3b585, type: 2}
   Level: 1
   maxHp: 100
   hp: 100
-  StrengthMultiplier: 0.9946517
+  maxFocus: 100
+  focus: 100
+  StrengthMultiplier: 1.072869
   DamageResistance: 0
   XP: 0
   AvailableAttributePoints: 0
