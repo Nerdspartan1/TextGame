@@ -15,6 +15,7 @@ public class ItemSlot : MonoBehaviour
 	public Image Icon;
 	public Image IconEmpty = null;
 	public ItemSelectionOptionPanel OptionPanel;
+	public bool CanBeSwapped = true;
 
 	public Item Item;
 

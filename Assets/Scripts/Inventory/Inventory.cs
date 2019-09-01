@@ -15,6 +15,8 @@ public class Inventory : MonoBehaviour
 	public GameObject InventoryPanel;
 	public Button InventoryButton;
 
+	public GameObject MerchantWindow;
+
 	private Vector3 InitialWindowPosition;
 
 	public static DescriptionPanel DescriptionPanel;
@@ -24,6 +26,8 @@ public class Inventory : MonoBehaviour
 	[Header("Inventory")]
 	[SerializeField]
 	private List<Item> items = new List<Item>();
+
+	public int Money = 0;
 
 	public List<Item> Items { get => items; }
 
@@ -58,6 +62,14 @@ public class Inventory : MonoBehaviour
 	{
 		InventoryWindow.transform.position = InitialWindowPosition;
 	}
+
+	public void OpenMerchantWindow(Merchant merchant)
+	{
+		MerchantWindow.gameObject.SetActive(true);
+		MerchantWindow.GetComponent<MerchantPanel>().SetMerchant(merchant);
+
+	}
+
 	#endregion
 
 	public Item this[int i]
@@ -122,7 +134,7 @@ public class Inventory : MonoBehaviour
 
 	public bool Swap(ItemSlot from, ItemSlot to)
 	{
-		if (!to.CanSet(from.Item))
+		if (!to.CanSet(from.Item) || !to.CanBeSwapped)
 			return false;
 
 		var it = from.Item;

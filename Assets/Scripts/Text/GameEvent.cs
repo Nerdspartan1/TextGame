@@ -13,7 +13,7 @@ public enum ConditionType {
 	IsLessThan,
 	RandomChance //random chance between 0 (never) and 1 (always)
 }
-public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem}
+public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem, OpenMerchant}
 
 [System.Serializable]
 public struct Condition{
@@ -103,6 +103,7 @@ public struct Operation
 	public GameEvent gameEvent;
 	public Vector2Int position;
 	public Item item;
+	public Merchant merchant;
 	public Object other;
 
 	public void Apply()
@@ -119,6 +120,9 @@ public struct Operation
 				if (other is Enemy enemy) FightManager.Instance.BeginFight(enemy, gameEvent);
 				else if (other is Team team) FightManager.Instance.BeginFight(team, gameEvent);
 				else throw new System.Exception("Bad type");
+				return;
+			case OperationType.OpenMerchant:
+				Inventory.Instance.OpenMerchantWindow(merchant);
 				return;
 			case OperationType.PlayGameEvent:
 				GameManager.Instance.PlayGameEvent(gameEvent);
