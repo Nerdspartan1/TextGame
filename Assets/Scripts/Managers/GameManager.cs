@@ -75,7 +75,8 @@ public class GameManager : MonoBehaviour {
 	public Transform mapHidingPanel;
 	public TeamPanel TeamPanel;
 	public Transform mapPanel;
-	public GameObject CharacterPanel;
+	public GameObject CharacterWindow;
+	public CharacterPanel CharacterPanel;
 
 	Dictionary<Vector2Int,Button> MapCells = new Dictionary<Vector2Int,Button>();
 	private float cellWidth, cellHeight;

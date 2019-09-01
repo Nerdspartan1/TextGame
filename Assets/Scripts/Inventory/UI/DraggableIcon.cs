@@ -24,7 +24,7 @@ public class DraggableIcon : MonoBehaviour
 		image.raycastTarget = false;
 
 		if(itemSlot.IconEmpty != null) itemSlot.IconEmpty.enabled = true;
-		itemSlot.OnPointerExit();
+		itemSlot.CloseOptions();
 		ItemSlot.ShowDescriptionOnCursorHover = false;
 	}
 
@@ -33,7 +33,7 @@ public class DraggableIcon : MonoBehaviour
 		if (ItemSlot.ItemSlotUnderPointer)
 		{
 			Inventory.Instance.Swap(itemSlot, ItemSlot.ItemSlotUnderPointer);
-			ItemSlot.ItemSlotUnderPointer.OnPointerEnter();
+			ItemSlot.ItemSlotUnderPointer.OpenOptions();
 		}
 
 		transform.SetParent(itemSlot.transform);

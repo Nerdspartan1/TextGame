@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(EventTrigger))]
 public class ItemSlot : MonoBehaviour
 {
 	public System.Type AllowedItemType;
@@ -49,7 +51,7 @@ public class ItemSlot : MonoBehaviour
 		return item.GetType().Equals(AllowedItemType) || item.GetType().IsSubclassOf(AllowedItemType);
 	}
 
-	public void OnPointerEnter()
+	public void OpenOptions()
 	{
 		if(ShowDescriptionOnCursorHover && Item != null)
 		{
@@ -60,7 +62,7 @@ public class ItemSlot : MonoBehaviour
 		ItemSlotUnderPointer = this;
 	}
 
-	public void OnPointerExit()
+	public void CloseOptions()
 	{
 		Inventory.DescriptionPanel?.Hide();
 		OptionPanel.gameObject.SetActive(false);
