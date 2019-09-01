@@ -13,7 +13,7 @@ public enum ConditionType {
 	IsLessThan,
 	RandomChance //random chance between 0 (never) and 1 (always)
 }
-public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem, OpenMerchant}
+public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem, OpenMerchant, CloseMerchant}
 
 [System.Serializable]
 public struct Condition{
@@ -124,6 +124,9 @@ public struct Operation
 			case OperationType.OpenMerchant:
 				Inventory.Instance.OpenMerchantWindow(merchant);
 				return;
+			case OperationType.CloseMerchant:
+				Inventory.Instance.CloseMerchantWindow();
+				break;
 			case OperationType.PlayGameEvent:
 				GameManager.Instance.PlayGameEvent(gameEvent);
 				return;
