@@ -32,9 +32,12 @@ public class ItemSelectionOptionPanel : OptionPanel
 		else
 		{
 			var button = AddButton($"Purchase ({ItemSlot.Item.Value})", delegate {
-				Inventory.Instance.Add(ItemSlot.Item);
-				Inventory.Instance.Money -= ItemSlot.Item.Value;
-				UpdateUI();
+				if (Inventory.Instance.Money >= ItemSlot.Item.Value)
+				{
+					Inventory.Instance.Add(ItemSlot.Item);
+					Inventory.Instance.Money -= ItemSlot.Item.Value;
+				}
+				
 			});
 			button.interactable = (Inventory.Instance.Money >= ItemSlot.Item.Value );
 		}
