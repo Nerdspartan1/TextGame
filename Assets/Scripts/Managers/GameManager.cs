@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour {
 
 		ClearText();
 		ClearButtons();
-		HideMap = !(gameEvent is Location);
+		LockMap = !(gameEvent is Location);
 
 		StartCoroutine(DisplayParagraphs());
 	}
@@ -273,16 +273,24 @@ public class GameManager : MonoBehaviour {
 		MapCursorPrefab.transform.SetParent(mapPanel);
 	}
 
-	public bool HideMap
+
+	public bool LockMap
 	{
-		get
-		{
-			return mapHidingPanel.gameObject.activeInHierarchy;
-		}
+		set => mapHidingPanel.gameObject.SetActive(value);
+	}
+
+	public bool LockInventory
+	{
 		set
 		{
-			mapHidingPanel.gameObject.SetActive(value);
+			if (value == true) Inventory.Instance.InventoryWindow.gameObject.SetActive(false);
+			Inventory.Instance.InventoryButton.interactable = !value;
 		}
+	}
+
+	public bool LockAbilities
+	{
+		set => CharacterPanel.AbilityMaskingPanel.SetActive(value);
 	}
 
 	static void ClearChilds(Transform t)

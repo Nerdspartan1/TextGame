@@ -48,9 +48,10 @@ public class FightManager : MonoBehaviour
 		EnemyTeamPanel.RebuildPanel();
 
 		GameManager.Instance.ClearText();
-		GameManager.Instance.HideMap = true;
-		Inventory.Instance.Lock();
-		GameManager.Instance.CharacterPanel.FightMode = true;
+		GameManager.Instance.LockMap = true;
+		GameManager.Instance.LockInventory = true;
+		GameManager.Instance.LockAbilities = true;
+
 
 		GameManager.Instance.CreateText(introduction);
 
@@ -193,9 +194,9 @@ public class FightManager : MonoBehaviour
 
 			yield return new Prompt(Prompt.PressOKToContinue).Display();
 
-			GameManager.Instance.HideMap = false;
-			Inventory.Instance.Unlock();
-			GameManager.Instance.CharacterPanel.FightMode = false;
+			GameManager.Instance.LockMap = false;
+			GameManager.Instance.LockInventory = false;
+			GameManager.Instance.LockAbilities = false;
 
 			if (NextEvent) GameManager.Instance.PlayGameEvent(NextEvent);
 			else GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);

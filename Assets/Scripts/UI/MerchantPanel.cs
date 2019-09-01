@@ -14,11 +14,6 @@ public class MerchantPanel : MonoBehaviour
 	public Transform ItemsPanel;
 	public Text MerchantName;
 
-	public void Start() //DEBUG
-	{
-		UpdateUI();
-	}
-
 	public void SetMerchant(Merchant merchant)
 	{
 		Merchant = merchant;

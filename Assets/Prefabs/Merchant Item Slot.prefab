@@ -139,7 +139,7 @@ MonoBehaviour:
   Icon: {fileID: 5329910138862845260}
   IconEmpty: {fileID: 0}
   OptionPanel: {fileID: 5329910139150357890}
-  CanBeSwapped: 1
+  CanBeSwapped: 0
   Item: {fileID: 0}
   OnItemChanged:
     m_PersistentCalls:

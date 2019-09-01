@@ -2931,9 +2931,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1090285156}
-        m_MethodName: CloseCharacterPanel
-        m_Mode: 1
+      - m_Target: {fileID: 613062344}
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3757,7 +3757,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1048328150
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5716,7 +5716,7 @@ MonoBehaviour:
   InventoryWindow: {fileID: 2094890274}
   InventoryPanel: {fileID: 1865027589}
   InventoryButton: {fileID: 348972825}
-  MerchantWindow: {fileID: 0}
+  MerchantWindow: {fileID: 1048328149}
   items: []
   Money: 0
   Size: 20
@@ -6340,9 +6340,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1048328149}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1700758566}
+        m_MethodName: CloseMerchantWindow
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7079,22 +7079,22 @@ PrefabInstance:
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 52
       objectReference: {fileID: 0}
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -52
       objectReference: {fileID: 0}
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}
@@ -7104,7 +7104,7 @@ PrefabInstance:
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}
@@ -7114,7 +7114,7 @@ PrefabInstance:
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5329910139278125882, guid: 23145392c8f955644b538f53e731539e,
         type: 3}

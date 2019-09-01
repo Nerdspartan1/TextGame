@@ -42,15 +42,6 @@ public class CharacterPanel : MonoBehaviour
 		UpdateUI();
 	}
 
-	public bool FightMode
-	{
-		get => FightMode;
-		set
-		{
-			AbilityMaskingPanel.SetActive(value);
-		}
-	}
-
 	public void UpdateUI()
 	{
 		Character character = Unit as Character;

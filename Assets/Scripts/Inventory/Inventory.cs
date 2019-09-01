@@ -47,17 +47,6 @@ public class Inventory : MonoBehaviour
 			ResetWindowPosition();
 	}
 
-	public void Lock()
-	{
-		InventoryWindow.gameObject.SetActive(false);
-		InventoryButton.interactable = false;
-	}
-
-	public void Unlock()
-	{
-		InventoryButton.interactable = true;
-	}
-
 	public void ResetWindowPosition()
 	{
 		InventoryWindow.transform.position = InitialWindowPosition;
@@ -67,7 +56,13 @@ public class Inventory : MonoBehaviour
 	{
 		MerchantWindow.gameObject.SetActive(true);
 		MerchantWindow.GetComponent<MerchantPanel>().SetMerchant(merchant);
+		GameManager.Instance.LockMap = true;
+	}
 
+	public void CloseMerchantWindow()
+	{
+		MerchantWindow.gameObject.SetActive(false);
+		GameManager.Instance.LockMap = false;
 	}
 
 	#endregion
