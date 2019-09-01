@@ -14,8 +14,9 @@ public class Inventory : MonoBehaviour
 	public GameObject InventoryWindow;
 	public GameObject InventoryPanel;
 	public Button InventoryButton;
-
+	public Text MoneyText;
 	public GameObject MerchantWindow;
+
 
 	private Vector3 InitialWindowPosition;
 
@@ -27,7 +28,15 @@ public class Inventory : MonoBehaviour
 	[SerializeField]
 	private List<Item> items = new List<Item>();
 
-	public int Money = 0;
+	private int money = 0;
+	public int Money {
+		get => money;
+		set
+		{
+			money = value;
+			MoneyText.text = $"Money : {money}";
+		}
+	}
 
 	public bool CanSellItems = false;
 
@@ -80,6 +89,7 @@ public class Inventory : MonoBehaviour
 	{
 		Instance = this;
 		InitialWindowPosition = InventoryWindow.transform.position;
+		Money = 0;
 	}
 
 	public void Start()

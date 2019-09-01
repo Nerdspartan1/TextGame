@@ -34,8 +34,8 @@ public class ItemSelectionOptionPanel : OptionPanel
 			var button = AddButton($"Purchase ({ItemSlot.Item.Value})", delegate {
 				if (Inventory.Instance.Money >= ItemSlot.Item.Value)
 				{
-					Inventory.Instance.Add(ItemSlot.Item);
-					Inventory.Instance.Money -= ItemSlot.Item.Value;
+					if(Inventory.Instance.Add(ItemSlot.Item))
+						Inventory.Instance.Money -= ItemSlot.Item.Value;
 				}
 				
 			});
