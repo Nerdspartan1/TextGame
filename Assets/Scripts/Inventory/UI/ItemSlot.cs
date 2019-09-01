@@ -59,6 +59,7 @@ public class ItemSlot : MonoBehaviour
 			Inventory.DescriptionPanel.Show(Item);
 
 			OptionPanel.gameObject.SetActive(true);
+			OptionPanel.UpdateUI();
 		}
 		ItemSlotUnderPointer = this;
 	}

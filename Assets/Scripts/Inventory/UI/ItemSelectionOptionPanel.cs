@@ -23,13 +23,18 @@ public class ItemSelectionOptionPanel : OptionPanel
 					AddButton($"Use on {character.Name}", delegate { c.Use(character); });
 				}
 			}
-			AddButton("Discard", delegate { Inventory.Instance.Remove(ItemSlot.Item); });
+			if(Inventory.Instance.CanSellItems) AddButton($"Sell ({ItemSlot.Item.Value})", delegate {
+				Inventory.Instance.Money += ItemSlot.Item.Value;
+				Inventory.Instance.Remove(ItemSlot.Item);
+			});
+			else AddButton("Discard", delegate { Inventory.Instance.Remove(ItemSlot.Item); });
 		}
 		else
 		{
 			var button = AddButton($"Purchase ({ItemSlot.Item.Value})", delegate {
 				Inventory.Instance.Add(ItemSlot.Item);
 				Inventory.Instance.Money -= ItemSlot.Item.Value;
+				UpdateUI();
 			});
 			button.interactable = (Inventory.Instance.Money >= ItemSlot.Item.Value );
 		}

@@ -29,6 +29,8 @@ public class Inventory : MonoBehaviour
 
 	public int Money = 0;
 
+	public bool CanSellItems = false;
+
 	public List<Item> Items { get => items; }
 
 	public int Size = 20; //max size of the inventory
@@ -57,12 +59,14 @@ public class Inventory : MonoBehaviour
 		MerchantWindow.gameObject.SetActive(true);
 		MerchantWindow.GetComponent<MerchantPanel>().SetMerchant(merchant);
 		GameManager.Instance.LockMap = true;
+		CanSellItems = true;
 	}
 
 	public void CloseMerchantWindow()
 	{
 		MerchantWindow.gameObject.SetActive(false);
 		GameManager.Instance.LockMap = false;
+		CanSellItems = false;
 	}
 
 	#endregion

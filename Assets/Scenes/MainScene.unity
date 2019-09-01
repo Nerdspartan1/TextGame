@@ -5719,6 +5719,7 @@ MonoBehaviour:
   MerchantWindow: {fileID: 1048328149}
   items: []
   Money: 0
+  CanSellItems: 0
   Size: 20
 --- !u!1 &1747562752
 GameObject:
@@ -6964,7 +6965,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2094890275
 RectTransform:
   m_ObjectHideFlags: 0
