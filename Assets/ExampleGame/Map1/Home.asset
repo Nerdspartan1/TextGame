@@ -22,6 +22,7 @@ MonoBehaviour:
       gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
       item: {fileID: 0}
+      merchant: {fileID: 0}
       other: {fileID: 0}
     choices: []
   - conditions:
@@ -38,6 +39,37 @@ MonoBehaviour:
       gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
       item: {fileID: 11400000, guid: 0ced11be9da6b7f499377d00e3aa3452, type: 2}
+      merchant: {fileID: 0}
       other: {fileID: 0}
     choices: []
+  - conditions: []
+    RawText: Your mom is there, ready to trade with you.
+    operations: []
+    choices:
+    - conditions: []
+      text: Trade
+      operations:
+      - key: 
+        operationType: 9
+        value: 
+        gameEvent: {fileID: 0}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 11400000, guid: bb06a118a908ff94ea1ec100052de2b1, type: 2}
+        other: {fileID: 0}
+  - conditions: []
+    RawText: '"Feel free to browse, honey ! I have all sorts of medkits !"'
+    operations: []
+    choices:
+    - conditions: []
+      text: Done
+      operations:
+      - key: 
+        operationType: 10
+        value: 
+        gameEvent: {fileID: 0}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 11400000, guid: bb06a118a908ff94ea1ec100052de2b1, type: 2}
+        other: {fileID: 0}
   EncounterTable: {fileID: 0}

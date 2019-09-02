@@ -14,6 +14,9 @@ public class Inventory : MonoBehaviour
 	public GameObject InventoryWindow;
 	public GameObject InventoryPanel;
 	public Button InventoryButton;
+	public Text MoneyText;
+	public GameObject MerchantWindow;
+
 
 	private Vector3 InitialWindowPosition;
 
@@ -24,6 +27,18 @@ public class Inventory : MonoBehaviour
 	[Header("Inventory")]
 	[SerializeField]
 	private List<Item> items = new List<Item>();
+
+	private int money = 0;
+	public int Money {
+		get => money;
+		set
+		{
+			money = value;
+			MoneyText.text = $"Money : {money}";
+		}
+	}
+
+	public bool CanSellItems = false;
 
 	public List<Item> Items { get => items; }
 
@@ -43,21 +58,26 @@ public class Inventory : MonoBehaviour
 			ResetWindowPosition();
 	}
 
-	public void Lock()
-	{
-		InventoryWindow.gameObject.SetActive(false);
-		InventoryButton.interactable = false;
-	}
-
-	public void Unlock()
-	{
-		InventoryButton.interactable = true;
-	}
-
 	public void ResetWindowPosition()
 	{
 		InventoryWindow.transform.position = InitialWindowPosition;
 	}
+
+	public void OpenMerchantWindow(Merchant merchant)
+	{
+		MerchantWindow.gameObject.SetActive(true);
+		MerchantWindow.GetComponent<MerchantPanel>().SetMerchant(merchant);
+		GameManager.Instance.LockMap = true;
+		CanSellItems = true;
+	}
+
+	public void CloseMerchantWindow()
+	{
+		MerchantWindow.gameObject.SetActive(false);
+		GameManager.Instance.LockMap = false;
+		CanSellItems = false;
+	}
+
 	#endregion
 
 	public Item this[int i]
@@ -69,6 +89,7 @@ public class Inventory : MonoBehaviour
 	{
 		Instance = this;
 		InitialWindowPosition = InventoryWindow.transform.position;
+		Money = 0;
 	}
 
 	public void Start()
@@ -122,7 +143,7 @@ public class Inventory : MonoBehaviour
 
 	public bool Swap(ItemSlot from, ItemSlot to)
 	{
-		if (!to.CanSet(from.Item))
+		if (!to.CanSet(from.Item) || !to.CanBeSwapped)
 			return false;
 
 		var it = from.Item;

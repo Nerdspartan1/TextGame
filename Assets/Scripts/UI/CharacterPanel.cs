@@ -24,31 +24,27 @@ public class CharacterPanel : MonoBehaviour
 
 	public void Start()
 	{
+		InitializeAttributeBars();
+		WeaponSlot.AllowedItemType = typeof(Weapon);
+		//CloseCharacterPanel();
+	}
+
+	private void InitializeAttributeBars()
+	{
 		AttributeBars = AttributePanel.GetComponentsInChildren<AttributeBar>();
-		foreach(var bar in AttributeBars)
+		foreach (var bar in AttributeBars)
 		{
-			bar.LevelUpButton.onClick.AddListener( delegate {
+			bar.LevelUpButton.onClick.AddListener(delegate {
 				(Unit as Character).LevelUpAttribute(bar.Attribute);
 				UpdateUI();
 			});
 		}
-		WeaponSlot.AllowedItemType = typeof(Weapon);
-		CloseCharacterPanel();
 	}
 
 	public void SetUnit(Unit unit)
 	{
 		Unit = unit;
 		UpdateUI();
-	}
-
-	public bool FightMode
-	{
-		get => FightMode;
-		set
-		{
-			AbilityMaskingPanel.SetActive(value);
-		}
 	}
 
 	public void UpdateUI()
@@ -74,6 +70,7 @@ public class CharacterPanel : MonoBehaviour
 			XPBar.MaxValue = Character.XPLevel(character.Level + 1) - Character.XPLevel(character.Level);
 			XPBar.UpdateBar();
 
+			if (AttributeBars == null) InitializeAttributeBars();
 			foreach (var bar in AttributeBars)
 			{
 				bar.Value = Unit.GetAttribute(bar.Attribute);

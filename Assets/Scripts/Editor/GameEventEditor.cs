@@ -138,6 +138,13 @@ public class OperationDrawer : PropertyDrawer
 				EditorGUI.PropertyField(rect2, property.FindPropertyRelative(nameof(Operation.other)), GUIContent.none);
 				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.gameEvent)), GUIContent.none);
 				break;
+			case OperationType.OpenMerchant:
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.merchant)), GUIContent.none);
+				break;
+			case OperationType.CloseMerchant:
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				break;
 		}
 		
 		EditorGUI.indentLevel = indent;
