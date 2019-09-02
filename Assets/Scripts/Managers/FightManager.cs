@@ -198,8 +198,8 @@ public class FightManager : MonoBehaviour
 			GameManager.Instance.LockInventory = false;
 			GameManager.Instance.LockAbilities = false;
 
-			if (NextEvent) GameManager.Instance.PlayGameEvent(NextEvent);
-			else GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);
+			if (NextEvent) StartCoroutine(GameManager.Instance.PlayGameEvent(NextEvent));
+			else StartCoroutine(GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]));
 		}
 
 	}
