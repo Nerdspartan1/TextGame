@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour {
 	public GameEvent StartingGameEvent;
 	[HideInInspector]
 	public GameEvent CurrentGameEvent;
+	private Coroutine CurrentGameEventRoutine;
 	[HideInInspector]
 	private bool onMap;
 	public Map StartingMap;
@@ -121,7 +122,7 @@ public class GameManager : MonoBehaviour {
 		GoToMap(StartingMap);
 		GoToLocation(StartingLocation);
 
-		StartCoroutine(PlayGameEvent(StartingGameEvent));
+		PlayGameEvent(StartingGameEvent);
 
 	}
 
@@ -131,34 +132,36 @@ public class GameManager : MonoBehaviour {
 	}
 
 	#region GameEvent handling
-	public IEnumerator PlayGameEvent(GameEvent gameEvent)
+	public void PlayGameEvent(GameEvent gameEvent)
 	{
-		while (CurrentGameEvent)
-			yield return null; //wait until current game event ends
-
-		CurrentGameEvent = Instantiate(gameEvent);
+		if(CurrentGameEventRoutine != null) StopCoroutine(CurrentGameEventRoutine);
 
 		ClearText();
 		ClearButtons();
 		LockMap = !(gameEvent is Location);
 
+		CurrentGameEventRoutine = StartCoroutine(GameEventRoutine(gameEvent));
+	}
+
+	private IEnumerator GameEventRoutine(GameEvent gameEvent)
+	{
+		CurrentGameEvent = Instantiate(gameEvent);
+
 		yield return CurrentGameEvent.DisplayParagraph();
 
-		if (!(CurrentGameEvent is Location)) StartCoroutine(PlayGameEvent(CurrentMap[CurrentLocation]));
+		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
 		CurrentGameEvent = null;
 	}
 
-	public IEnumerator PlayLocation(Location location)
+	public void PlayLocation(Location location)
 	{
 		Encounter encounter = location.EncounterTable?.GetEncounter();
 
 		if (encounter != null)
-		{
 			FightManager.Instance.BeginFight(encounter.EnemyTeam, null, encounter.Introduction);
-		}
-		yield return PlayGameEvent(location);
+		else
+			PlayGameEvent(location);
 	}
-
 	#endregion
 
 	#region Map handling
@@ -185,7 +188,7 @@ public class GameManager : MonoBehaviour {
 					go.GetComponent<Button>().onClick.AddListener(
 						delegate {
 							GoToLocation(pos);
-							StartCoroutine(PlayLocation(CurrentMap[pos]));
+							PlayLocation(CurrentMap[pos]);
 						});
 					MapCells.Add(pos, go.GetComponent<Button>());
 				}

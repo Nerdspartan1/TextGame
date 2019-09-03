@@ -128,7 +128,7 @@ public struct Operation
 				Inventory.Instance.CloseMerchantWindow();
 				return;
 			case OperationType.PlayGameEvent:
-				GameManager.Instance.StartCoroutine(GameManager.Instance.PlayGameEvent(gameEvent));
+				GameManager.Instance.PlayGameEvent(gameEvent);
 				return;
 			case OperationType.Set:
 				Values.SetValueAsString(key, value.ToString());
@@ -170,8 +170,7 @@ public class GameEvent : ScriptableObject
 
 	public IEnumerator DisplayParagraph(int paragraphId = 0)
 	{
-		if (paragraphId >= paragraphs.Count) yield break; // break if current paragraph doesn't exist
-
+		if (paragraphs.Count == 0) throw new System.Exception("Empty game event");
 		currentParagraphId = paragraphId;
 
 		Paragraph paragraph = paragraphs[paragraphId];
@@ -189,24 +188,20 @@ public class GameEvent : ScriptableObject
 				
 		}
 
-		bool interruption = false;
+		//apply operations
 		foreach(var operation in operationsToApply)
 		{
 			operation.Apply();
-			switch (operation.operationType)
-			{
-				case OperationType.InitiateFight:
-				case OperationType.PlayGameEvent:
-					interruption = true;
-					break;
-			}
 		}
 
-		if (interruption)
-			yield break;
-		
-		yield return DisplayParagraph(++paragraphId);
-		
+		if (paragraphId >= paragraphs.Count - 1) // break if next paragraph doesn't exist
+		{
+			yield break; 
+		}
+		else // else continue
+		{
+			yield return DisplayParagraph(++paragraphId);
+		}
 	}
 
 	public void DisplayChoices(Prompt prompt)
