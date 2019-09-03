@@ -63,6 +63,7 @@ public class CharacterPanel : MonoBehaviour
 		FocusBar.MaxValue = Unit.MaxFocus;
 		FocusBar.UpdateBar();
 
+		if (AttributeBars == null) InitializeAttributeBars();
 		if (character)
 		{
 			XPBar.gameObject.SetActive(true);
@@ -70,7 +71,6 @@ public class CharacterPanel : MonoBehaviour
 			XPBar.MaxValue = Character.XPLevel(character.Level + 1) - Character.XPLevel(character.Level);
 			XPBar.UpdateBar();
 
-			if (AttributeBars == null) InitializeAttributeBars();
 			foreach (var bar in AttributeBars)
 			{
 				bar.Value = Unit.GetAttribute(bar.Attribute);
