@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour {
 		GoToMap(StartingMap);
 		GoToLocation(StartingLocation);
 
-		StartCoroutine(PlayGameEvent(StartingGameEvent));
+		PlayGameEvent(StartingGameEvent);
 
 	}
 
@@ -131,24 +131,18 @@ public class GameManager : MonoBehaviour {
 	}
 
 	#region GameEvent handling
-	public IEnumerator PlayGameEvent(GameEvent gameEvent)
+	public void PlayGameEvent(GameEvent gameEvent)
 	{
-		while (CurrentGameEvent)
-			yield return null; //wait until current game event ends
-
 		CurrentGameEvent = Instantiate(gameEvent);
 
 		ClearText();
 		ClearButtons();
 		LockMap = !(gameEvent is Location);
 
-		yield return CurrentGameEvent.DisplayParagraph();
-
-		if (!(CurrentGameEvent is Location)) StartCoroutine(PlayGameEvent(CurrentMap[CurrentLocation]));
-		CurrentGameEvent = null;
+		StartCoroutine(DisplayParagraphs());
 	}
 
-	public IEnumerator PlayLocation(Location location)
+	public void PlayLocation(Location location)
 	{
 		Encounter encounter = location.EncounterTable?.GetEncounter();
 
@@ -156,7 +150,14 @@ public class GameManager : MonoBehaviour {
 		{
 			FightManager.Instance.BeginFight(encounter.EnemyTeam, null, encounter.Introduction);
 		}
-		yield return PlayGameEvent(location);
+		else PlayGameEvent(location);
+	}
+
+	private IEnumerator DisplayParagraphs()
+	{
+		yield return CurrentGameEvent.DisplayParagraph();
+
+		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
 	}
 
 	#endregion
@@ -185,7 +186,7 @@ public class GameManager : MonoBehaviour {
 					go.GetComponent<Button>().onClick.AddListener(
 						delegate {
 							GoToLocation(pos);
-							StartCoroutine(PlayLocation(CurrentMap[pos]));
+							PlayLocation(CurrentMap[pos]);
 						});
 					MapCells.Add(pos, go.GetComponent<Button>());
 				}

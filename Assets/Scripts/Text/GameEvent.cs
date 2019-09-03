@@ -126,9 +126,9 @@ public struct Operation
 				return;
 			case OperationType.CloseMerchant:
 				Inventory.Instance.CloseMerchantWindow();
-				return;
+				break;
 			case OperationType.PlayGameEvent:
-				GameManager.Instance.StartCoroutine(GameManager.Instance.PlayGameEvent(gameEvent));
+				GameManager.Instance.PlayGameEvent(gameEvent);
 				return;
 			case OperationType.Set:
 				Values.SetValueAsString(key, value.ToString());
@@ -189,7 +189,6 @@ public class GameEvent : ScriptableObject
 				
 		}
 
-		bool interruption = false;
 		foreach(var operation in operationsToApply)
 		{
 			operation.Apply();
@@ -197,13 +196,9 @@ public class GameEvent : ScriptableObject
 			{
 				case OperationType.InitiateFight:
 				case OperationType.PlayGameEvent:
-					interruption = true;
-					break;
+					yield break;
 			}
 		}
-
-		if (interruption)
-			yield break;
 		
 		yield return DisplayParagraph(++paragraphId);
 		
