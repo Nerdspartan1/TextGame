@@ -9,26 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdff682ccdd28b3429496e6ba4c9e5db, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b7679b7cd1c47c43b38c8cee697ddaf, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
   Name: Poppy Gloria
   Description: 
-  Vitality: 10
-  Strength: 10
+  Vitality: 9
+  Strength: 11
   Skill: 10
   Endurance: 10
-  Intelligence: 10
+  Intelligence: 12
   Speed: 10
-  Abilities:
-  - {fileID: 11400000, guid: 2a2057aa120b30f439aa72e1616faf8a, type: 2}
-  - {fileID: 11400000, guid: ae458c5e8ff453a46a32bcf493e3b585, type: 2}
+  Abilities: []
   Level: 1
-  maxHp: 100
-  hp: 100
-  maxFocus: 100
-  focus: 100
-  StrengthMultiplier: 1.072869
+  maxHp: 91
+  hp: 91
+  maxFocus: 118
+  focus: 118
+  StrengthMultiplier: 1.1038582
   DamageResistance: 0
   XP: 0
   AvailableAttributePoints: 0

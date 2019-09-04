@@ -26,7 +26,7 @@ public class Inventory : MonoBehaviour
 
 	[Header("Inventory")]
 	[SerializeField]
-	private List<Item> items = new List<Item>();
+	public List<Item> Items = new List<Item>();
 
 	private int money = 0;
 	public int Money {
@@ -40,11 +40,9 @@ public class Inventory : MonoBehaviour
 
 	public bool CanSellItems = false;
 
-	public List<Item> Items { get => items; }
-
 	public int Size = 20; //max size of the inventory
 
-	public int TotalItemCount { get => items.Count; }
+	public int TotalItemCount { get => Items.Count; }
 	public int ItemInInventoryCount()
 	{
 		return inventorySlots.FindAll((slot) => (slot.Item != null)).Count;
@@ -105,7 +103,7 @@ public class Inventory : MonoBehaviour
 
 		for (int i = 0; i < Size; i++)
 		{
-			if (i < TotalItemCount) inventorySlots[i].SetItem(items[i]);
+			if (i < TotalItemCount) inventorySlots[i].SetItem(Items[i]);
 			else inventorySlots[i].SetItem(null);
 			inventorySlots[i].AllowedItemType = typeof(Item);
 		}
@@ -121,7 +119,7 @@ public class Inventory : MonoBehaviour
 		
 		FindInSlots(null, out ItemSlot slot);
 
-		items.Add(newItem);
+		Items.Add(newItem);
 		slot.SetItem(newItem);
 
 		return true;
@@ -135,7 +133,7 @@ public class Inventory : MonoBehaviour
 
 		FindInSlots(item, out ItemSlot slot);
 
-		if(!items.Remove(item)) return false;
+		if(!Items.Remove(item)) return false;
 		slot.SetItem(null);
 
 		return true;

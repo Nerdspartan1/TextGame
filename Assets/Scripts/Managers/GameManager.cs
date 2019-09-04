@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Values
 {
-	static Dictionary<string, string> values = new Dictionary<string, string>();
+	public static Dictionary<string, string> values = new Dictionary<string, string>();
 
 	static public bool ContainsKey(string key)
 	{

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SavedGame xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <PlayerTeam>
+    <Unit xsi:type="Character">
+      <name>Player(Clone)</name>
+      <hideFlags>None</hideFlags>
+      <Name>Poppy Gloria</Name>
+      <Description />
+      <Vitality>9</Vitality>
+      <Strength>11</Strength>
+      <Skill>10</Skill>
+      <Endurance>10</Endurance>
+      <Intelligence>12</Intelligence>
+      <Speed>10</Speed>
+      <Abilities />
+      <Level>1</Level>
+      <StrengthMultiplier>1.10385823</StrengthMultiplier>
+      <DamageResistance>0</DamageResistance>
+      <MaxHp>91</MaxHp>
+      <Hp>91</Hp>
+      <MaxFocus>118</MaxFocus>
+      <Focus>118</Focus>
+      <XP>0</XP>
+      <AvailableAttributePoints>0</AvailableAttributePoints>
+    </Unit>
+    <Unit xsi:type="Character">
+      <name>Tom(Clone)</name>
+      <hideFlags>None</hideFlags>
+      <Name>Tom</Name>
+      <Description />
+      <Vitality>10</Vitality>
+      <Strength>10</Strength>
+      <Skill>9</Skill>
+      <Endurance>12</Endurance>
+      <Intelligence>10</Intelligence>
+      <Speed>12</Speed>
+      <Abilities>
+        <Ability>
+          <name>Grenade</name>
+          <hideFlags>None</hideFlags>
+          <Name>Grenade</Name>
+          <Value>60</Value>
+          <FocusCost>20</FocusCost>
+          <AbilityType>Damage</AbilityType>
+          <TargettingType>All</TargettingType>
+        </Ability>
+      </Abilities>
+      <Level>1</Level>
+      <StrengthMultiplier>1.072869</StrengthMultiplier>
+      <DamageResistance>0</DamageResistance>
+      <MaxHp>100</MaxHp>
+      <Hp>100</Hp>
+      <MaxFocus>100</MaxFocus>
+      <Focus>100</Focus>
+      <XP>0</XP>
+      <AvailableAttributePoints>0</AvailableAttributePoints>
+    </Unit>
+  </PlayerTeam>
+</SavedGame>
