@@ -22,15 +22,10 @@ public class CharacterPanel : MonoBehaviour
 
 	private AttributeBar[] AttributeBars;
 
-	public void Start()
-	{
-		InitializeAttributeBars();
-		WeaponSlot.AllowedItemType = typeof(Weapon);
-		//CloseCharacterPanel();
-	}
 
-	private void InitializeAttributeBars()
+	public void Awake()
 	{
+		WeaponSlot.AllowedItemType = typeof(Weapon);
 		AttributeBars = AttributePanel.GetComponentsInChildren<AttributeBar>();
 		foreach (var bar in AttributeBars)
 		{
@@ -70,7 +65,6 @@ public class CharacterPanel : MonoBehaviour
 			XPBar.MaxValue = Character.XPLevel(character.Level + 1) - Character.XPLevel(character.Level);
 			XPBar.UpdateBar();
 
-			if (AttributeBars == null) InitializeAttributeBars();
 			foreach (var bar in AttributeBars)
 			{
 				bar.Value = Unit.GetAttribute(bar.Attribute);

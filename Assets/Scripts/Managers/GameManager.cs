@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour {
 	public GameEvent StartingGameEvent;
 	[HideInInspector]
 	public GameEvent CurrentGameEvent;
+	private Coroutine CurrentGameEventRoutine;
 	[HideInInspector]
 	private bool onMap;
 	public Map StartingMap;
@@ -133,13 +134,23 @@ public class GameManager : MonoBehaviour {
 	#region GameEvent handling
 	public void PlayGameEvent(GameEvent gameEvent)
 	{
-		CurrentGameEvent = Instantiate(gameEvent);
+		if(CurrentGameEventRoutine != null) StopCoroutine(CurrentGameEventRoutine);
 
 		ClearText();
 		ClearButtons();
 		LockMap = !(gameEvent is Location);
 
-		StartCoroutine(DisplayParagraphs());
+		CurrentGameEventRoutine = StartCoroutine(GameEventRoutine(gameEvent));
+	}
+
+	private IEnumerator GameEventRoutine(GameEvent gameEvent)
+	{
+		CurrentGameEvent = Instantiate(gameEvent);
+
+		yield return CurrentGameEvent.DisplayParagraph();
+
+		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
+		CurrentGameEvent = null;
 	}
 
 	public void PlayLocation(Location location)
@@ -147,19 +158,10 @@ public class GameManager : MonoBehaviour {
 		Encounter encounter = location.EncounterTable?.GetEncounter();
 
 		if (encounter != null)
-		{
 			FightManager.Instance.BeginFight(encounter.EnemyTeam, null, encounter.Introduction);
-		}
-		else PlayGameEvent(location);
+		else
+			PlayGameEvent(location);
 	}
-
-	private IEnumerator DisplayParagraphs()
-	{
-		yield return CurrentGameEvent.DisplayParagraph();
-
-		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
-	}
-
 	#endregion
 
 	#region Map handling
