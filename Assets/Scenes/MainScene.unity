@@ -1911,7 +1911,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02654eb7dadb92d49b559d129cb3c67a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Team: {fileID: 0}
   CharacterSlotPrefab: {fileID: 9095870099774590277, guid: 354a3850fd7050e409cc3e5baae50a9d,
     type: 3}
 --- !u!114 &545817103
@@ -6093,7 +6092,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02654eb7dadb92d49b559d129cb3c67a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Team: {fileID: 0}
   CharacterSlotPrefab: {fileID: 9095870099774590277, guid: 354a3850fd7050e409cc3e5baae50a9d,
     type: 3}
 --- !u!1 &1820021958

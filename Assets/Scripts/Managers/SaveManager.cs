@@ -37,8 +37,7 @@ public class SaveManager : MonoBehaviour
 
 		var loadedGame = serializer.Deserialize(reader) as SavedGame;
 
-		foreach(var unit in loadedGame.PlayerTeam)
-			Debug.Log(unit);
+		GameManager.Instance.Load(loadedGame);
 
 		reader.Close();
 	}

@@ -44,8 +44,7 @@ public class FightManager : MonoBehaviour
 		this.NextEvent = NextEvent;
 
 		GameManager.Instance.RightPanel.gameObject.SetActive(true);
-		EnemyTeamPanel.Team = Fight.EnemyTeam;
-		EnemyTeamPanel.RebuildPanel();
+		EnemyTeamPanel.SetTeam(Fight.EnemyTeam);
 
 		GameManager.Instance.ClearText();
 		GameManager.Instance.LockMap = true;

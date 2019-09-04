@@ -13,15 +13,15 @@
       <Intelligence>12</Intelligence>
       <Speed>10</Speed>
       <Abilities />
-      <Level>1</Level>
+      <Level>3</Level>
       <StrengthMultiplier>1.10385823</StrengthMultiplier>
       <DamageResistance>0</DamageResistance>
       <MaxHp>91</MaxHp>
-      <Hp>91</Hp>
+      <Hp>40</Hp>
       <MaxFocus>118</MaxFocus>
       <Focus>118</Focus>
-      <XP>0</XP>
-      <AvailableAttributePoints>0</AvailableAttributePoints>
+      <XP>68</XP>
+      <AvailableAttributePoints>2</AvailableAttributePoints>
     </Unit>
     <Unit xsi:type="Character">
       <name>Tom(Clone)</name>
@@ -45,15 +45,15 @@
           <TargettingType>All</TargettingType>
         </Ability>
       </Abilities>
-      <Level>1</Level>
+      <Level>3</Level>
       <StrengthMultiplier>1.072869</StrengthMultiplier>
       <DamageResistance>0</DamageResistance>
       <MaxHp>100</MaxHp>
-      <Hp>100</Hp>
+      <Hp>70</Hp>
       <MaxFocus>100</MaxFocus>
-      <Focus>100</Focus>
-      <XP>0</XP>
-      <AvailableAttributePoints>0</AvailableAttributePoints>
+      <Focus>60</Focus>
+      <XP>68</XP>
+      <AvailableAttributePoints>2</AvailableAttributePoints>
     </Unit>
   </PlayerTeam>
 </SavedGame>

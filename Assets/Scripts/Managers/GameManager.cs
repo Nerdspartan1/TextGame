@@ -115,8 +115,7 @@ public class GameManager : MonoBehaviour {
 		PlayerTeam = Instantiate(PlayerTeam);
 		PlayerTeam.InstantiateUnits();
 
-		TeamPanel.Team = PlayerTeam;
-		TeamPanel.RebuildPanel();
+		TeamPanel.SetTeam(PlayerTeam);
 
 		//starting map
 		GoToMap(StartingMap);
@@ -124,6 +123,12 @@ public class GameManager : MonoBehaviour {
 
 		PlayGameEvent(StartingGameEvent);
 
+	}
+
+	public void Load(SaveManager.SavedGame savedGame)
+	{
+		PlayerTeam = new Team() { Units = savedGame.PlayerTeam };
+		TeamPanel.SetTeam(GameManager.Instance.PlayerTeam);
 	}
 
 	private void Update()
