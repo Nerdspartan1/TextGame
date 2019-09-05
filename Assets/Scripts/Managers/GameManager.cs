@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Values
 {
-	static Dictionary<string, string> values = new Dictionary<string, string>();
+	public static Dictionary<string, string> values = new Dictionary<string, string>();
 
 	static public bool ContainsKey(string key)
 	{
@@ -115,8 +115,7 @@ public class GameManager : MonoBehaviour {
 		PlayerTeam = Instantiate(PlayerTeam);
 		PlayerTeam.InstantiateUnits();
 
-		TeamPanel.Team = PlayerTeam;
-		TeamPanel.RebuildPanel();
+		TeamPanel.SetTeam(PlayerTeam);
 
 		//starting map
 		GoToMap(StartingMap);
@@ -124,6 +123,60 @@ public class GameManager : MonoBehaviour {
 
 		PlayGameEvent(StartingGameEvent);
 
+	}
+
+	public SaveManager.SavedGame Save()
+	{
+		List<SaveManager.ValuePair> values = new List<SaveManager.ValuePair>();
+		foreach(KeyValuePair<string, string> pair in Values.values)
+		{
+			values.Add(new SaveManager.ValuePair() { Key = pair.Key, Value = pair.Value });
+		}
+
+		System.Func<Object, string> GetTrimmedName = (obj) => obj ? obj.name.Substring(0, obj.name.Length - 7) : "";
+		return new SaveManager.SavedGame()
+		{
+			PlayerTeam = PlayerTeam.Units,
+			EquippedWeapons = PlayerTeam.Units.ConvertAll(unit => Inventory.Instance.Items.FindIndex(item => item == (unit as Character).Weapon)),
+			Inventory = Inventory.Instance.Items.ConvertAll(item => GetTrimmedName(item)),
+			Money = Inventory.Instance.Money,
+			Map = CurrentMap.name,
+			Location = CurrentLocation,
+			Values = values,
+		};
+		
+	}
+
+	public void Load(SaveManager.SavedGame savedGame)
+	{
+		PlayerTeam = new Team() { Units = savedGame.PlayerTeam };
+		Inventory.Instance.Items = savedGame.Inventory.ConvertAll(name => Instantiate(Resources.Load($"ExampleGame/Items/{name}") as Item));
+		Inventory.Instance.Money = savedGame.Money;
+		for (int i = 0; i < PlayerTeam.Count; ++i)
+		{
+			(PlayerTeam[i] as Character).Equip(savedGame.EquippedWeapons[i] >= 0 ? Inventory.Instance.Items[savedGame.EquippedWeapons[i]] as Weapon : null);
+
+		}
+		TeamPanel.SetTeam(GameManager.Instance.PlayerTeam);
+
+		
+		Inventory.Instance.TidyItems();
+
+		//close all windows
+		Inventory.Instance.MerchantWindow.SetActive(false);
+		Inventory.Instance.InventoryWindow.SetActive(false);
+		CharacterWindow.SetActive(false);
+
+		//restore values
+		Values.values = new Dictionary<string, string>();
+		foreach(var pair in savedGame.Values)
+		{
+			Values.values.Add(pair.Key, pair.Value);
+		}
+
+		GoToMap(Resources.Load($"ExampleGame/Maps/{savedGame.Map}") as Map);
+		GoToLocation(savedGame.Location);
+		PlayGameEvent(CurrentMap[savedGame.Location]);
 	}
 
 	private void Update()
@@ -139,6 +192,7 @@ public class GameManager : MonoBehaviour {
 		ClearText();
 		ClearButtons();
 		LockMap = !(gameEvent is Location);
+		LockSave = !(gameEvent is Location);
 
 		CurrentGameEventRoutine = StartCoroutine(GameEventRoutine(gameEvent));
 	}
@@ -196,7 +250,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void GoToLocation(Vector2Int pos, bool ignoreRandomOperations = false)
+	public void GoToLocation(Vector2Int pos)
 	{
 		if(CurrentMap == null)
 		{
@@ -287,6 +341,15 @@ public class GameManager : MonoBehaviour {
 		{
 			if (value == true) Inventory.Instance.InventoryWindow.gameObject.SetActive(false);
 			Inventory.Instance.InventoryButton.interactable = !value;
+		}
+	}
+
+	public bool LockSave
+	{
+		set
+		{
+			if (value == true) SaveManager.Instance.SaveWindow.gameObject.SetActive(false);
+			SaveManager.Instance.SaveButton.interactable = !value;
 		}
 	}
 

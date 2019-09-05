@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class TeamPanel : MonoBehaviour
 {
-	public Team Team;
+	public Team Team { get; private set; }
 
 	[Header("Prefabs")]
 	public GameObject CharacterSlotPrefab;
 
 	private UnitSlot[] unitSlots;
-	
+
 	public void UpdateSlots()
 	{
 		foreach(var slot in unitSlots)
@@ -20,8 +20,9 @@ public class TeamPanel : MonoBehaviour
 	}
 
 	//to be called when team changes
-	public void RebuildPanel()
+	public void SetTeam(Team team)
 	{
+		Team = team;
 		foreach(Transform child in transform)
 		{
 			Destroy(child.gameObject);
