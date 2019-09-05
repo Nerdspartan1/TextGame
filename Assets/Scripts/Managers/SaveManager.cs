@@ -56,14 +56,18 @@ public class SaveManager : MonoBehaviour
 		}
 	}
 
+	private const string SAVE_DIRECTORY = "Saves";
+
 	public static string GetSavePath(int slot)
 	{
-		return $"Saves/save{slot}.save";
+		return $"{SAVE_DIRECTORY}/save{slot}.save";
 	}
 
 	public void Save(int slot)
 	{
 		var savedGame = GameManager.Instance.Save();
+
+		if (!Directory.Exists(SAVE_DIRECTORY)) Directory.CreateDirectory(SAVE_DIRECTORY);
 
 		StreamWriter writer = new StreamWriter(GetSavePath(slot), false, System.Text.Encoding.UTF8);
 
