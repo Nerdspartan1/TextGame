@@ -101,6 +101,11 @@ public class Inventory : MonoBehaviour
 
 		inventorySlots = new List<ItemSlot>(InventoryPanel.GetComponentsInChildren<ItemSlot>());
 
+		TidyItems();
+	}
+
+	public void TidyItems()
+	{
 		for (int i = 0; i < Size; i++)
 		{
 			if (i < TotalItemCount) inventorySlots[i].SetItem(Items[i]);

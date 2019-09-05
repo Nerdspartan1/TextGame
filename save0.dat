@@ -17,7 +17,7 @@
       <StrengthMultiplier>1.10385823</StrengthMultiplier>
       <DamageResistance>0</DamageResistance>
       <MaxHp>91</MaxHp>
-      <Hp>40</Hp>
+      <Hp>43</Hp>
       <MaxFocus>118</MaxFocus>
       <Focus>118</Focus>
       <XP>68</XP>
@@ -49,11 +49,19 @@
       <StrengthMultiplier>1.072869</StrengthMultiplier>
       <DamageResistance>0</DamageResistance>
       <MaxHp>100</MaxHp>
-      <Hp>70</Hp>
+      <Hp>86</Hp>
       <MaxFocus>100</MaxFocus>
       <Focus>60</Focus>
       <XP>68</XP>
       <AvailableAttributePoints>2</AvailableAttributePoints>
     </Unit>
   </PlayerTeam>
+  <Inventory>
+    <string>Medikit</string>
+    <string>Medikit</string>
+    <string>Pencil</string>
+    <string>M16</string>
+    <string>Wolf Pelt</string>
+    <string>Wolf Pelt</string>
+  </Inventory>
 </SavedGame>

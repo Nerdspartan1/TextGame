@@ -16,16 +16,17 @@ public class SaveManager : MonoBehaviour
 	public class SavedGame
 	{
 		public List<Unit> PlayerTeam;
+		public List<string> Inventory;
 	}
 
-	private XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character) });
+	private XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character), typeof(Item), typeof(Weapon), typeof(Consumable) });
 
 	public void Save(int slot)
 	{
-		var savedGame = new SavedGame() { PlayerTeam = GameManager.Instance.PlayerTeam.Units };
+		var savedGame = GameManager.Instance.Save();
+
 		StreamWriter writer = new StreamWriter($"save{slot}.dat", false, System.Text.Encoding.UTF8);
 
-		
 		serializer.Serialize(writer, savedGame);
 
 		writer.Close();

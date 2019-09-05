@@ -7,8 +7,6 @@ using System.IO;
 [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/Item/Item", order = 1)]
 public class Item : ScriptableObject{
 	
-	public static Dictionary<string,Item> items = new Dictionary<string,Item>();
-	
 	[Header("Identity")]
 	public string Name;
 	public Sprite icon;

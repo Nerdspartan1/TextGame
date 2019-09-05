@@ -125,10 +125,28 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	public SaveManager.SavedGame Save()
+	{
+		return new SaveManager.SavedGame()
+		{
+			PlayerTeam = GameManager.Instance.PlayerTeam.Units,
+			Inventory = Inventory.Instance.Items.ConvertAll(item => item.name.Substring(0,item.name.Length - 7)),
+
+		};
+	}
+
 	public void Load(SaveManager.SavedGame savedGame)
 	{
 		PlayerTeam = new Team() { Units = savedGame.PlayerTeam };
 		TeamPanel.SetTeam(GameManager.Instance.PlayerTeam);
+
+		Inventory.Instance.Items = savedGame.Inventory.ConvertAll(name => Instantiate(Resources.Load($"ExampleGame/Items/{name}") as Item));
+		Inventory.Instance.TidyItems();
+
+		//close all windows
+		Inventory.Instance.MerchantWindow.SetActive(false);
+		Inventory.Instance.InventoryWindow.SetActive(false);
+		CharacterWindow.SetActive(false);
 	}
 
 	private void Update()
