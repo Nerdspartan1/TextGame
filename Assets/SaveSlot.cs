@@ -16,11 +16,11 @@ public class SaveSlot : MonoBehaviour
 		this.slotId = slotId;
 		Name.text = $"Save {slotId}";
 		SaveButton.onClick.RemoveAllListeners();
-		SaveButton.onClick.AddListener(delegate { SaveManager.Save(slotId); UpdateUI(); });
+		SaveButton.onClick.AddListener(delegate { SaveManager.Instance.Save(slotId); UpdateUI(); });
 		LoadButton.onClick.RemoveAllListeners();
-		LoadButton.onClick.AddListener(delegate { SaveManager.Load(slotId); UpdateUI(); });
+		LoadButton.onClick.AddListener(delegate { SaveManager.Instance.Load(slotId); UpdateUI(); });
 		DeleteButton.onClick.RemoveAllListeners();
-		DeleteButton.onClick.AddListener(delegate { SaveManager.Delete(slotId); UpdateUI(); });
+		DeleteButton.onClick.AddListener(delegate { SaveManager.Instance.Delete(slotId); UpdateUI(); });
 		UpdateUI();
 	}
 

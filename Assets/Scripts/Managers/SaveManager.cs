@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour
 {
+	public static SaveManager Instance;
 
 	public struct ValuePair
 	{
@@ -26,14 +27,16 @@ public class SaveManager : MonoBehaviour
 		public List<ValuePair> Values;
 	}
 
-	private static XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character)});
+	private XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character)});
 
+	public Button SaveButton;
 	public Transform SaveWindow;
 	public Transform SavePanel;
 	private SaveSlot[] saveSlots;
 
 	private void Awake()
 	{
+		Instance = this;
 		saveSlots = SavePanel.GetComponentsInChildren<SaveSlot>();
 	}
 
@@ -58,7 +61,7 @@ public class SaveManager : MonoBehaviour
 		return $"Saves/save{slot}.save";
 	}
 
-	public static void Save(int slot)
+	public void Save(int slot)
 	{
 		var savedGame = GameManager.Instance.Save();
 
@@ -69,7 +72,7 @@ public class SaveManager : MonoBehaviour
 		writer.Close();
 	}
 
-	public static void Load(int slot)
+	public void Load(int slot)
 	{
 		StreamReader reader = new StreamReader(GetSavePath(slot), System.Text.Encoding.UTF8);
 
@@ -80,7 +83,7 @@ public class SaveManager : MonoBehaviour
 		reader.Close();
 	}
 
-	public static void Delete(int slot)
+	public void Delete(int slot)
 	{
 		File.Delete(GetSavePath(slot));
 	}

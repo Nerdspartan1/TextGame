@@ -192,6 +192,7 @@ public class GameManager : MonoBehaviour {
 		ClearText();
 		ClearButtons();
 		LockMap = !(gameEvent is Location);
+		LockSave = !(gameEvent is Location);
 
 		CurrentGameEventRoutine = StartCoroutine(GameEventRoutine(gameEvent));
 	}
@@ -340,6 +341,15 @@ public class GameManager : MonoBehaviour {
 		{
 			if (value == true) Inventory.Instance.InventoryWindow.gameObject.SetActive(false);
 			Inventory.Instance.InventoryButton.interactable = !value;
+		}
+	}
+
+	public bool LockSave
+	{
+		set
+		{
+			if (value == true) SaveManager.Instance.SaveWindow.gameObject.SetActive(false);
+			SaveManager.Instance.SaveButton.interactable = !value;
 		}
 	}
 
