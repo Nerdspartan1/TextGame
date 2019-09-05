@@ -13,6 +13,12 @@ public class SaveManager : MonoBehaviour
 		Instance = this;
 	}
 
+	public struct ValuePair
+	{
+		public string Key;
+		public string Value;
+	}
+
 	public class SavedGame
 	{
 		public List<Unit> PlayerTeam;
@@ -21,6 +27,7 @@ public class SaveManager : MonoBehaviour
 		public int Money;
 		public string Map;
 		public Vector2Int Location;
+		public List<ValuePair> Values;
 	}
 
 	private XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character)});

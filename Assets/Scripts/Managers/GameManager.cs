@@ -127,6 +127,12 @@ public class GameManager : MonoBehaviour {
 
 	public SaveManager.SavedGame Save()
 	{
+		List<SaveManager.ValuePair> values = new List<SaveManager.ValuePair>();
+		foreach(KeyValuePair<string, string> pair in Values.values)
+		{
+			values.Add(new SaveManager.ValuePair() { Key = pair.Key, Value = pair.Value });
+		}
+
 		System.Func<Object, string> GetTrimmedName = (obj) => obj ? obj.name.Substring(0, obj.name.Length - 7) : "";
 		return new SaveManager.SavedGame()
 		{
@@ -136,8 +142,9 @@ public class GameManager : MonoBehaviour {
 			Money = Inventory.Instance.Money,
 			Map = CurrentMap.name,
 			Location = CurrentLocation,
-
+			Values = values,
 		};
+		
 	}
 
 	public void Load(SaveManager.SavedGame savedGame)
@@ -159,6 +166,13 @@ public class GameManager : MonoBehaviour {
 		Inventory.Instance.MerchantWindow.SetActive(false);
 		Inventory.Instance.InventoryWindow.SetActive(false);
 		CharacterWindow.SetActive(false);
+
+		//restore values
+		Values.values = new Dictionary<string, string>();
+		foreach(var pair in savedGame.Values)
+		{
+			Values.values.Add(pair.Key, pair.Value);
+		}
 
 		GoToMap(Resources.Load($"ExampleGame/Maps/{savedGame.Map}") as Map);
 		GoToLocation(savedGame.Location);

@@ -13,15 +13,15 @@
       <Intelligence>12</Intelligence>
       <Speed>10</Speed>
       <Abilities />
-      <Level>3</Level>
+      <Level>1</Level>
       <StrengthMultiplier>1.10385823</StrengthMultiplier>
       <DamageResistance>0</DamageResistance>
       <MaxHp>91</MaxHp>
-      <Hp>20</Hp>
+      <Hp>91</Hp>
       <MaxFocus>118</MaxFocus>
       <Focus>118</Focus>
-      <XP>136</XP>
-      <AvailableAttributePoints>2</AvailableAttributePoints>
+      <XP>0</XP>
+      <AvailableAttributePoints>0</AvailableAttributePoints>
     </Unit>
     <Unit xsi:type="Character">
       <name>Tom(Clone)</name>
@@ -45,19 +45,19 @@
           <TargettingType>All</TargettingType>
         </Ability>
       </Abilities>
-      <Level>3</Level>
+      <Level>1</Level>
       <StrengthMultiplier>1.072869</StrengthMultiplier>
       <DamageResistance>0</DamageResistance>
       <MaxHp>100</MaxHp>
-      <Hp>61</Hp>
+      <Hp>100</Hp>
       <MaxFocus>100</MaxFocus>
-      <Focus>20</Focus>
-      <XP>136</XP>
-      <AvailableAttributePoints>2</AvailableAttributePoints>
+      <Focus>100</Focus>
+      <XP>0</XP>
+      <AvailableAttributePoints>0</AvailableAttributePoints>
     </Unit>
   </PlayerTeam>
   <EquippedWeapons>
-    <int>3</int>
+    <int>-1</int>
     <int>-1</int>
   </EquippedWeapons>
   <Inventory>
@@ -65,15 +65,21 @@
     <string>Medikit</string>
     <string>Pencil</string>
     <string>M16</string>
-    <string>Wolf Pelt</string>
-    <string>Wolf Pelt</string>
-    <string>Wolf Pelt</string>
-    <string>Wolf Pelt</string>
   </Inventory>
   <Money>0</Money>
   <Map>Map1</Map>
   <Location>
-    <x>3</x>
+    <x>2</x>
     <y>1</y>
   </Location>
+  <Values>
+    <ValuePair>
+      <Key>name</Key>
+      <Value>Skidoo</Value>
+    </ValuePair>
+    <ValuePair>
+      <Key>visits</Key>
+      <Value>4</Value>
+    </ValuePair>
+  </Values>
 </SavedGame>
