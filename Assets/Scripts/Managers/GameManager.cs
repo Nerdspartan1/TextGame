@@ -127,10 +127,12 @@ public class GameManager : MonoBehaviour {
 
 	public SaveManager.SavedGame Save()
 	{
+		System.Func<Object, string> GetTrimmedName = (obj) => obj ? obj.name.Substring(0, obj.name.Length - 7) : "";
 		return new SaveManager.SavedGame()
 		{
 			PlayerTeam = GameManager.Instance.PlayerTeam.Units,
-			Inventory = Inventory.Instance.Items.ConvertAll(item => item.name.Substring(0,item.name.Length - 7)),
+			EquippedWeapons = GameManager.Instance.PlayerTeam.Units.ConvertAll(unit => Inventory.Instance.Items.FindIndex(item => item == (unit as Character).Weapon)),
+			Inventory = Inventory.Instance.Items.ConvertAll(item => GetTrimmedName(item)),
 
 		};
 	}
@@ -138,9 +140,14 @@ public class GameManager : MonoBehaviour {
 	public void Load(SaveManager.SavedGame savedGame)
 	{
 		PlayerTeam = new Team() { Units = savedGame.PlayerTeam };
+		Inventory.Instance.Items = savedGame.Inventory.ConvertAll(name => Instantiate(Resources.Load($"ExampleGame/Items/{name}") as Item));
+		for (int i = 0; i < PlayerTeam.Count; ++i)
+		{
+			(PlayerTeam[i] as Character).Equip(savedGame.EquippedWeapons[i] >= 0 ? Inventory.Instance.Items[savedGame.EquippedWeapons[i]] as Weapon : null);
+		}
 		TeamPanel.SetTeam(GameManager.Instance.PlayerTeam);
 
-		Inventory.Instance.Items = savedGame.Inventory.ConvertAll(name => Instantiate(Resources.Load($"ExampleGame/Items/{name}") as Item));
+		
 		Inventory.Instance.TidyItems();
 
 		//close all windows

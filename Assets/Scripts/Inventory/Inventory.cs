@@ -42,8 +42,7 @@ public class Inventory : MonoBehaviour
 
 	public int Size = 20; //max size of the inventory
 
-	public int TotalItemCount { get => Items.Count; }
-	public int ItemInInventoryCount()
+	public int ItemsInInventorySlots()
 	{
 		return inventorySlots.FindAll((slot) => (slot.Item != null)).Count;
 	}
@@ -78,11 +77,6 @@ public class Inventory : MonoBehaviour
 
 	#endregion
 
-	public Item this[int i]
-	{
-		get { return inventorySlots[i].Item; }
-	}
-
 	public void Awake()
 	{
 		Instance = this;
@@ -100,17 +94,28 @@ public class Inventory : MonoBehaviour
 			Instantiate(ItemSlotInstance, InventoryPanel.transform);
 
 		inventorySlots = new List<ItemSlot>(InventoryPanel.GetComponentsInChildren<ItemSlot>());
+		foreach (var slot in inventorySlots)
+			slot.AllowedItemType = typeof(Item);
+
 
 		TidyItems();
 	}
 
 	public void TidyItems()
 	{
-		for (int i = 0; i < Size; i++)
+		foreach (var slot in inventorySlots)
+			slot.SetItem(null);
+
+		int slotId = 0;
+		foreach(var item in Items)
 		{
-			if (i < TotalItemCount) inventorySlots[i].SetItem(Items[i]);
-			else inventorySlots[i].SetItem(null);
-			inventorySlots[i].AllowedItemType = typeof(Item);
+			if (!item.IsEquipped)
+			{
+				inventorySlots[slotId].SetItem(item);
+				slotId++;
+			}
+
+			if (slotId >= Size) break;
 		}
 	}
 
@@ -118,7 +123,7 @@ public class Inventory : MonoBehaviour
 	{
 		if (item == null) return true;
 
-		if (ItemInInventoryCount() >= Size) return false;
+		if (ItemsInInventorySlots() >= Size) return false;
 
 		var newItem = Item.Instantiate(item);
 		
@@ -133,8 +138,6 @@ public class Inventory : MonoBehaviour
 	public bool Remove(Item item)
 	{
 		if (item == null) return true;
-
-		if (TotalItemCount == 0) return false;
 
 		FindInSlots(item, out ItemSlot slot);
 

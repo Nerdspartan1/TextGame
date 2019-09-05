@@ -14,6 +14,9 @@ public class Item : ScriptableObject{
 	public string Description;
 	public int Value;
 
+	[HideInInspector]
+	public bool IsEquipped = false;
+
 	public virtual string Describe()
 	{
 		return Name + ":\n" + Description;

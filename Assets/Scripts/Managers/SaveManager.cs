@@ -16,10 +16,11 @@ public class SaveManager : MonoBehaviour
 	public class SavedGame
 	{
 		public List<Unit> PlayerTeam;
+		public List<int> EquippedWeapons;
 		public List<string> Inventory;
 	}
 
-	private XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character), typeof(Item), typeof(Weapon), typeof(Consumable) });
+	private XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character)});
 
 	public void Save(int slot)
 	{

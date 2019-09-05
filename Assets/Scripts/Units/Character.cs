@@ -9,8 +9,16 @@ public class Character : Unit
 
 	public int AvailableAttributePoints;
 
-	[Header("Weapon")]
-	public Weapon Weapon;
+	//[Header("Weapon")]
+	[System.Xml.Serialization.XmlIgnore]
+	public Weapon Weapon { get; private set; }
+
+	public void Equip(Weapon weapon)
+	{
+		if (Weapon) Weapon.IsEquipped = false;
+		Weapon = weapon;
+		if (Weapon) Weapon.IsEquipped = true;
+	}
 
 	public override void Attack(Unit target, out CombatAction.Result result)
 	{

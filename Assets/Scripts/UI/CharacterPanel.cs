@@ -111,7 +111,7 @@ public class CharacterPanel : MonoBehaviour
 
 	public void UpdateEquipment()
 	{
-		(Unit as Character).Weapon = (Weapon)WeaponSlot.Item;
+		(Unit as Character).Equip((Weapon)WeaponSlot.Item);
 		UpdateUI();
 	}
 

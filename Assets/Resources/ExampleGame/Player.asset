@@ -30,4 +30,3 @@ MonoBehaviour:
   DamageResistance: 0
   XP: 0
   AvailableAttributePoints: 0
-  Weapon: {fileID: 0}
