@@ -130,9 +130,12 @@ public class GameManager : MonoBehaviour {
 		System.Func<Object, string> GetTrimmedName = (obj) => obj ? obj.name.Substring(0, obj.name.Length - 7) : "";
 		return new SaveManager.SavedGame()
 		{
-			PlayerTeam = GameManager.Instance.PlayerTeam.Units,
-			EquippedWeapons = GameManager.Instance.PlayerTeam.Units.ConvertAll(unit => Inventory.Instance.Items.FindIndex(item => item == (unit as Character).Weapon)),
+			PlayerTeam = PlayerTeam.Units,
+			EquippedWeapons = PlayerTeam.Units.ConvertAll(unit => Inventory.Instance.Items.FindIndex(item => item == (unit as Character).Weapon)),
 			Inventory = Inventory.Instance.Items.ConvertAll(item => GetTrimmedName(item)),
+			Money = Inventory.Instance.Money,
+			Map = CurrentMap.name,
+			Location = CurrentLocation,
 
 		};
 	}
@@ -141,9 +144,11 @@ public class GameManager : MonoBehaviour {
 	{
 		PlayerTeam = new Team() { Units = savedGame.PlayerTeam };
 		Inventory.Instance.Items = savedGame.Inventory.ConvertAll(name => Instantiate(Resources.Load($"ExampleGame/Items/{name}") as Item));
+		Inventory.Instance.Money = savedGame.Money;
 		for (int i = 0; i < PlayerTeam.Count; ++i)
 		{
 			(PlayerTeam[i] as Character).Equip(savedGame.EquippedWeapons[i] >= 0 ? Inventory.Instance.Items[savedGame.EquippedWeapons[i]] as Weapon : null);
+
 		}
 		TeamPanel.SetTeam(GameManager.Instance.PlayerTeam);
 
@@ -154,6 +159,10 @@ public class GameManager : MonoBehaviour {
 		Inventory.Instance.MerchantWindow.SetActive(false);
 		Inventory.Instance.InventoryWindow.SetActive(false);
 		CharacterWindow.SetActive(false);
+
+		GoToMap(Resources.Load($"ExampleGame/Maps/{savedGame.Map}") as Map);
+		GoToLocation(savedGame.Location);
+		PlayGameEvent(CurrentMap[savedGame.Location]);
 	}
 
 	private void Update()
@@ -226,7 +235,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void GoToLocation(Vector2Int pos, bool ignoreRandomOperations = false)
+	public void GoToLocation(Vector2Int pos)
 	{
 		if(CurrentMap == null)
 		{

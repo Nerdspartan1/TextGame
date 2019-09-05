@@ -18,6 +18,9 @@ public class SaveManager : MonoBehaviour
 		public List<Unit> PlayerTeam;
 		public List<int> EquippedWeapons;
 		public List<string> Inventory;
+		public int Money;
+		public string Map;
+		public Vector2Int Location;
 	}
 
 	private XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character)});
