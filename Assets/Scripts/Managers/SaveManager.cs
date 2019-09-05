@@ -4,14 +4,10 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour
 {
-	public static SaveManager Instance;
-	private void Awake()
-	{
-		Instance = this;
-	}
 
 	public struct ValuePair
 	{
@@ -30,27 +26,62 @@ public class SaveManager : MonoBehaviour
 		public List<ValuePair> Values;
 	}
 
-	private XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character)});
+	private static XmlSerializer serializer = new XmlSerializer(typeof(SavedGame), new Type[] { typeof(Character)});
 
-	public void Save(int slot)
+	public Transform SaveWindow;
+	public Transform SavePanel;
+	private SaveSlot[] saveSlots;
+
+	private void Awake()
+	{
+		saveSlots = SavePanel.GetComponentsInChildren<SaveSlot>();
+	}
+
+	public void ToggleWindow()
+	{
+		SaveWindow.gameObject.SetActive(!SaveWindow.gameObject.activeInHierarchy);
+		if (SaveWindow.gameObject.activeInHierarchy) UpdateUI();
+	}
+
+	public void UpdateUI()
+	{
+		int slotId = 0;
+		foreach(SaveSlot slot in saveSlots)
+		{
+			slot.SetSlotId(slotId);
+			slotId++;
+		}
+	}
+
+	public static string GetSavePath(int slot)
+	{
+		return $"Saves/save{slot}.save";
+	}
+
+	public static void Save(int slot)
 	{
 		var savedGame = GameManager.Instance.Save();
 
-		StreamWriter writer = new StreamWriter($"save{slot}.dat", false, System.Text.Encoding.UTF8);
+		StreamWriter writer = new StreamWriter(GetSavePath(slot), false, System.Text.Encoding.UTF8);
 
 		serializer.Serialize(writer, savedGame);
 
 		writer.Close();
 	}
 
-	public void Load(int slot)
+	public static void Load(int slot)
 	{
-		StreamReader reader = new StreamReader($"save{slot}.dat", System.Text.Encoding.UTF8);
+		StreamReader reader = new StreamReader(GetSavePath(slot), System.Text.Encoding.UTF8);
 
 		var loadedGame = serializer.Deserialize(reader) as SavedGame;
 
 		GameManager.Instance.Load(loadedGame);
 
 		reader.Close();
+	}
+
+	public static void Delete(int slot)
+	{
+		File.Delete(GetSavePath(slot));
 	}
 }
