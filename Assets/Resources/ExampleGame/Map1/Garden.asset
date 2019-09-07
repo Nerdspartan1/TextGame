@@ -18,6 +18,26 @@ MonoBehaviour:
     operations: []
     choices: []
   - conditions: []
-    RawText: You can hear dogs barking from across the street
-    operations: []
-    choices: []
+    RawText: What ? You found a clone of Tom !
+    operations:
+    - key: 
+      operationType: 11
+      value: 
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 11400000, guid: fd0fbaae1081cc04daa8a78743178378, type: 2}
+    - key: cloneFound
+      operationType: 1
+      value: 1
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 11400000, guid: fd0fbaae1081cc04daa8a78743178378, type: 2}
+    choices:
+    - conditions: []
+      text: Ok, weird.
+      operations: []
+  EncounterTable: {fileID: 0}

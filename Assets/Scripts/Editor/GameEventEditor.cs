@@ -145,6 +145,10 @@ public class OperationDrawer : PropertyDrawer
 			case OperationType.CloseMerchant:
 				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
 				break;
+			case OperationType.AddTeammate:
+				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
+				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.other)), GUIContent.none);
+				break;
 		}
 		
 		EditorGUI.indentLevel = indent;

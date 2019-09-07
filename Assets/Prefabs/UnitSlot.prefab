@@ -715,7 +715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -750,6 +750,7 @@ MonoBehaviour:
   LifeBar: {fileID: 9005606954362661107}
   Focus: {fileID: 4583969492157864405}
   FocusBar: {fileID: 9194839654438716494}
+  Panel: {fileID: 5057685999527192597}
   LevelUpSymbol: {fileID: 7049976028377558418}
 --- !u!114 &3729056803201660196
 MonoBehaviour:

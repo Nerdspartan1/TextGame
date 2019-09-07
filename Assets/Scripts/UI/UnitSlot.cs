@@ -13,6 +13,7 @@ public class UnitSlot : MonoBehaviour
 	public StatBar LifeBar;
 	public Text Focus;
 	public StatBar FocusBar;
+	public Image Panel;
 	public GameObject LevelUpSymbol;
 
 	public void UpdateSlot()
@@ -31,6 +32,7 @@ public class UnitSlot : MonoBehaviour
 		if (Unit is Character character)
 		{
 			LevelUpSymbol.SetActive(character.AvailableAttributePoints > 0);
+			Panel.color = character.InFightTeam ? Color.white : Color.gray;
 		}
 	}
 
