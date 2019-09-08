@@ -126,6 +126,7 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	//to be removed
 	private void Update()
 	{
 		TeamPanel.UpdateSlots();

@@ -30,3 +30,5 @@ MonoBehaviour:
   DamageResistance: 0
   XP: 0
   AvailableAttributePoints: 0
+  CanBeRemovedFromFightTeam: 0
+  InFightTeam: 1

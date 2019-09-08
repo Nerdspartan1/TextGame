@@ -41,6 +41,7 @@ public class FightManager : MonoBehaviour
 		Fight.EnemyTeam = Instantiate(enemyTeam);
 		Fight.EnemyTeam.InstantiateUnits();
 		Fight.PlayerTeam = new Team() { Units = GameManager.Instance.PlayerTeam.Units.FindAll(unit => (unit as Character).InFightTeam)};
+		GameManager.Instance.TeamPanel.SetTeam(Fight.PlayerTeam);
 
 		this.NextEvent = NextEvent;
 
@@ -196,6 +197,7 @@ public class FightManager : MonoBehaviour
 
 			yield return new Prompt(Prompt.PressOKToContinue).Display();
 
+			GameManager.Instance.TeamPanel.SetTeam(GameManager.Instance.PlayerTeam);
 			GameManager.Instance.LockMap = false;
 			GameManager.Instance.LockInventory = false;
 			GameManager.Instance.LockAbilities = false;

@@ -14,6 +14,7 @@ public class Character : Unit
 	public Weapon Weapon { get; private set; }
 
 	//[HideInInspector]
+	public bool CanBeRemovedFromFightTeam = true;
 	public bool InFightTeam = true;
 
 	public void Equip(Weapon weapon)
