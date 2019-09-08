@@ -48,6 +48,7 @@ public class FightManager : MonoBehaviour
 		EnemyTeamPanel.SetTeam(Fight.EnemyTeam);
 
 		GameManager.Instance.ClearText();
+		GameManager.Instance.ClearButtons();
 		GameManager.Instance.LockMap = true;
 		GameManager.Instance.LockInventory = true;
 		GameManager.Instance.LockAbilities = true;
