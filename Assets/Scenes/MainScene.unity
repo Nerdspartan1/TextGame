@@ -4892,6 +4892,7 @@ MonoBehaviour:
     type: 3}
   AbilityMaskingPanel: {fileID: 378605112}
   DescriptionText: {fileID: 1128283605}
+  LockCharacterSwap: 0
 --- !u!1 &1128283603
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ public class CharacterPanel : MonoBehaviour
 	public Text DescriptionText;
 
 	private AttributeBar[] AttributeBars;
-
+	public bool LockCharacterSwap = false;
 
 	public void Awake()
 	{
@@ -67,13 +67,14 @@ public class CharacterPanel : MonoBehaviour
 			XPBar.MaxValue = Character.XPLevel(character.Level + 1) - Character.XPLevel(character.Level);
 			XPBar.UpdateBar();
 
+			AddToFightTeamButton.gameObject.SetActive(true);
 			AddToFightTeamButton.onClick.RemoveAllListeners();
 
 			AddToFightTeamButton.GetComponentInChildren<Text>().text = character.InFightTeam ? "Remove from fight team" : "Add to fight team";
 
-			AddToFightTeamButton.interactable = character.InFightTeam ?
+			AddToFightTeamButton.interactable = !LockCharacterSwap && (character.InFightTeam ?
 				(character.CanBeRemovedFromFightTeam) :
-				(GameManager.Instance.PlayerTeam.Count(unit => (unit as Character).InFightTeam) < 4);
+				(GameManager.Instance.PlayerTeam.Count(unit => (unit as Character).InFightTeam) < 4));
 
 			if (AddToFightTeamButton.interactable)
 				AddToFightTeamButton.onClick.AddListener(
@@ -115,6 +116,7 @@ public class CharacterPanel : MonoBehaviour
 		else
 		{
 			XPBar.gameObject.SetActive(false);
+			AddToFightTeamButton.gameObject.SetActive(false);
 
 			foreach (var bar in AttributeBars)
 			{

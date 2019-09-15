@@ -54,6 +54,7 @@ public class FightManager : MonoBehaviour
 		GameManager.Instance.LockInventory = true;
 		GameManager.Instance.LockAbilities = true;
 		GameManager.Instance.LockSave = true;
+		GameManager.Instance.LockCharacterSwap = true;
 
 
 		GameManager.Instance.CreateText(introduction);
@@ -202,6 +203,7 @@ public class FightManager : MonoBehaviour
 			GameManager.Instance.LockInventory = false;
 			GameManager.Instance.LockAbilities = false;
 			GameManager.Instance.LockSave = false;
+			GameManager.Instance.LockCharacterSwap = false;
 
 			if (NextEvent) GameManager.Instance.PlayGameEvent(NextEvent);
 			else GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);

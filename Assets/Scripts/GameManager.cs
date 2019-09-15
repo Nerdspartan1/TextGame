@@ -370,6 +370,11 @@ public class GameManager : MonoBehaviour {
 		set => CharacterPanel.AbilityMaskingPanel.SetActive(value);
 	}
 
+	public bool LockCharacterSwap
+	{
+		set => CharacterPanel.LockCharacterSwap = value;
+	}
+
 	static void ClearChilds(Transform t)
 	{
 		foreach (Transform child in t)
