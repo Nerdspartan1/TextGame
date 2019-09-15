@@ -9,6 +9,9 @@ public class TeamPanel : MonoBehaviour
 	[Header("Prefabs")]
 	public GameObject CharacterSlotPrefab;
 
+	[Header("References")]
+	public Transform CharacterSlots;
+
 	private UnitSlot[] unitSlots;
 
 	public void UpdateSlots()
@@ -23,14 +26,14 @@ public class TeamPanel : MonoBehaviour
 	public void SetTeam(Team team)
 	{
 		Team = team;
-		foreach(Transform child in transform)
+		foreach(Transform child in CharacterSlots)
 		{
 			Destroy(child.gameObject);
 		}
 		var slotList = new List<UnitSlot>();
 		foreach(Unit u in Team)
 		{
-			var slot = Instantiate(CharacterSlotPrefab, transform).GetComponent<UnitSlot>();
+			var slot = Instantiate(CharacterSlotPrefab, CharacterSlots).GetComponent<UnitSlot>();
 			slot.Unit = u;
 			slotList.Add(slot);
 		}
