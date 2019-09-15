@@ -40,6 +40,8 @@ public class FightManager : MonoBehaviour
 		Fight = new Fight();
 		Fight.EnemyTeam = Instantiate(enemyTeam);
 		Fight.EnemyTeam.InstantiateUnits();
+		Fight.PlayerTeam = new Team() { Units = GameManager.Instance.PlayerTeam.Units.FindAll(unit => (unit as Character).InFightTeam)};
+		GameManager.Instance.TeamPanel.SetTeam(Fight.PlayerTeam);
 
 		this.NextEvent = NextEvent;
 
@@ -47,10 +49,12 @@ public class FightManager : MonoBehaviour
 		EnemyTeamPanel.SetTeam(Fight.EnemyTeam);
 
 		GameManager.Instance.ClearText();
+		GameManager.Instance.ClearButtons();
 		GameManager.Instance.LockMap = true;
 		GameManager.Instance.LockInventory = true;
 		GameManager.Instance.LockAbilities = true;
 		GameManager.Instance.LockSave = true;
+		GameManager.Instance.LockCharacterSwap = true;
 
 
 		GameManager.Instance.CreateText(introduction);
@@ -61,7 +65,7 @@ public class FightManager : MonoBehaviour
 
 	private FightOutcome CheckFightOutcome()
 	{
-		if (GameManager.Instance.PlayerTeam.All(unit => unit.IsDead))
+		if (Fight.PlayerTeam.All(unit => unit.IsDead))
 			return FightOutcome.Defeat;
 		else if(Fight.EnemyTeam.All(unit => unit.IsDead))
 			return FightOutcome.Victory;
@@ -101,7 +105,7 @@ public class FightManager : MonoBehaviour
 		do
 		{
 			//Player Strategy
-			var alivePlayers = GameManager.Instance.PlayerTeam.Where(unit => !unit.IsDead);
+			var alivePlayers = Fight.PlayerTeam.Where(unit => !unit.IsDead);
 			Fight.CombatActions = new List<CombatAction>(new CombatAction[alivePlayers.Count()]);
 			int teammateId = 0;
 			while (teammateId < alivePlayers.Count()) // Fight or escape
@@ -194,10 +198,12 @@ public class FightManager : MonoBehaviour
 
 			yield return new Prompt(Prompt.PressOKToContinue).Display();
 
+			GameManager.Instance.TeamPanel.SetTeam(GameManager.Instance.PlayerTeam);
 			GameManager.Instance.LockMap = false;
 			GameManager.Instance.LockInventory = false;
 			GameManager.Instance.LockAbilities = false;
 			GameManager.Instance.LockSave = false;
+			GameManager.Instance.LockCharacterSwap = false;
 
 			if (NextEvent) GameManager.Instance.PlayGameEvent(NextEvent);
 			else GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);

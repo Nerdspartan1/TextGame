@@ -7,6 +7,7 @@ using UnityEngine;
 public class Fight
 {
 	// in
+	public Team PlayerTeam;
 	public Team EnemyTeam;
 	public Unit CurrentActor;
 	public List<CombatAction> CombatActions;
@@ -20,7 +21,7 @@ public class Fight
 	public List<CombatAction> MakeEnemyActions()
 	{
 		var enemiesActions = new List<CombatAction>();
-		var aliveTargets = GameManager.Instance.PlayerTeam.Where(unit => !unit.IsDead);
+		var aliveTargets = PlayerTeam.Where(unit => !unit.IsDead);
 		for (int i = 0; i < EnemyTeam.Count; ++i)
 		{
 			if (EnemyTeam[i].IsDead) continue;
@@ -157,7 +158,7 @@ public class Fight
 			(CurrentCombatAction.Ability != null &&
 			CurrentCombatAction.Ability.AbilityType == AbilityType.Heal))
 		{
-			parsableTeam = GameManager.Instance.PlayerTeam;
+			parsableTeam = PlayerTeam;
 		}
 		else
 		{

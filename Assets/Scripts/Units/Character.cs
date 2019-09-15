@@ -13,6 +13,10 @@ public class Character : Unit
 	[System.Xml.Serialization.XmlIgnore]
 	public Weapon Weapon { get; private set; }
 
+	//[HideInInspector]
+	public bool CanBeRemovedFromFightTeam = true;
+	public bool InFightTeam = true;
+
 	public void Equip(Weapon weapon)
 	{
 		if (Weapon) Weapon.IsEquipped = false;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class CharacterPanel : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public class CharacterPanel : MonoBehaviour
 	[Header("References")]
 	public Text NameText;
 	public Text LevelText;
-	public Text DescriptionText;
 	public StatBar XPBar;
+	public Button AddToFightTeamButton;
 	public StatBar HealthBar;
 	public StatBar FocusBar;
 	public Transform AttributePanel;
@@ -19,9 +20,10 @@ public class CharacterPanel : MonoBehaviour
 	public Transform AbilityPanel;
 	public GameObject AbilitySlotPrefab;
 	public GameObject AbilityMaskingPanel;
+	public Text DescriptionText;
 
 	private AttributeBar[] AttributeBars;
-
+	public bool LockCharacterSwap = false;
 
 	public void Awake()
 	{
@@ -65,6 +67,26 @@ public class CharacterPanel : MonoBehaviour
 			XPBar.MaxValue = Character.XPLevel(character.Level + 1) - Character.XPLevel(character.Level);
 			XPBar.UpdateBar();
 
+			AddToFightTeamButton.gameObject.SetActive(true);
+			AddToFightTeamButton.onClick.RemoveAllListeners();
+
+			AddToFightTeamButton.GetComponentInChildren<Text>().text = character.InFightTeam ? "Remove from fight team" : "Add to fight team";
+
+			AddToFightTeamButton.interactable = !LockCharacterSwap && (character.InFightTeam ?
+				(character.CanBeRemovedFromFightTeam) :
+				(GameManager.Instance.PlayerTeam.Count(unit => (unit as Character).InFightTeam) < 4));
+
+			if (AddToFightTeamButton.interactable)
+				AddToFightTeamButton.onClick.AddListener(
+					delegate
+					{
+						character.InFightTeam = !character.InFightTeam;
+						GameManager.Instance.TeamPanel.UpdateSlots();
+						UpdateUI();
+					}
+					);
+
+
 			foreach (var bar in AttributeBars)
 			{
 				bar.Value = Unit.GetAttribute(bar.Attribute);
@@ -94,6 +116,7 @@ public class CharacterPanel : MonoBehaviour
 		else
 		{
 			XPBar.gameObject.SetActive(false);
+			AddToFightTeamButton.gameObject.SetActive(false);
 
 			foreach (var bar in AttributeBars)
 			{

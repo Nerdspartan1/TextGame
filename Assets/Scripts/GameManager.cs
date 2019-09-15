@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -125,6 +126,21 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	//to be removed
+	private void Update()
+	{
+		TeamPanel.UpdateSlots();
+	}
+
+	public void AddTeammate(Character character)
+	{
+		var instantiatedCharacter = Instantiate(character);
+		instantiatedCharacter.InFightTeam = (PlayerTeam.Units.Count(unit => (unit as Character).InFightTeam) < 4);
+		PlayerTeam.Add(instantiatedCharacter);
+		TeamPanel.SetTeam(PlayerTeam);
+	}
+
+	#region Save/Load
 	public SaveManager.SavedGame Save()
 	{
 		List<SaveManager.ValuePair> values = new List<SaveManager.ValuePair>();
@@ -178,11 +194,7 @@ public class GameManager : MonoBehaviour {
 		GoToLocation(savedGame.Location);
 		PlayGameEvent(CurrentMap[savedGame.Location]);
 	}
-
-	private void Update()
-	{
-		TeamPanel.UpdateSlots();
-	}
+	#endregion
 
 	#region GameEvent handling
 	public void PlayGameEvent(GameEvent gameEvent)
@@ -356,6 +368,11 @@ public class GameManager : MonoBehaviour {
 	public bool LockAbilities
 	{
 		set => CharacterPanel.AbilityMaskingPanel.SetActive(value);
+	}
+
+	public bool LockCharacterSwap
+	{
+		set => CharacterPanel.LockCharacterSwap = value;
 	}
 
 	static void ClearChilds(Transform t)
