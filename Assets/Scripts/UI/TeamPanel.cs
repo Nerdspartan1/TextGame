@@ -26,9 +26,9 @@ public class TeamPanel : MonoBehaviour
 	public void SetTeam(Team team)
 	{
 		Team = team;
-		foreach(Transform child in CharacterSlots)
+		foreach(Transform slot in CharacterSlots)
 		{
-			Destroy(child.gameObject);
+			Destroy(slot.gameObject);
 		}
 		var slotList = new List<UnitSlot>();
 		foreach(Unit u in Team)
