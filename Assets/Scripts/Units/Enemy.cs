@@ -14,9 +14,6 @@ public class Enemy : Unit
 		public float dropChance;
 	}
 
-	[Header("Fight Style")]
-	public Vector2Int damage;
-
 	[Header("Drop")]
 	public int xpDrop;
 	public LootDrop[] lootDrops;
@@ -24,7 +21,7 @@ public class Enemy : Unit
 	public override void Attack(Unit target, out CombatAction.Result result)
 	{
 		result = new CombatAction.Result();
-		result.IntValue = target.TakeDamage(Random.Range(damage.x, damage.y));
+		result.IntValue = target.TakeDamage(Random.Range(Strength, Strength + Skill));
 		result.Missed = false;
 
 	}

@@ -15,20 +15,15 @@ MonoBehaviour:
   Name: Sand crab
   Description: A large crab with a brownish shell. Has heavy claws that can be troublesome
     to dodge. Can be quite tasty if seasoned correctly.
-  Vitality: 10
-  Strength: 10
-  Skill: 10
-  Endurance: 10
-  Intelligence: 10
-  Speed: 10
+  Strength: 3
+  Skill: 0
+  Intelligence: 1
   Abilities: []
   Level: 1
-  maxHp: 0
-  hp: 0
-  maxFocus: 0
-  focus: 0
-  StrengthMultiplier: 0
+  maxHp: 12
+  hp: 12
+  maxFocus: 5
+  focus: 5
   DamageResistance: 0
-  damage: {x: 0, y: 0}
-  xpDrop: 0
+  xpDrop: 12
   lootDrops: []
