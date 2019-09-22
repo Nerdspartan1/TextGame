@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour {
 	public Transform infoPanel;
 	public Transform mapHidingPanel;
 	public TeamPanel TeamPanel;
-	public Transform mapPanel;
+	public Transform MapPanel;
 	public GameObject CharacterWindow;
 	public CharacterPanel CharacterPanel;
 
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour {
 
 		//starting map
 		GoToMap(StartingMap);
-		GoToLocation(StartingLocation);
+		GoToLocation(StartingLocation,true);
 
 		PlayGameEvent(StartingGameEvent);
 
@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour {
 		cellWidth = LocationPrefab.GetComponent<RectTransform>().rect.width;
 		cellHeight = LocationPrefab.GetComponent<RectTransform>().rect.height;
 
-		mapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(cellWidth*map.Width, cellHeight*map.Height);
+		MapPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(cellWidth*map.Width, cellHeight*map.Height);
 		MapCells.Clear();
 		
 		for (int v = 0; v<map.Height; v++)
@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour {
 			{
 				if (map[new Vector2Int(u,v)] != null)
 				{
-					GameObject go = Instantiate(LocationPrefab, mapPanel);
+					GameObject go = Instantiate(LocationPrefab, MapPanel);
 					go.transform.localPosition = new Vector3(cellWidth * u, -v * cellHeight, 0);
 					Vector2Int pos = new Vector2Int(u, v);
 					go.GetComponent<Button>().onClick.AddListener(
@@ -262,7 +262,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void GoToLocation(Vector2Int pos)
+	public void GoToLocation(Vector2Int pos, bool centerOnCursor = false)
 	{
 		if(CurrentMap == null)
 		{
@@ -279,6 +279,8 @@ public class GameManager : MonoBehaviour {
 
 		//update position on map
 		MapCursorPrefab.transform.localPosition = new Vector2(pos.x * cellWidth, -pos.y* cellHeight);
+		//center in on the map
+		if(centerOnCursor) MapPanel.transform.localPosition = -MapCursorPrefab.transform.localPosition + new Vector3(110,110);
 
 		foreach(KeyValuePair<Vector2Int,Button> pair in MapCells)
 		{
@@ -337,8 +339,8 @@ public class GameManager : MonoBehaviour {
 	public void ClearMap()
 	{
 		MapCursorPrefab.transform.SetParent(null);
-		ClearChilds(mapPanel);
-		MapCursorPrefab.transform.SetParent(mapPanel);
+		ClearChilds(MapPanel);
+		MapCursorPrefab.transform.SetParent(MapPanel);
 	}
 
 

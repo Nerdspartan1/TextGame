@@ -27,7 +27,7 @@ MonoBehaviour:
     choices: []
   - conditions: []
     RawText: "\"They mark their territories with banners made of bones and junk metal,
-      so if you come across one, go back, do you understand ? Leave them to me.\"\n\nShe
+      so if you come across one, go back. Leave them to me. I will take care of them.\"\n\nShe
       raises her hand to point a finger at you. \n\n\"And if you decide to join them,
       I will kill you too, do you understand ?\""
     operations: []

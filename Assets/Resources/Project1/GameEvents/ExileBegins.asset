@@ -37,5 +37,37 @@ MonoBehaviour:
       rations, and a sharp knife made of recycled metal. It might be difficult to
       survive with just that. Moreover, you don''t know a lot about what awaits you
       out there. Perhaps you should start by talking with the other exiles ?'
-    operations: []
+    operations:
+    - key: 
+      operationType: 7
+      value: 
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: 1eea7ee16100cf244950006a224cda2f, type: 2}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
+    - key: 
+      operationType: 7
+      value: 
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: 1eea7ee16100cf244950006a224cda2f, type: 2}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
+    - key: 
+      operationType: 7
+      value: 
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: 1eea7ee16100cf244950006a224cda2f, type: 2}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
+    - key: 
+      operationType: 7
+      value: 
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: ad23685d2021e1e45858ad36d89c0a7c, type: 2}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
     choices: []
