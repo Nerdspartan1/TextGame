@@ -29,11 +29,14 @@ public class Character : Unit
 		result = new CombatAction.Result();
 		if (Weapon != null)
 		{
-			int multipliedDamage = (int)(1 +
+			float damageMultiplier = 1 +
 				Weapon.StrengthScale * ((Strength - Weapon.MinimumStrength) * 0.01f) +
 				Weapon.SkillScale * ((Skill - Weapon.MinimumSkill) * 0.01f) +
-				Weapon.IntelligenceScale * ((Intelligence - Weapon.MinimumIntelligence) * 0.01f));
-			result.IntValue = target.TakeDamage(multipliedDamage);
+				Weapon.IntelligenceScale * ((Intelligence - Weapon.MinimumIntelligence) * 0.01f);
+			if (Strength < Weapon.MinimumStrength) damageMultiplier *= 0.5f;
+			if (Skill < Weapon.MinimumSkill) damageMultiplier *= 0.5f;
+			if (Intelligence < Weapon.MinimumIntelligence) damageMultiplier *= 0.5f;
+			result.IntValue = target.TakeDamage((int)(damageMultiplier * Weapon.GetDamage()));
 		}
 		else
 			result.IntValue = target.TakeDamage(Strength);

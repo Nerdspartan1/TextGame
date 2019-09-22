@@ -26,4 +26,6 @@ MonoBehaviour:
   focus: 5
   DamageResistance: 0
   xpDrop: 12
-  lootDrops: []
+  lootDrops:
+  - loot: {fileID: 11400000, guid: 4f1561ad53fe1e047bf8459d1abce196, type: 2}
+    dropChance: 0.5
