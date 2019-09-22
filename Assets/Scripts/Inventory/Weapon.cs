@@ -10,6 +10,14 @@ public class Weapon : Item {
 	public int minDmg;
 	public int maxDmg;
 
+	public int MinimumStrength = 0;
+	public int MinimumSkill = 0;
+	public int MinimumIntelligence = 0;
+
+	public float StrengthScale = 0;
+	public float SkillScale = 0;
+	public float IntelligenceScale = 0;
+
 	public int GetDamage()
 	{
 		return Random.Range(minDmg, maxDmg + 1);

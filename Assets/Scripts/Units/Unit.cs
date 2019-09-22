@@ -69,9 +69,6 @@ public abstract class Unit : ScriptableObject
 		}
 	}
 
-	public float StrengthMultiplier;
-	public float SkillMultiplier;
-	public float IntelligenceMultiplier;
 	public float DamageResistance;
 
 	public void CalculateStatsFromAttributes(bool reset = false)
@@ -82,9 +79,6 @@ public abstract class Unit : ScriptableObject
 		int previousMaxFocus = MaxFocus;
 		MaxFocus = 5 * Intelligence;
 		Focus = reset ? MaxFocus : Focus + (MaxFocus - previousMaxFocus);
-		StrengthMultiplier = 0.90f + 0.01f * Strength;
-		SkillMultiplier = 0.90f + 0.01f * Skill;
-		IntelligenceMultiplier = 0.90f + 0.01f * Intelligence;
 		
 	}
 
@@ -101,7 +95,7 @@ public abstract class Unit : ScriptableObject
 		result = new CombatAction.Result();
 		foreach (var target in targets)
 		{
-			int multipliedValue = (int)(IntelligenceMultiplier * ability.Value);
+			int multipliedValue = (int)(((0.9f + Intelligence*0.01f)  * ability.Value));
 			switch (ability.AbilityType)
 			{
 				case AbilityType.Heal:
