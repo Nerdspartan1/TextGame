@@ -13,7 +13,7 @@ public class UnitEditor : Editor
 		base.OnInspectorGUI();
 		if(GUILayout.Button("Calculate stats from attributes"))
 		{
-			((Unit)serializedObject.targetObject).CalculateStatsFromAttributes();
+			((Unit)serializedObject.targetObject).CalculateStatsFromAttributes(true);
 		}
 	}
 }

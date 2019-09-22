@@ -52,12 +52,9 @@ public class Character : Unit
 	{
 		switch (attribute)
 		{
-			case Attribute.Vitality: Vitality++; break;
 			case Attribute.Strength: Strength++; break;
 			case Attribute.Skill: Skill++; break;
-			case Attribute.Endurance: Endurance++; break;
 			case Attribute.Intelligence: Intelligence++; break;
-			case Attribute.Speed: Speed++; break;
 		}
 		AvailableAttributePoints--;
 		CalculateStatsFromAttributes();

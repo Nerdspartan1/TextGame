@@ -75,7 +75,7 @@ public class FightManager : MonoBehaviour
 
 	public IOrderedEnumerable<CombatAction> GetOrderedActions(IEnumerable<CombatAction> combatActions)
 	{
-		return combatActions.OrderByDescending(action => action.Actor.Speed);
+		return combatActions.OrderByDescending(action => action.Actor.Skill);
 	}
 
 //	private void Describe(IEnumerable<CombatAction> actions)

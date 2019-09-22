@@ -4,12 +4,9 @@ using UnityEngine;
 
 public enum Attribute
 {
-	Vitality,
 	Strength,
 	Skill,
-	Endurance,
 	Intelligence,
-	Speed,
 }
 
 public abstract class Unit : ScriptableObject
@@ -20,12 +17,9 @@ public abstract class Unit : ScriptableObject
 	public string Description;
 
 	[Header("Attributes")]
-	public int Vitality = 10;
 	public int Strength = 10;
 	public int Skill = 10;
-	public int Endurance = 10;
 	public int Intelligence = 10;
-	public int Speed = 10;
 
 	[Header("Abilities")]
 	public List<Ability> Abilities;
@@ -76,13 +70,22 @@ public abstract class Unit : ScriptableObject
 	}
 
 	public float StrengthMultiplier;
+	public float SkillMultiplier;
+	public float IntelligenceMultiplier;
 	public float DamageResistance;
 
-	public void CalculateStatsFromAttributes()
+	public void CalculateStatsFromAttributes(bool reset = false)
 	{
-		MaxHp = Vitality > 9 ? (int)(2000 * Mathf.Atan(Mathf.PI * Vitality / 200) -211) : 1 + 10 * Vitality;
-		StrengthMultiplier = 0.76f + 2f * Mathf.Sin((float)Strength * Mathf.PI / 200f);
-		MaxFocus = Intelligence < 40 ? (int)(8 + 300 * Mathf.Sin(Mathf.PI * Intelligence / 100)) : 3 * Intelligence + 173;
+		int previousMaxHp = MaxHp;
+		MaxHp = 20 + (int)(3.0f * (0.6f*Strength + 0.3f*Skill + 0.1f*Intelligence));
+		Hp = reset ? MaxHp : Hp + (MaxHp - previousMaxHp);
+		int previousMaxFocus = MaxFocus;
+		MaxFocus = 5 * Intelligence;
+		Focus = reset ? MaxFocus : Focus + (MaxFocus - previousMaxFocus);
+		StrengthMultiplier = 0.90f + 0.01f * Strength;
+		SkillMultiplier = 0.90f + 0.01f * Skill;
+		IntelligenceMultiplier = 0.90f + 0.01f * Intelligence;
+		
 	}
 
 	public bool IsDead{ get => Hp <= 0; }
@@ -98,15 +101,16 @@ public abstract class Unit : ScriptableObject
 		result = new CombatAction.Result();
 		foreach (var target in targets)
 		{
+			int multipliedValue = (int)(IntelligenceMultiplier * ability.Value);
 			switch (ability.AbilityType)
 			{
 				case AbilityType.Heal:
-					target.Heal(ability.Value);
-					result.IntValue = ability.Value;
+					target.Heal(multipliedValue);
+					result.IntValue = multipliedValue;
 					break;
 				case AbilityType.Damage:
-					target.TakeDamage(ability.Value);
-					result.IntValue = ability.Value;
+					target.TakeDamage(multipliedValue);
+					result.IntValue = multipliedValue;
 					break;
 			}
 			
@@ -140,12 +144,9 @@ public abstract class Unit : ScriptableObject
 	{
 		switch (attribute)
 		{
-			case Attribute.Vitality: return Vitality;
 			case Attribute.Strength: return Strength;
 			case Attribute.Skill: return Skill;
-			case Attribute.Endurance: return Endurance;
 			case Attribute.Intelligence: return Intelligence;
-			case Attribute.Speed: return Speed;
 		}
 		throw new System.Exception("Unknown attribute");
 	}
