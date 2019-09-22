@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
+  m_Name: OldManAdvice
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: '"You want an advice to survive the exile..." he says meticulously while
+      staring at you, stroking his beard. "Heh. Seeing someone so hopeful make me
+      glad."
+
+
+      He pauses, his eyes darting over you.'
+    operations: []
+    choices: []
+  - conditions: []
+    RawText: '"You''re young, you look fit and healthy... makes me wonder why you
+      got exiled. Bah, doesn''t matter now."
+
+
+      He looks in the distance to the east.
+
+
+      "You may have seen a few other exiles head to the east. They hope to reach the
+      clan of Jafax, our ex-vassals. But it''s useless, it is too far. No man can
+      hope to make the walk there through the desert and the mountains on foot, trust
+      me. Your best hope is to head straight south and try to reach the Warrior''s
+      forest. There is no civilization there but at least, you will be able to find
+      some shade, water and food to survive."
+
+
+      He pauses to sip on the water bottle that was handed to aged exiles before their
+      departure.'
+    operations: []
+    choices: []
+  - conditions: []
+    RawText: '"I heard there is some sort of temple in that forest, dedicated to some
+      ancient gods from a forgotten era... You might find some people there to help
+      you ? I''m sorry I can''t help you more. That''s all I can tell you."'
+    operations: []
+    choices:
+    - conditions: []
+      text: '"Thank you. This is helpful."'
+      operations: []

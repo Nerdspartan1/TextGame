@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
+  m_Name: CapedWomanComeWithYou
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: 'She stares at you for some time.
+
+
+      "No, I''m sorry, you''d be in danger if you came with me. Do not follow me."'
+    operations: []
+    choices:
+    - conditions: []
+      text: '"I see."'
+      operations: []
+  - conditions: []
+    RawText: She remains turned towards you for a few moments, as if she wanted to
+      add something, but she eventually resume her scouting silently.
+    operations: []
+    choices: []

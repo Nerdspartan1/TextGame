@@ -7047,11 +7047,11 @@ MonoBehaviour:
   MapCursorPrefab: {fileID: 151370142}
   ItemSlotPrefab: {fileID: 3445653614421520457, guid: 1365e2bbae1d84d4b87b4533edf80c5c,
     type: 3}
-  StartingGameEvent: {fileID: 11400000, guid: a4c8953992d41504faee327597441dd5, type: 2}
+  StartingGameEvent: {fileID: 11400000, guid: 66a05c11ff9bd114282019e530680eee, type: 2}
   CurrentGameEvent: {fileID: 0}
-  StartingMap: {fileID: 11400000, guid: 83b92eddad84d2845a3628734ce38ef3, type: 2}
+  StartingMap: {fileID: 11400000, guid: 8066b3537f8da7a4dac25e7beeea463a, type: 2}
   CurrentMap: {fileID: 0}
-  StartingLocation: {x: 1, y: 1}
+  StartingLocation: {x: 9, y: 0}
   CurrentLocation: {x: 0, y: 0}
   foe: {fileID: 11400000, guid: d4ee3f9948f8f3a4da05a480575f75db, type: 2}
 --- !u!4 &1700758564

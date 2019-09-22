@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
+  m_Name: ExileBegins
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: 'The great gate closes behing you in a deafening mechanical rattle. Before
+      you lies a vast sea of sand bathing in an impossibly bright and blazing hot
+      sunlight.
+
+
+      There are other exiles with you. Among them are mostly men and women of old
+      age, disabled people, sentenced criminals and political enemies, you presume.
+
+
+      A few of them are panicking, a few of them are banging on the door, crying to
+      let them back in. The most capable looking ones are already silently beginning
+      their trek in the desert.'
+    operations: []
+    choices: []
+  - conditions: []
+    RawText: 'The rest are just silently resigned to their fate, sitting in the shadow
+      of the city walls, amongst the skeletons of the previous years'' exiles.
+
+
+      You glance at what you were given as a parting gift from the city. A few bug
+      rations, and a sharp knife made of recycled metal. It might be difficult to
+      survive with just that. Moreover, you don''t know a lot about what awaits you
+      out there. Perhaps you should start by talking with the other exiles ?'
+    operations: []
+    choices: []

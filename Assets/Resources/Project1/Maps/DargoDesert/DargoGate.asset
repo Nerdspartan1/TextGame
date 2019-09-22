@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
+  m_Name: DargoGate
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: 'You are in front of Dargo City''s massive gate. It is tighly shut down,
+      and there is no way that you would be able to force it open from outside.
+
+
+      Most of the exiles are sitting around in resignation, or mentally preparing
+      themselves to part with the only place of civilization they know. You try to
+      make out who is able to hold a conversation amongst them.
+
+
+      Just to the right of the gate sits an old bearded man, looking moodily in the
+      distance. Maybe he has some old man''s advices he would be willing to share.
+
+
+      Standing far away from the gate is a capable-looking caped woman looking cautiously
+      in the distance. She looks like she knows a few things about this desert.
+
+
+      There is a young man still banging furiously at the gate, shouting insults to
+      whoever might want to hear them from the other side of the wall.
+
+
+
+'
+    operations: []
+    choices:
+    - conditions: []
+      text: Talk to the old man
+      operations:
+      - key: 
+        operationType: 6
+        value: 
+        gameEvent: {fileID: 11400000, guid: 3a55f3aa841e80b4dadbbd0e9df47fdf, type: 2}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 0}
+        other: {fileID: 0}
+    - conditions: []
+      text: Talk to the caped woman
+      operations:
+      - key: 
+        operationType: 6
+        value: 
+        gameEvent: {fileID: 11400000, guid: 67a89512a97de3642b08a08b909124f9, type: 2}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 0}
+        other: {fileID: 0}
+    - conditions: []
+      text: Talk to the young man
+      operations:
+      - key: 
+        operationType: 0
+        value: 
+        gameEvent: {fileID: 0}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 0}
+        other: {fileID: 0}
+  EncounterTable: {fileID: 0}

@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
+  m_Name: CapedWomanAdvice
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: "\"Advices ?\" she repeats. \"Yes, I can give you some.\"\n\nShe turns
+      to fully face you, giving you a chance to glance over her equipment : sturdy
+      leather armor, combat knife, long-range sniper rifle, ammo pockets.\n\n\"If
+      you encounter bandits in this desert, run.\" she says while piercing you with
+      her stare. \n\n\"There are some dangers in the desert like scorpions and sand
+      crabs. But the bandits here are ruthless, and they come in high number. If they
+      see you, they will kill you and loot your body. And they might do it the other
+      way around if you are a woman.\"\n\nShe pauses to readjust the leather strap
+      across her chest."
+    operations: []
+    choices: []
+  - conditions: []
+    RawText: "\"They mark their territories with banners made of bones and junk metal,
+      so if you come across one, go back, do you understand ? Leave them to me.\"\n\nShe
+      raises her hand to point a finger at you. \n\n\"And if you decide to join them,
+      I will kill you too, do you understand ?\""
+    operations: []
+    choices:
+    - conditions: []
+      text: '"I understand. Thank you for the advice."'
+      operations: []
+  - conditions: []
+    RawText: 'She lowers her hand and puts it on her dagger''s handle.
+
+
+      "If you need to fight, don''t forget to equip your weapon by accessing your
+      character panel by clicking on your character slot in the top left corner, and
+      dragging your weapon from your inventory to your weapon slot.
+
+
+      You should always do it before combat, as you can''t switch weapon during a
+      fight." '
+    operations: []
+    choices:
+    - conditions: []
+      text: '"Got it. Thanks."'
+      operations: []

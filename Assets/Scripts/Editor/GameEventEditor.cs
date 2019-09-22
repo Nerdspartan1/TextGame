@@ -263,7 +263,7 @@ public class ParagraphDrawer : PropertyDrawer
 			(conditions.isExpanded ?
 				EditorUtils.GetPropertyListHeight(conditions) :
 				0) +
-			100 + //text
+			200 + //text
 			20 + //foldout
 			(operations.isExpanded ?
 				EditorUtils.GetPropertyListHeight(operations) :
@@ -304,8 +304,8 @@ public class ParagraphDrawer : PropertyDrawer
 			}
 
 
-			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 100), property.FindPropertyRelative(nameof(Paragraph.RawText)));
-			position.y += 100;
+			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 200), property.FindPropertyRelative(nameof(Paragraph.RawText)));
+			position.y += 200;
 
 			SerializedProperty operations = property.FindPropertyRelative(nameof(Paragraph.operations));
 			foldoutRect = new Rect(position.x, position.y, position.width, 20);

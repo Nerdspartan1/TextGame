@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
+  m_Name: CapedWomanTalk
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: 'The woman turns her head towards you as you approach. Her hair and cape
+      are floating behind her in the desert dry wind, making peaceful flapping sounds.
+
+
+      She looks at you with her piercing blue eyes. You notice that she bears multiple
+      scars on her face.
+
+
+      "What is it ?" she asks directly, though not rudely.'
+    operations: []
+    choices:
+    - conditions: []
+      text: '"Could you give me some advices on how to survive out there ?"'
+      operations:
+      - key: capedWomanAcquainted
+        operationType: 1
+        value: 1
+        gameEvent: {fileID: 11400000, guid: 0827378bee2f0d843aca1cb924bd13ab, type: 2}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 0}
+        other: {fileID: 0}
+      - key: 
+        operationType: 6
+        value: 
+        gameEvent: {fileID: 11400000, guid: 0827378bee2f0d843aca1cb924bd13ab, type: 2}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 0}
+        other: {fileID: 0}
+    - conditions: []
+      text: '"Why did you get exiled ?"'
+      operations:
+      - key: 
+        operationType: 6
+        value: 
+        gameEvent: {fileID: 11400000, guid: baec8b198a6e7e542a3a1ca3d2b46593, type: 2}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 0}
+        other: {fileID: 0}
+    - conditions:
+      - key: capedWomanAcquainted
+        conditionType: 0
+        value: 1
+      text: '"Can I come with you ?"'
+      operations:
+      - key: 
+        operationType: 6
+        value: 
+        gameEvent: {fileID: 11400000, guid: 2c5e83819505d524a9d1968e1fda7dfd, type: 2}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 0}
+        other: {fileID: 0}

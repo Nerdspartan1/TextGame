@@ -6,7 +6,7 @@ using UnityEngine;
 public class Paragraph
 {
 	public List<Condition> conditions;
-	[TextArea(5, 15)]
+	[TextArea(10, 20)]
 	[SerializeField]
 	public string RawText;
 	public List<Operation> operations;
