@@ -303,7 +303,6 @@ public class ParagraphDrawer : PropertyDrawer
 
 			}
 
-
 			EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 200), property.FindPropertyRelative(nameof(Paragraph.RawText)));
 			position.y += 200;
 
@@ -366,9 +365,10 @@ public class GameEventEditor : Editor
 
 		if (EditorGUI.EndChangeCheck())
 		{
+			Undo.RecordObject(serializedObject.targetObject, "change paragraphs");
 			serializedObject.ApplyModifiedProperties();
+			EditorUtility.SetDirty(serializedObject.targetObject);
 		}
-		
 
 	}
 }

@@ -65,9 +65,9 @@ MonoBehaviour:
       text: Talk to the young man
       operations:
       - key: 
-        operationType: 0
+        operationType: 6
         value: 
-        gameEvent: {fileID: 0}
+        gameEvent: {fileID: 11400000, guid: 050628bc037a51245aa2de09ef194dd8, type: 2}
         position: {x: 0, y: 0}
         item: {fileID: 0}
         merchant: {fileID: 0}

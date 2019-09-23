@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Crab meat
   icon: {fileID: 21300000, guid: cac45f45565339949b9163f3aaf0ff76, type: 3}
-  Description: Sand crab flesh. A bit rubbery but doesn't taste half bad.
+  Description: Sand crab flesh. Very rubbery and takes a long time to chew. Could
+    use some seasoning.
   Value: 5
   IsEquipped: 0
   UseValue: 8

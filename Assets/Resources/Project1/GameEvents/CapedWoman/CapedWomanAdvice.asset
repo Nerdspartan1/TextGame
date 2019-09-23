@@ -21,22 +21,24 @@ MonoBehaviour:
       her stare. \n\n\"There are some dangers in the desert like scorpions and sand
       crabs. But the bandits here are ruthless, and they come in high number. If they
       see you, they will kill you and loot your body. And they might do it the other
-      way around if you are a woman.\"\n\nShe pauses to readjust the leather strap
-      across her chest."
+      way around if you are a woman.\"\n\nShe pauses briefly to unsheath her knife
+      and start playing with the blade with her thumb."
     operations: []
     choices: []
   - conditions: []
-    RawText: "\"They mark their territories with banners made of bones and junk metal,
-      so if you come across one, go back. Leave them to me. I will take care of them.\"\n\nShe
-      raises her hand to point a finger at you. \n\n\"And if you decide to join them,
-      I will kill you too, do you understand ?\""
+    RawText: "\"They mark their territories with banners made of bones and junk metal.
+      If you come across one, turn back immediately.\"\n\nShe spins the knife with
+      her finger.\n\n\"Do not try to confront them. They are stupid but they are many.
+      Leave them to me. Also...\"\n\nShe suddenly raises the knife to point it at
+      you. \n\n\"..if you decide to join them, I will kill you, do you understand
+      ?\""
     operations: []
     choices:
     - conditions: []
-      text: '"I understand. Thank you for the advice."'
+      text: '"...I understand. Thank you for the advice."'
       operations: []
   - conditions: []
-    RawText: 'She lowers her hand and puts it on her dagger''s handle.
+    RawText: 'She lowers her weapon and puts it back in her sheath.
 
 
       "If you need to fight, don''t forget to equip your weapon by accessing your

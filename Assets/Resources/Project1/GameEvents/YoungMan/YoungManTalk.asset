@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
+  m_Name: GameEvent
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: '"Heeeeeeey !" the young man shouts at the top of his lungs. "Let me
+      back in ! You bastards !"
+
+
+      He bangs furiously on the door several times before he notices you standing
+      next to him. He stops to catch his breath, his head resting on his forearm pressed
+      against the door and eyes you neglectfully.
+
+
+      He looks quite young, about the same age as you.
+
+
+      "What do you want ?" he asks crudely.'
+    operations: []
+    choices:
+    - conditions: []
+      text: '"They won''t let you back in, you know ?"'
+      operations: []
+  - conditions: []
+    RawText: '"Well, duh ! You got something more obvious to tell me, smartass ?"'
+    operations: []
+    choices:
+    - conditions: []
+      text: '"Then maybe you should stop banging on that door ?"'
+      operations: []
+  - conditions: []
+    RawText: 'He suddenly turns to face you and quickly runs a hand into his blond
+      hair to clear a stray strand that was hanging over his eyes. You notice that
+      he has a quite good looking face with a well defined chin and nose, and blue-gray
+      eyes.
+
+
+      "Hey ! You know what ? You''re right !" he shouts with a sly grin. "I sure would
+      like to hear your idea of what to do instead ! Oh what''s that ? Wander off
+      into the desert and get killed and maybe eaten by raiders ? No thanks ! I''m
+      gonna stick to banging on this door and you can have fun on your own !"
+
+
+      He then proceeds to immediately resume banging on the gate.
+
+
+      "Bastaaaaaards ! Open this dooooooooor !"'
+    operations: []
+    choices:
+    - conditions: []
+      text: Leave him alone
+      operations: []
