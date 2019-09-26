@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviour {
 		yield return CurrentGameEvent.DisplayParagraph();
 
 		if (!(CurrentGameEvent is Location)) PlayGameEvent(CurrentMap[CurrentLocation]);
-		CurrentGameEvent = null;
+		else CurrentGameEvent = null;
 	}
 
 	public void PlayLocation(Location location)

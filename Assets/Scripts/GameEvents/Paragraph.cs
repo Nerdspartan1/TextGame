@@ -61,12 +61,16 @@ public class Paragraph
 						{
 							if (!key.StartsWith("/"))
 							{
-								if (Values.GetValueAsFloat(key, out float value))
+								bool not = key.StartsWith("!");
+
+								if (Values.GetValueAsFloat(key.TrimStart('!'), out float value))
 								{
 									conditionMet = value != 0;
 								}
 								else // key not found
 									conditionMet = false;
+
+								if (not) conditionMet = !conditionMet;
 
 								if (!conditionMet) // skip to the end of condition
 								{

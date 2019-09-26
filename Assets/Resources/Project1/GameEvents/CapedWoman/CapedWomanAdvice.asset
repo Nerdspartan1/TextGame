@@ -27,11 +27,10 @@ MonoBehaviour:
     choices: []
   - conditions: []
     RawText: "\"They mark their territories with banners made of bones and junk metal.
-      If you come across one, turn back immediately.\"\n\nShe spins the knife with
-      her finger.\n\n\"Do not try to confront them. They are stupid but they are many.
-      Leave them to me. Also...\"\n\nShe suddenly raises the knife to point it at
-      you. \n\n\"..if you decide to join them, I will kill you, do you understand
-      ?\""
+      If you come across one, turn back immediately. Do not try to confront them.
+      They are stupid but they are many. Leave them to me. Also...\"\n\nShe suddenly
+      raises the knife to point it at you. \n\n\"..if you decide to join them, I will
+      kill you, do you understand ?\""
     operations: []
     choices:
     - conditions: []

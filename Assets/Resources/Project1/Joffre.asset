@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b7679b7cd1c47c43b38c8cee697ddaf, type: 3}
+  m_Name: Joffre
+  m_EditorClassIdentifier: 
+  Name: Joffre
+  Description: A lively young man with a fit build, thick blond hair, fine facial
+    features and blue-grey eyes.
+  Strength: 5
+  Skill: 10
+  Intelligence: 4
+  Abilities: []
+  Level: 2
+  maxHp: 39
+  hp: 39
+  maxFocus: 20
+  focus: 20
+  DamageResistance: 0
+  XP: 0
+  AvailableAttributePoints: 0
+  CanBeRemovedFromFightTeam: 1
+  InFightTeam: 1

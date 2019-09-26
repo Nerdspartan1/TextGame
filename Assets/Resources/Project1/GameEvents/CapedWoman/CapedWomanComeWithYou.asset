@@ -14,17 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   paragraphs:
   - conditions: []
-    RawText: 'She stares at you for some time.
+    RawText: 'She immediatly responds:
 
 
-      "No, I''m sorry, you''d be in danger if you came with me. Do not follow me."'
+      "No, that''s a bad idea. Do not follow me."'
     operations: []
     choices:
     - conditions: []
       text: '"I see."'
       operations: []
-  - conditions: []
-    RawText: She remains turned towards you for a few moments, as if she wanted to
-      add something, but she eventually resume her scouting silently.
-    operations: []
-    choices: []

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Desert1
   m_EditorClassIdentifier: 
   Encounters:
-  - occurenceProbability: 0.2
+  - occurenceProbability: 0.15
     groupPresenceProbability: 1
     introduction: As you walk, a pair of claws suddenly emerges from the sand in front
       of you. It's a sand crab !

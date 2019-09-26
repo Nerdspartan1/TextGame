@@ -28,14 +28,6 @@ MonoBehaviour:
     - conditions: []
       text: '"Could you give me some advices on how to survive out there ?"'
       operations:
-      - key: capedWomanAcquainted
-        operationType: 1
-        value: 1
-        gameEvent: {fileID: 11400000, guid: 0827378bee2f0d843aca1cb924bd13ab, type: 2}
-        position: {x: 0, y: 0}
-        item: {fileID: 0}
-        merchant: {fileID: 0}
-        other: {fileID: 0}
       - key: 
         operationType: 6
         value: 
@@ -55,10 +47,7 @@ MonoBehaviour:
         item: {fileID: 0}
         merchant: {fileID: 0}
         other: {fileID: 0}
-    - conditions:
-      - key: capedWomanAcquainted
-        conditionType: 0
-        value: 1
+    - conditions: []
       text: '"Can I come with you ?"'
       operations:
       - key: 

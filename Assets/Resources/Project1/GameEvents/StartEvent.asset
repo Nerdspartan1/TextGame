@@ -26,7 +26,15 @@ MonoBehaviour:
       let alone survive amidst the chaos and anarchy that ensued.
 
 '
-    operations: []
+    operations:
+    - key: playerName
+      operationType: 1
+      value: Rodin
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
     choices: []
   - conditions: []
     RawText: Radical changes had to be made in order to thrive in this new world.

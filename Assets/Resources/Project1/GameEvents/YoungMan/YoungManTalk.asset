@@ -56,7 +56,15 @@ MonoBehaviour:
 
 
       "Bastaaaaaards ! Open this dooooooooor !"'
-    operations: []
+    operations:
+    - key: joffreAcquainted
+      operationType: 1
+      value: 1
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
     choices:
     - conditions: []
       text: Leave him alone
