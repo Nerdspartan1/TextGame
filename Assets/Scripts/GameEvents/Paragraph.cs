@@ -12,41 +12,77 @@ public class Paragraph
 	public List<Operation> operations;
 	public List<Choice> choices;
 
+	enum ReadMode
+	{
+		Text,
+		Key,
+		Condition
+	}
+
 	public string Text
 	{
 		get
 		{
 			string result = "";
 			int textSize = RawText.Length;
-			bool readingKey = false;
+			ReadMode readMode = ReadMode.Text;
+			bool conditionMet = true;
 			string key = "";
 			for (int i = 0; i < textSize; i++)
 			{
-				if (!readingKey)
+				switch(readMode)
 				{
-					if (RawText[i] == '{')
-					{
-						readingKey = true;
-					}
-					else
-					{
-						result += RawText[i];
-					}
-				}
-				else //readingKey
-				{
-					if (RawText[i] == '}')
-					{
-						string s;
-						if (!Values.GetValueAsString(key, out s)) Debug.LogWarning($"[GameEvent] {key} key undefined.");
-						result += s;
-						readingKey = false;
-						key = "";
-					}
-					else
-					{
-						key += RawText[i];
-					}
+					case ReadMode.Text:
+						if (RawText[i] == '<')
+							readMode = ReadMode.Condition;
+						else if (RawText[i] == '{')
+							readMode = ReadMode.Key;
+						else
+						{
+							result += RawText[i];
+						}
+						break;
+					case ReadMode.Key:
+						if (RawText[i] == '}')
+						{
+							string s;
+							if (!Values.GetValueAsString(key, out s)) Debug.LogWarning($"[GameEvent] {key} key undefined.");
+							result += s;
+							readMode = ReadMode.Text;
+							key = "";
+						}
+						else
+						{
+							key += RawText[i];
+						}
+						break;
+					case ReadMode.Condition:
+						if (RawText[i] == '>')
+						{
+							if (!key.StartsWith("/"))
+							{
+								if (Values.GetValueAsFloat(key, out float value))
+								{
+									conditionMet = value != 0;
+								}
+								else // key not found
+									conditionMet = false;
+
+								if (!conditionMet) // skip to the end of condition
+								{
+									string markup = $"</{key}>";
+									int resumeIndex = RawText.IndexOf(markup, i);
+									i = resumeIndex + markup.Length;
+								}
+							}
+							readMode = ReadMode.Text;
+							key = "";
+						}
+						else
+						{
+							key += RawText[i];
+						}
+						break;
 				}
 
 			}
