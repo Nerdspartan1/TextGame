@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 023d7c1b3cd018d4da25a7cd925ddabc, type: 3}
-  m_Name: Desert1
+  m_Name: d1_enc
   m_EditorClassIdentifier: 
   Encounters:
   - occurenceProbability: 0.15

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
-  m_Name: DargoGate
+  m_Name: DG_DargoGate
   m_EditorClassIdentifier: 
   paragraphs:
   - conditions: []

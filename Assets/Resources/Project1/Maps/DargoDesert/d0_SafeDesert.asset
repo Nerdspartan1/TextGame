@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
-  m_Name: RaiderBanner
+  m_Name: d0_SafeDesert
   m_EditorClassIdentifier: 
   paragraphs:
   - conditions: []
-    RawText: Pegged in the sand appears to be a tall banner made of very crudely assembled
-      metal parts and various bones, topped with a human skull.
+    RawText: 'You stand in the middle of a sea of scolding hot sand under the scorching
+      sun.
+
+
+      You can make out the wiggling image of the walls of Dargo City in the north.'
     operations: []
     choices: []
   EncounterTable: {fileID: 0}

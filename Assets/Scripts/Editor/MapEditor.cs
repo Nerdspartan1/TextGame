@@ -37,11 +37,12 @@ public class LocationEditor : GameEventEditor
 public class MapEditor : Editor
 {
 	public Vector2 scrollPosition = Vector2.zero;
+	public float scale = 1;
 	SerializedProperty locations;
 	SerializedProperty width;
 	SerializedProperty height;
 
-	Vector2 buttonSize = new Vector2(40, 16);
+	Vector2 initialButtonSize = new Vector2(48, 16);
 
 	private void OnEnable()
 	{
@@ -63,6 +64,11 @@ public class MapEditor : Editor
 		position.y += 18;
 		EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, 16), height, new GUIContent("Height"));
 		position.y += 18;
+		scale = EditorGUI.Slider(new Rect(position.x, position.y, position.width, 16), new GUIContent("Editor scale"), scale, 1, 5);
+		position.y += 18;
+
+		Vector2 buttonSize = new Vector2(scale * initialButtonSize.x, initialButtonSize.y);
+
 
 		Rect scrollView = new Rect(0, 0, (buttonSize.x+5)*width.intValue, (buttonSize.y + 5) * height.intValue);
 		Rect scrollRect = new Rect(0, 0, EditorGUIUtility.currentViewWidth, 600);

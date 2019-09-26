@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
+  m_Name: rb_RaiderBanner
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: 'You are in the middle of the desert.
+
+
+      Pegged in the sand appears to be a tall banner made of very crudely assembled
+      metal parts and various bones, topped with a human skull.'
+    operations: []
+    choices: []
+  - conditions:
+    - key: joffreInParty
+      conditionType: 0
+      value: 
+    - key: crossedRaiderBanner
+      conditionType: 1
+      value: 
+    RawText: '"What is that ?" asks Joffre as he inspects the curious totem. "These
+      are bones right ? Look, man, this has got to be a raider''s banner. We really
+      shouldn''t keep going..."'
+    operations:
+    - key: crossedRaiderBanner
+      operationType: 1
+      value: 1
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
+    choices: []
+  EncounterTable: {fileID: 0}

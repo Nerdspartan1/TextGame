@@ -189,8 +189,8 @@ public class ConditionDrawer : PropertyDrawer
 
 		switch ((ConditionType)conditionType.intValue)
 		{
-			case ConditionType.Exists:
-			case ConditionType.DoesNotExist:
+			case ConditionType.True:
+			case ConditionType.False:
 				break;
 			default:
 				EditorGUI.PropertyField(valueRect, property.FindPropertyRelative(nameof(Condition.value)), GUIContent.none);

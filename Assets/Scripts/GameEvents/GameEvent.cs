@@ -5,15 +5,16 @@ using UnityEngine.UI;
 using System.IO;
 
 public enum ConditionType {
-	Exists,
-	DoesNotExist,
+	True,
+	False,
 	IsEqualTo,
 	IsNotEqualTo,
 	IsGreaterThan,
 	IsLessThan,
 	RandomChance //random chance between 0 (never) and 1 (always)
 }
-public enum OperationType { None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem, OpenMerchant, CloseMerchant, AddTeammate}
+public enum OperationType {
+	None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem, OpenMerchant, CloseMerchant, AddTeammate}
 
 [System.Serializable]
 public struct Condition{
@@ -31,8 +32,8 @@ public struct Condition{
 
 		switch (conditionType)
 		{
-			case ConditionType.Exists: return keyExists;
-			case ConditionType.DoesNotExist: return !keyExists;
+			case ConditionType.True: return (keyExists && Values.GetValueAsFloat(key,out float v) && v !=0);
+			case ConditionType.False: return !keyExists;
 		}
 
 		float v1 = 0;
