@@ -57,4 +57,5 @@ public class EnemyEncounterTable : ScriptableObject
 			return new Encounter() { EnemyTeam = enemyTeam, Introduction = occuringEncounter.introduction };
 		}
 	}
+
 }

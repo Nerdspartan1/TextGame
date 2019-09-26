@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Encounters:
   - occurenceProbability: 0.15
-    groupPresenceProbability: 1
+    groupPresenceProbability: 0.66
     introduction: As you walk, a pair of claws suddenly emerges from the sand in front
       of you. It's a sand crab !
     enemies:
+    - {fileID: 11400000, guid: 2cfd82fec59503243b81f34a8aab4a0b, type: 2}
     - {fileID: 11400000, guid: 2cfd82fec59503243b81f34a8aab4a0b, type: 2}

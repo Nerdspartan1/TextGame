@@ -25,7 +25,7 @@ MonoBehaviour:
   maxFocus: 20
   focus: 20
   DamageResistance: 0
-  XP: 0
+  XP: 16
   AvailableAttributePoints: 0
   CanBeRemovedFromFightTeam: 1
   InFightTeam: 1

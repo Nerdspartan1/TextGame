@@ -63,8 +63,8 @@ public class CharacterPanel : MonoBehaviour
 		if (character)
 		{
 			XPBar.gameObject.SetActive(true);
-			XPBar.Value = character.XP - Character.XPLevel(character.Level);
-			XPBar.MaxValue = Character.XPLevel(character.Level + 1) - Character.XPLevel(character.Level);
+			XPBar.Value = character.XP - Character.LevelToXP(character.Level);
+			XPBar.MaxValue = Character.LevelToXP(character.Level + 1) - Character.LevelToXP(character.Level);
 			XPBar.UpdateBar();
 
 			AddToFightTeamButton.gameObject.SetActive(true);

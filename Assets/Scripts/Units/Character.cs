@@ -45,16 +45,21 @@ public class Character : Unit
 	public void GainXP(int xp)
 	{
 		XP += xp;
-		while(XP > XPLevel(Level+1))
+		while(XP > LevelToXP(Level+1))
 		{
 			Level++;
 			AvailableAttributePoints++;
 		}
 	}
 
-	public static int XPLevel(int level)
+	public static int LevelToXP(int level)
 	{
-		return (int)Mathf.Pow((level-1) * 4,2);
+		return 16 * (int)Mathf.Pow(level-1,2);
+	}
+
+	public static int XPToLevel(int xp)
+	{
+		return (int)(Mathf.Sqrt(xp)/4.0f) + 1;
 	}
 
 	public void LevelUpAttribute(Attribute attribute)
@@ -67,5 +72,17 @@ public class Character : Unit
 		}
 		AvailableAttributePoints--;
 		CalculateStatsFromAttributes();
+	}
+
+	public override void CalculateStatsFromAttributes(bool reset = false)
+	{
+		base.CalculateStatsFromAttributes(reset);
+		if (reset)
+		{
+			Level = (Strength + Skill + Intelligence) - 17;
+			if (Level < 1) Level = 1;
+			XP = LevelToXP(Level);
+		}
+
 	}
 }

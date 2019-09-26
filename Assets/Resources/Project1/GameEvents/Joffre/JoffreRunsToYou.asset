@@ -69,10 +69,16 @@ MonoBehaviour:
       <!joffreHandShaken>You leave him hanging in silence.
 
 
-      "Erk... Ouch..." he says, embarassed. "Well, i''m sure we''ll make a good team
-      anyway."
+      "Oof..." he says with an embarassed smile. "Well uh... i''m sure we''ll make
+      a good team anyway."
 
-      </!joffreHandShaken>'
+      </!joffreHandShaken>
+
+
+      Joffre joins your party.
+
+
+      1 bug ration added to your inventory.'
     operations:
     - key: joffreInParty
       operationType: 1
@@ -80,6 +86,14 @@ MonoBehaviour:
       gameEvent: {fileID: 0}
       position: {x: 0, y: 0}
       item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 11400000, guid: e8f41a772cc21fc478ae7144173325e3, type: 2}
+    - key: joffreInParty
+      operationType: 7
+      value: 1
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 11400000, guid: 1eea7ee16100cf244950006a224cda2f, type: 2}
       merchant: {fileID: 0}
       other: {fileID: 11400000, guid: e8f41a772cc21fc478ae7144173325e3, type: 2}
     - key: 

@@ -71,7 +71,7 @@ public abstract class Unit : ScriptableObject
 
 	public float DamageResistance;
 
-	public void CalculateStatsFromAttributes(bool reset = false)
+	public virtual void CalculateStatsFromAttributes(bool reset = false)
 	{
 		int previousMaxHp = MaxHp;
 		MaxHp = 20 + (int)(3.0f * (0.6f*Strength + 0.3f*Skill + 0.1f*Intelligence));
