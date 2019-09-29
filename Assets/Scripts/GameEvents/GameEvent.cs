@@ -173,6 +173,7 @@ public class GameEvent : ScriptableObject
 	public List<Paragraph> paragraphs  = new List<Paragraph>();
 
 	private List<Operation> choiceOperations;
+	private bool noChoice;
 	private int currentParagraphId;
 
 	public IEnumerator DisplayParagraph(int paragraphId = 0)
@@ -205,10 +206,12 @@ public class GameEvent : ScriptableObject
 
 		}
 
-
-
-		if (paragraphId >= paragraphs.Count - 1) // break if next paragraph doesn't exist
+		if (paragraphId >= paragraphs.Count - 1) // if last paragraph
 		{
+			if (noChoice && !(this is Location)) // if last displayed paragraph did not propose any choice and we are in a non location game event
+			{
+				yield return new Prompt(Prompt.PressOKToContinue).Display(); //prompt button before returning to map
+			}
 			yield break; 
 		}
 		else // else continue
@@ -219,7 +222,7 @@ public class GameEvent : ScriptableObject
 
 	public void DisplayChoices(Prompt prompt)
 	{
-		bool noChoice = true;
+		noChoice = true;
 		//instantiate choices
 		foreach (Choice choice in paragraphs[currentParagraphId].choices)
 		{
@@ -232,13 +235,7 @@ public class GameEvent : ScriptableObject
 			});
 			noChoice = false;
 		}
-		if(noChoice)
-		{
-			//if not location and last paragraph, prompt button before returning to map
-			if (!(this is Location) && currentParagraphId == paragraphs.Count - 1)
-				prompt.Next = new Prompt(Prompt.PressOKToContinue); 
-			prompt.Proceed();
-		}
+		if (noChoice) prompt.Proceed();
 	}
 
 }
