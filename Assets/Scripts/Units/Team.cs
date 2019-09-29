@@ -41,9 +41,19 @@ public class Team : ScriptableObject, ICollection<Unit>
 		{
 			if (usedNameCounts[unit.Name] > 1) { //rename only if there are 2 identical names or more
 				unit.Name += $" {++usedNameNumber[unit.Name]}";
+
 			}
 		}
 
+	}
+
+	public void Rest()
+	{
+		foreach(var unit in Units)
+		{
+			unit.Hp = unit.MaxHp;
+			unit.Focus = unit.MaxFocus;
+		}
 	}
 
 	public int Count { get => Units.Count; }

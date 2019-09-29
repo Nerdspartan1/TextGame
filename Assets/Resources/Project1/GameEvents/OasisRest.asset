@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
+  m_Name: OasisRest
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: 'You sit under the shade of the tree, shielding you from the sun''s blazing
+      light, and making the heat a little more bearable. The pool of water next to
+      you makes extremely pleasant and peaceful lapping sounds, so rare to the ear
+      in this barren land. You close your eyes to focus on the soothing noise. You
+      find yourself forgetting all the discomfort that found you on your way here
+      as you start to doze off.
+
+
+      When you wake, you feel appeased and well rested.'
+    operations:
+    - key: 
+      operationType: 12
+      value: 
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
+    choices: []
+  - conditions:
+    - key: joffreConversation
+      conditionType: 1
+      value: 
+    RawText: A snoring sound remembers you of the presence of Joffre, sleeping soundly
+      against the tree. You don't know what to make of him just yet, but you're sure
+      that it can't be worse than being alone. It seems like he's going to stick around
+      for a while, so maybe you should start getting to know him.
+    operations:
+    - key: joffreConversation
+      operationType: 1
+      value: 1
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
+    choices: []

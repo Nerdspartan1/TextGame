@@ -76,7 +76,7 @@ public class Paragraph
 								{
 									string markup = $"</{key}>";
 									int resumeIndex = RawText.IndexOf(markup, i);
-									i = resumeIndex + markup.Length;
+									i = resumeIndex + markup.Length -1;
 								}
 							}
 							readMode = ReadMode.Text;

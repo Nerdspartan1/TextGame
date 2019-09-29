@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SavedGame xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <PlayerTeam>
+    <Unit xsi:type="Character">
+      <name>Player(Clone)</name>
+      <hideFlags>None</hideFlags>
+      <Name>Rodin</Name>
+      <Description>That's you. A young human male originating from Dargo City.</Description>
+      <Strength>6</Strength>
+      <Skill>6</Skill>
+      <Intelligence>6</Intelligence>
+      <Abilities />
+      <Level>1</Level>
+      <DamageResistance>0</DamageResistance>
+      <MaxHp>38</MaxHp>
+      <Hp>38</Hp>
+      <MaxFocus>30</MaxFocus>
+      <Focus>30</Focus>
+      <XP>0</XP>
+      <AvailableAttributePoints>0</AvailableAttributePoints>
+      <CanBeRemovedFromFightTeam>false</CanBeRemovedFromFightTeam>
+      <InFightTeam>true</InFightTeam>
+    </Unit>
+  </PlayerTeam>
+  <EquippedWeapons>
+    <int>-1</int>
+  </EquippedWeapons>
+  <Inventory>
+    <string>BugRation</string>
+    <string>BugRation</string>
+    <string>BugRation</string>
+    <string>RecycledKnife</string>
+  </Inventory>
+  <Money>0</Money>
+  <Map>DargoDesert</Map>
+  <Location>
+    <x>9</x>
+    <y>2</y>
+  </Location>
+  <Values>
+    <ValuePair>
+      <Key>playerName</Key>
+      <Value>Rodin</Value>
+    </ValuePair>
+  </Values>
+</SavedGame>

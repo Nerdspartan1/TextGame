@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour {
 	public void Load(SaveManager.SavedGame savedGame)
 	{
 		PlayerTeam = new Team() { Units = savedGame.PlayerTeam };
-		Inventory.Instance.Items = savedGame.Inventory.ConvertAll(name => Instantiate(Resources.Load($"ExampleGame/Items/{name}") as Item));
+		Inventory.Instance.Items = savedGame.Inventory.ConvertAll(name => Instantiate(Resources.Load($"Project1/Items/{name}") as Item));
 		Inventory.Instance.Money = savedGame.Money;
 		for (int i = 0; i < PlayerTeam.Count; ++i)
 		{

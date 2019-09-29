@@ -14,7 +14,7 @@ public enum ConditionType {
 	RandomChance //random chance between 0 (never) and 1 (always)
 }
 public enum OperationType {
-	None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem, OpenMerchant, CloseMerchant, AddTeammate}
+	None, Set, Add, GoToMap, GoToCell, InitiateFight, PlayGameEvent, AddItem, RemoveItem, OpenMerchant, CloseMerchant, AddTeammate, Rest}
 
 [System.Serializable]
 public struct Condition{
@@ -131,6 +131,9 @@ public struct Operation
 			case OperationType.AddTeammate:
 				GameManager.Instance.AddTeammate(other as Character);
 				break;
+			case OperationType.Rest:
+				GameManager.Instance.PlayerTeam.Rest();
+				break;
 			case OperationType.PlayGameEvent:
 				GameManager.Instance.PlayGameEvent(gameEvent);
 				return;
@@ -169,7 +172,7 @@ public class GameEvent : ScriptableObject
 {
 	public List<Paragraph> paragraphs  = new List<Paragraph>();
 
-	private List<Operation> operationsToApply;
+	private List<Operation> choiceOperations;
 	private int currentParagraphId;
 
 	public IEnumerator DisplayParagraph(int paragraphId = 0)
@@ -179,24 +182,30 @@ public class GameEvent : ScriptableObject
 
 		Paragraph paragraph = paragraphs[paragraphId];
 
-		operationsToApply = new List<Operation>();
+		choiceOperations = new List<Operation>();
 
 		if (Condition.AreVerified(paragraph.conditions))
 		{
 			//instantiate text
 			GameManager.Instance.CreateText(paragraph.Text);
 
+			//apply paragraph operations
+			foreach (var operation in paragraph.operations)
+			{
+				operation.Apply();
+			}
+
 			yield return new Prompt(DisplayChoices).Display();
 
-			operationsToApply.AddRange(paragraph.operations);
-				
+			//apply choice operations
+			foreach (var operation in choiceOperations)
+			{
+				operation.Apply();
+			}
+
 		}
 
-		//apply operations
-		foreach(var operation in operationsToApply)
-		{
-			operation.Apply();
-		}
+
 
 		if (paragraphId >= paragraphs.Count - 1) // break if next paragraph doesn't exist
 		{
@@ -218,7 +227,7 @@ public class GameEvent : ScriptableObject
 
 			GameManager.Instance.CreateButton(choice.text, delegate
 			{
-				operationsToApply.AddRange(choice.operations);
+				choiceOperations.AddRange(choice.operations);
 				prompt.Proceed();
 			});
 			noChoice = false;

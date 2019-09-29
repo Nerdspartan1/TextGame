@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c993e4b8e8220946be3953876652816, type: 3}
+  m_Name: O_oasis
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: '<!oasisFound>"Hey ! Check this out !" exclaims Joffre as he points ahead.</!oasisFound>
+
+
+      </!oasisFound>Amazingly enough, there appears to be a tiny oasis in this location
+      : a small pool of clear water surrounded by green verdant vegetation, complete
+      with a single tree, creating a much appealing spot of shade.<oasisFound>You
+      can rest here if you wish so</oasisFound>
+
+
+      <!oasisFound>As you approach, you notice a few trails of faded footprints furrowing
+      away from this place. It seems like other visitors have come here. Maybe this
+      is a known traveller''s resting place ?
+
+
+      Meanwhile, Joffre is poking at the tree, seemingly to make sure that this is
+      not a mirage, even though that is not how mirages work. After making sure that
+      this place is indeed real, he turns to you.
+
+
+      "Well, we can rest here if you want." he declares as he already start to slouch
+      against the tree.
+
+
+      It is true that you could rest here. It would be wise to remember the way to
+      this place when you leave, in case you need to return.</!oasisFound>
+
+
+'
+    operations:
+    - key: oasisFound
+      operationType: 1
+      value: 1
+      gameEvent: {fileID: 0}
+      position: {x: 0, y: 0}
+      item: {fileID: 0}
+      merchant: {fileID: 0}
+      other: {fileID: 0}
+    choices:
+    - conditions: []
+      text: Rest
+      operations:
+      - key: 
+        operationType: 6
+        value: 
+        gameEvent: {fileID: 11400000, guid: 44a912fa3ef3d904f9d271937cede23d, type: 2}
+        position: {x: 0, y: 0}
+        item: {fileID: 0}
+        merchant: {fileID: 0}
+        other: {fileID: 0}
+  EncounterTable: {fileID: 0}

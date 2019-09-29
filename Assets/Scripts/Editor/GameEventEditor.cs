@@ -149,6 +149,9 @@ public class OperationDrawer : PropertyDrawer
 				EditorGUI.PropertyField(rect2, operationType, GUIContent.none);
 				EditorGUI.PropertyField(rect3, property.FindPropertyRelative(nameof(Operation.other)), GUIContent.none);
 				break;
+			case OperationType.Rest:
+				EditorGUI.PropertyField(rect1, operationType, GUIContent.none);
+				break;
 		}
 		
 		EditorGUI.indentLevel = indent;
