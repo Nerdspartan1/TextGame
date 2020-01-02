@@ -18,3 +18,5 @@ MonoBehaviour:
     operations: []
     choices: []
   EncounterTable: {fileID: 11400000, guid: 7837080536f9893459ed4d09ded9eea7, type: 2}
+  Icon: {fileID: 0}
+  Color: {r: 162, g: 194, b: 255, a: 1}

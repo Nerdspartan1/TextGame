@@ -24,7 +24,7 @@ MonoBehaviour:
 
 
       Just to the right of the gate sits an old bearded man, looking moodily in the
-      distance. Maybe he has some old man''s advices he would be willing to share.
+      distance. Maybe he has some old man''s advices he would be willing to share.<!joffreInParty>
 
 
       Standing far away from the gate is a capable-looking caped woman looking cautiously
@@ -32,7 +32,7 @@ MonoBehaviour:
 
 
       There is a young man still banging furiously at the gate, shouting insults to
-      whoever might want to hear them from the other side of the wall.
+      whoever might want to hear them from the other side of the wall.</!joffreInParty>
 
 
 
@@ -50,7 +50,10 @@ MonoBehaviour:
         item: {fileID: 0}
         merchant: {fileID: 0}
         other: {fileID: 0}
-    - conditions: []
+    - conditions:
+      - key: joffreInParty
+        conditionType: 1
+        value: 
       text: Talk to the caped woman
       operations:
       - key: 
@@ -61,7 +64,10 @@ MonoBehaviour:
         item: {fileID: 0}
         merchant: {fileID: 0}
         other: {fileID: 0}
-    - conditions: []
+    - conditions:
+      - key: joffreInParty
+        conditionType: 1
+        value: 
       text: Talk to the young man
       operations:
       - key: 
@@ -73,3 +79,5 @@ MonoBehaviour:
         merchant: {fileID: 0}
         other: {fileID: 0}
   EncounterTable: {fileID: 0}
+  Icon: {fileID: 21300000, guid: dcab429bbdbc7674e93415fbf4d8d245, type: 3}
+  Color: {r: 0.63529414, g: 0.7607843, b: 1, a: 1}

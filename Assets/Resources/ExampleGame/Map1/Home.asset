@@ -66,3 +66,5 @@ MonoBehaviour:
         merchant: {fileID: 11400000, guid: bb06a118a908ff94ea1ec100052de2b1, type: 2}
         other: {fileID: 0}
   EncounterTable: {fileID: 0}
+  Icon: {fileID: 0}
+  Color: {r: 0.63529414, g: 0.7607843, b: 1, a: 1}

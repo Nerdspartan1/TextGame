@@ -23,10 +23,10 @@ MonoBehaviour:
       watches your face, looking for a hint of understanding, but keeps going before
       you can say anything:\n\n\"I realized that just shouting and being mad at nothing
       would lead me nowhere, you know ? But you... you look like you know what you're
-      doing ! So I figured that... if I came with you, we would stand a better chance
+      doing... So I figured that... if I came with you, we would stand a better chance
       at surviving, you know ?\"\n\nHe stops for a second, and you not having answered
-      in this period of time prompts him to bow awkwardly and plead : \"Please, I
-      want to help you.\""
+      in this period of time prompts him to bow awkwardly and plead : \"Please, let
+      me come with you.\""
     operations: []
     choices:
     - conditions: []
@@ -43,7 +43,7 @@ MonoBehaviour:
       He offers his hand to shake.
 
 
-      "My name is Joffre."'
+      "So, my name is Joffre."'
     operations: []
     choices:
     - conditions: []
@@ -68,13 +68,12 @@ MonoBehaviour:
 
       </joffreHandShaken>
 
-      <!joffreHandShaken>You leave him hanging in silence.<joffreAcquainted> That''s
-      what you get for yelling at people.</joffreAcquainted><!joffreAcquainted> Who''s
-      this guy ?</!joffreAcquainted>
+      <!joffreHandShaken>You leave him hanging and resume your trek.<joffreAcquainted>
+      That''s what you get for yelling at people.</joffreAcquainted><!joffreAcquainted>
+      Who''s this guy ?</!joffreAcquainted>
 
 
-      "Uuh..." he mumbles as he retracts his hand. "Well uh... i''m sure we''ll make
-      a good team anyway."
+      "Ugh..." he mumbles as he retracts his hand and start following you.
 
       </!joffreHandShaken>
 

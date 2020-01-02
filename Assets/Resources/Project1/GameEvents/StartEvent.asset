@@ -14,70 +14,111 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   paragraphs:
   - conditions: []
-    RawText: 'The year is 2997.
+    RawText: 'The year is 2119.
 
 
-      Human civilization is just phantom of what it once was some thousand years ago.
-      Most of the continents have been wiped of all life by years of unending wars,
-      famine, and natural disasters of cataclysmic amplitude.
+      The human civilization on Earth seems to have reached a golden age once again.
+      Development and growth are excellent. Technologies are innovating and evolving
+      at a boggling speed. Society has successfully suppressed the last remains of
+      bigotry and hate among the people for a truly safe and comfortable life for
+      all people. Everything is going well and everyone is happy.
 
 
-      The population has been drastically decreased. Very few cities managed to adapt,
-      let alone survive amidst the chaos and anarchy that ensued.
+      Overhanging this beautiful planet, on the surface of the Moon, lies a small,
+      but very comfortable lunar station, called Skybase. This station was a city
+      built to house the rich people of Earth, so that they could have a nice and
+      quiet home, closer to the stars.
+
+
+      Dwelling in one of the smaller sized apartments of Skybase is a young man in
+      his twenties just waking up from one of those slumber that felt like it was
+      too long to be actually revirorating.
+
+
+      That''s you.'
+    operations: []
+    choices: []
+  - conditions: []
+    RawText: 'You struggle to shift to a sitting position on your bed, and your head
+      begins to spins capriciously as you do so. You feel like you slept at least
+      one whole day.
+
+
+      "Ugh, I need to stop doing that." you tell yourself, referring to the oversleeping
+      habit that you steadily developped in your time on the Skybase. You wipe your
+      sleepy face with a hand, trying vainly to tonify it.
+
+
+      "Domoe, what time is it ?", you ask sluggishly.
+
+
+      Domoe is your personal domotic AI assistant, developped by the giant tech company
+      Oble. Domoe is a ubiquitous tool that every modern housing possesses; she does
+      everything from telling you the time of the day to controlling smartly all household
+      appliances. Without her, you would have no idea how to operate your appartment.
+
+
+      "Domoe ?" you repeat, as no answer is to be heard.'
+    operations: []
+    choices: []
+  - conditions: []
+    RawText: 'With herculean efforts, you lift your heavy body from your ensnaring
+      shape-memory mattress.
+
+
+      "Domoe ?" you repeat again as you stumble your way toward the AI''s panel across
+      your dark messy room.
+
+
+      You reach the panel, your sight still blurry, and reboot the system. Finally,
+      the room lighens slowly as Domoe wakes from her own slumber.
+
+
+      "Welcome." she says in a human-like feminine voice.
+
+
+      It''s quite worrying that you had to reboot her, she usually doesn''t crash
+      overnight like this.
+
+
+      "I am Domoe, your domotic assistant." she continues. "For this first activation,
+      please take a few minutes to configure your preference settings."'
+    operations: []
+    choices: []
+  - conditions: []
+    RawText: 'Did her memory get wiped ? How did this happen ?
+
+
+      "Skip.", you order.
+
+
+      "Preference settings are set to default. If you wish to modify them later, you
+      can do so from the domotic panel." she states.
+
+
+      "Domoe, what date is it ?" you ask finally.
+
+
+      "The date is January the first of year minus two billion, one hundred forty-seven
+      million, four hundred eighty-three thousands, six hundreds fourty-eight."
+
+
+      "Huh-uh." you respond, nonchalant, as you look for your clothes somewhere lying
+      on the floor.
+
 
 '
-    operations:
-    - key: playerName
-      operationType: 1
-      value: Rodin
-      gameEvent: {fileID: 0}
-      position: {x: 0, y: 0}
-      item: {fileID: 0}
-      merchant: {fileID: 0}
-      other: {fileID: 0}
-    choices: []
-  - conditions: []
-    RawText: Radical changes had to be made in order to thrive in this new world.
-      Society saw a return to a sort of neo-medieval age. Almost all economic and
-      technologic growth has been halted. Clans arose to take control of the cities,
-      alliances were made and broken. Many clans raised armies to conquer more land
-      and expand their territories to salvage what was left of the desolated landscapes
-      left by their ancestors.
     operations: []
     choices: []
   - conditions: []
-    RawText: "Built on the remains of what once was Los Angeles, located in what once
-      was the United States of America, stood the city of Dargo, held by the clan
-      of the same name.\nDargo used to possess the largest population in the remaining
-      clans in America and therefore the most numerous army that conquered a large
-      chunk of the western coast. \nHowever, due to the extreme climate changes taking
-      place during the last hundred years, the outskirts of Dargo City have become
-      a vast and infertile desert. This made growing crops ever more difficult, and
-      therefore, gave the population less to feed, and Dargo's power steadily faltered
-      in the years."
+    RawText: '"Thorium batteries are currently low. I recommend to replace them. Estimated
+      time before battery depletion : zero hours, zero minutes and twelve seconds."
+      warns Domoe.
+
+
+      "Yeah, I guessed." you say sarcastically as you dress up. You''ve gotta go buy
+
+
+'
     operations: []
     choices: []
-  - conditions: []
-    RawText: "To cope with the ever impending famine, Dargo City would organize an
-      event to cull the population to reduce it to an acceptable number. Every month,
-      inhabitants of the city would be sent into exile to the desert, only to return
-      if they had made a useful discovery for the clan. \n\nHowever, volunteer adventurers
-      were few, and most of the people sent in the desert would be the least desirable
-      and valuable individuals of the clan."
-    operations: []
-    choices: []
-  - conditions: []
-    RawText: Today, you volunteered to be exiled from Dargo City.
-    operations: []
-    choices:
-    - conditions: []
-      text: Continue...
-      operations:
-      - key: 
-        operationType: 6
-        value: 
-        gameEvent: {fileID: 11400000, guid: ae281db698fb04f4cb294dc2c943520d, type: 2}
-        position: {x: 0, y: 0}
-        item: {fileID: 0}
-        merchant: {fileID: 0}
-        other: {fileID: 0}

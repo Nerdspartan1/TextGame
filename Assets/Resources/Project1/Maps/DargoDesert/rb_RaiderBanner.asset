@@ -28,9 +28,10 @@ MonoBehaviour:
     - key: crossedRaiderBanner
       conditionType: 1
       value: 
-    RawText: '"What is that ?" asks Joffre as he inspects the curious totem. "These
-      are bones right ? Look, man, this has got to be a raider''s banner. We really
-      shouldn''t keep going..."'
+    RawText: '"What is... that ?" asks Joffre as he inspects the curious totem. "Ugh...
+      These are bones, right ? Listen, {playerName}, being eaten by desert raiders
+      is very low on my list of preferred ways to die, so... how about we turn back
+      ?"'
     operations:
     - key: crossedRaiderBanner
       operationType: 1
@@ -42,3 +43,5 @@ MonoBehaviour:
       other: {fileID: 0}
     choices: []
   EncounterTable: {fileID: 0}
+  Icon: {fileID: 0}
+  Color: {r: 0.63529414, g: 0.7607843, b: 1, a: 1}

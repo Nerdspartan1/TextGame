@@ -8,11 +8,15 @@ public class LocationEditor : GameEventEditor
 {
 
 	SerializedProperty encounterTable;
+	SerializedProperty icon;
+	SerializedProperty color;
 
 	public override void OnEnable()
 	{
 		base.OnEnable();
 		encounterTable = serializedObject.FindProperty(nameof(Location.EncounterTable));
+		icon = serializedObject.FindProperty(nameof(Location.Icon));
+		color = serializedObject.FindProperty(nameof(Location.Color));
 	}
 
 	public override void OnInspectorGUI()
@@ -20,11 +24,15 @@ public class LocationEditor : GameEventEditor
 
 		base.OnInspectorGUI();
 
-		Rect rect = new Rect(0, position.y, EditorGUIUtility.currentViewWidth -40, 18);
+		Rect rect = new Rect(0, position.y, EditorGUIUtility.currentViewWidth -40, 16);
 
 		EditorGUI.BeginChangeCheck();
 
 		EditorGUI.PropertyField(rect, encounterTable);
+		rect.y += 16;
+		EditorGUI.PropertyField(rect, icon);
+		rect.y += 16;
+		EditorGUI.PropertyField(rect, color);
 
 		if (EditorGUI.EndChangeCheck())
 		{

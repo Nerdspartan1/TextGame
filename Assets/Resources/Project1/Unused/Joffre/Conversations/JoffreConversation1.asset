@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b79922b70ad82449e33609150dd5e1, type: 3}
+  m_Name: JoffreConversation1
+  m_EditorClassIdentifier: 
+  paragraphs:
+  - conditions: []
+    RawText: "You carefully think of the various conversation topics you could explore
+      with Joffre. Eventually, you decide to just ask him why he was exiled, for a
+      start. He reacts to the question with a soft sigh: \n\n\"I used to work in a
+      gang.\"\n\nHe turns his head to face you, to check if that elicit any reaction
+      from you.\n\n\"I was specialized in thievery, you know ? Not the shady stuff
+      like kidnapping, or drug dealing.\"\n\nSeeing that you are not judging him,
+      he continues:\n\n\"Anyway, today, somehow, I got caught and... that's why I'm
+      here.\"\n\nHe looks at his feet for a moment in disappointment.\n\n\"Dammit.\"\n"
+    operations: []
+    choices:
+    - conditions: []
+      text: '"Well, crime doesn''t pay in the end."'
+      operations: []
+  - conditions: []
+    RawText: 'Joffre raises his head to give you a surprised look, before smiling
+      sadly.
+
+
+      "Yeah, I guess not. But still... this sucks !
+
+
+      My work was very valued in this gang. Everytime I would perform well, I would
+      climb up the ranks, and it felt amazing, you know ? To be good at something,
+      and feeling useful and important as a result."
+
+
+      You raise a very skeptical eyebrow at that last statement, considering the nature
+      of the deeds.
+
+
+      "Come on." he responds with a sly smile. "Theft is not that evil ! I just see
+      it as.. redistributing the goods, that''s all."
+
+
+'
+    operations: []
+    choices: []

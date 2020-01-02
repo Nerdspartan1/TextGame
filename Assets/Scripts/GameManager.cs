@@ -246,7 +246,8 @@ public class GameManager : MonoBehaviour {
 		{
 			for(int u = 0; u<map.Width; u++)
 			{
-				if (map[new Vector2Int(u,v)] != null)
+				Location location = map[new Vector2Int(u, v)];
+				if (location != null)
 				{
 					GameObject go = Instantiate(LocationPrefab, MapPanel);
 					go.transform.localPosition = new Vector3(cellWidth * u, -v * cellHeight, 0);
@@ -257,6 +258,18 @@ public class GameManager : MonoBehaviour {
 							PlayLocation(CurrentMap[pos]);
 						});
 					MapCells.Add(pos, go.GetComponent<Button>());
+
+					go.GetComponent<Image>().color = location.Color;
+
+					var icon = go.transform.GetChild(0).GetComponent<Image>();
+					if (location.Icon)
+					{
+						icon.enabled = true;
+						icon.sprite = location.Icon;
+					}
+					else
+						icon.enabled = false;
+					
 				}
 			}
 		}
