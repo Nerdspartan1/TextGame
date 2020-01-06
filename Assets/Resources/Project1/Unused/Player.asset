@@ -23,11 +23,8 @@ MonoBehaviour:
   hp: 38
   maxFocus: 30
   focus: 30
-  StrengthMultiplier: 0.96
-  SkillMultiplier: 0.96
-  IntelligenceMultiplier: 0.96
   DamageResistance: 0
   XP: 0
-  AvailableAttributePoints: 0
+  AvailableAttributePoints: 99
   CanBeRemovedFromFightTeam: 0
   InFightTeam: 1
