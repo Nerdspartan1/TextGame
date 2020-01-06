@@ -26,6 +26,7 @@ public class FightManager : MonoBehaviour
 	public TeamPanel EnemyTeamPanel;
 
 	public Fight Fight;
+	private bool skip;
 	public GameEvent NextEvent;
 
 	public void BeginFight(Enemy enemy, GameEvent NextEvent = null)
@@ -148,10 +149,14 @@ public class FightManager : MonoBehaviour
 			//Build order by speed
 			var orderedCombatActions = GetOrderedActions(Fight.CombatActions);
 
+			skip = false;
 			//Fight plays
 			foreach (var action in orderedCombatActions)
 			{
 				action.Execute(Fight);
+				if (!skip)
+					yield return new Prompt(NextOrSkip).Display();
+				
 			}
 
 			EnemyTeamPanel.UpdateSlots();
@@ -209,6 +214,20 @@ public class FightManager : MonoBehaviour
 			else GameManager.Instance.PlayGameEvent(GameManager.Instance.CurrentMap[GameManager.Instance.CurrentLocation]);
 		}
 
+	}
+
+	private void NextOrSkip(Prompt prompt)
+	{
+		GameManager.Instance.CreateButton("Next",
+		delegate {
+			prompt.Proceed();
+		});
+
+		GameManager.Instance.CreateButton("Skip",
+		delegate {
+			skip = true;
+			prompt.Proceed();
+		});
 	}
 
 }
